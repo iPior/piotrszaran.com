@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bun info:*)",
+      "Bash(bun -e \"const d = await Bun.stdin.json\\(\\); console.log\\('astro latest:', d['dist-tags']?.latest\\)\")",
+      "Bash(bun pm:*)",
+      "Bash(npm info:*)",
+      "Bash(bun x:*)",
+      "Bash(bun install:*)",
+      "Bash(bun run:*)",
+      "Bash(python -c \"import sys,json; v=json.load\\(sys.stdin\\); print\\([x for x in v if not any\\(s in x for s in ['alpha','beta','rc']\\)][-10:]\\)\")",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ]
+  }
+}
