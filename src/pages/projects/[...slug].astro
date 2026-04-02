@@ -1,0 +1,26 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import ProjectLayout from '../../layouts/ProjectLayout.astro';
+import Callout from '../../components/mdx/Callout.astro';
+import Image from '../../components/mdx/Image.astro';
+import LinkCard from '../../components/mdx/LinkCard.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await project.render();
+
+const relatedBlog = project.data.blogSlug
+  ? await getEntry('blog', project.data.blogSlug)
+  : null;
+---
+
+<ProjectLayout project={project} relatedBlog={relatedBlog}>
+  <Content components={{ Callout, Image, LinkCard }} />
+</ProjectLayout>

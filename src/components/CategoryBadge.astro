@@ -1,0 +1,23 @@
+---
+interface Props {
+  category: 'freelance' | 'work' | 'personal';
+}
+
+const { category } = Astro.props;
+
+const labels: Record<string, string> = {
+  freelance: 'Freelance',
+  work: 'Work',
+  personal: 'Personal',
+};
+
+const colors: Record<string, string> = {
+  freelance: 'border-blue-300 text-blue-700',
+  work: 'border-green-300 text-green-700',
+  personal: 'border-purple-300 text-purple-700',
+};
+---
+
+<span class={`text-xs border rounded-full px-2.5 py-0.5 font-medium ${colors[category]}`}>
+  {labels[category]}
+</span>

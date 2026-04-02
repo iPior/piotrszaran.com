@@ -1,0 +1,39 @@
+---
+title: "Why I Rebuilt My Portfolio (Again)"
+date: 2025-03-15
+description: "Payload CMS was overkill. Here's why I went with Astro and files in a repo."
+projectSlug: "example-project"
+tags: ["astro", "mdx", "portfolio", "cms"]
+draft: false
+---
+
+## The Problem With My Old Setup
+
+The previous version of this site ran on Next.js with Payload CMS and Supabase. That stack made sense when I was building it — I wanted to learn Payload and I figured I'd add features over time.
+
+In practice: I never added those features. The site served one purpose — showing a list of projects and a few blog posts. A CMS backed by a database with an admin panel was massive overkill.
+
+## Why Astro
+
+Astro is purpose-built for content sites. It generates fully static HTML at build time with zero JavaScript shipped by default. The pages that need interactivity (just the project filter on the homepage) use Astro's island architecture to hydrate a single Preact component.
+
+This means fast page loads, no API calls, and no runtime dependencies. The whole site is a folder of HTML files.
+
+## Why MDX in the Repo
+
+Dropping the CMS in favor of MDX files checked several boxes:
+
+- **Version controlled**: Content changes appear in git history. I can see exactly when and why I changed something.
+- **Offline-first**: The content works without a database connection.
+- **Type-safe**: Astro's content collections validate frontmatter against a Zod schema at build time. No more runtime surprises.
+- **Editor-friendly**: Writing in a text editor with a Markdown preview is faster than a CMS rich text editor.
+
+## What I'd Do Differently
+
+The one thing I'd reconsider is MDX for short-form content. For project descriptions (200–500 words), MDX is fine. For longer posts with complex layouts, it requires more discipline to keep consistent.
+
+If I were building a site with frequent long-form content, I'd evaluate whether a CMS with good structured content support (Sanity, Payload v2) makes sense — even if the rendering stays static.
+
+<Callout type="tip">
+  If you're building a portfolio site and evaluating Next.js vs Astro: unless you need server-side rendering, use Astro. The zero-JS default is a better starting point.
+</Callout>

@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import ProjectFilter from '../components/islands/ProjectFilter.tsx';
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('projects'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const serializedProjects = projects.map((p) => ({
+  id: p.slug,
+  title: p.data.title,
+  date: p.data.date.toISOString(),
+  category: p.data.category,
+  description: p.data.description,
+  stack: p.data.stack,
+  thumbnail: p.data.thumbnail,
+  liveUrl: p.data.liveUrl,
+  githubUrl: p.data.githubUrl,
+  blogSlug: p.data.blogSlug,
+}));
+---
+
+<BaseLayout
+  title="Piotr Szaran — Developer"
+  description="Software developer looking for full-time opportunities."
+>
+  <Hero />
+  <section class="mt-10">
+    <h2 class="text-2xl font-bold mb-6">Projects</h2>
+    <ProjectFilter client:load projects={serializedProjects} />
+  </section>
+</BaseLayout>
