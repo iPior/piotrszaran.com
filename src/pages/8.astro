@@ -1,0 +1,480 @@
+---
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Design 8 — Vivid — Piotr Szaran</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&display=swap" rel="stylesheet" />
+  <style is:global>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #F97316;
+      --amber: #FB923C;
+      --peach: #FED7AA;
+      --cream: #FFF8F1;
+      --dark: #1C0A00;
+      --mid: #7C4A1E;
+      --light-mid: #C5835A;
+      --white: #FFFFFF;
+      --card-border: #F3DDD0;
+    }
+
+    html, body {
+      background: var(--cream);
+      color: var(--dark);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 400;
+      min-height: 100vh;
+    }
+
+    /* HERO SECTION — vivid gradient */
+    .hero-section {
+      background: linear-gradient(160deg, #EA580C 0%, #F97316 30%, #FB923C 60%, #FED7AA 100%);
+      padding: 48px 32px 64px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative circles */
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      top: -150px; right: -80px;
+      pointer-events: none;
+    }
+    .hero-section::after {
+      content: '';
+      position: absolute;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      bottom: -60px; left: 60px;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Top nav */
+    .top-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 56px;
+    }
+
+    .nav-logo {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.8);
+    }
+    .nav-links a { color: rgba(255,255,255,0.8); text-decoration: none; }
+    .nav-links a:hover { color: var(--white); }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(8px);
+      color: var(--white);
+      padding: 5px 14px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .badge-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #86EFAC;
+      box-shadow: 0 0 6px #86EFAC;
+    }
+
+    .hero-name {
+      font-size: clamp(48px, 9vw, 96px);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -3px;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+
+    .hero-sub {
+      font-size: 18px;
+      color: rgba(255,255,255,0.85);
+      font-weight: 300;
+      font-style: italic;
+      margin-bottom: 32px;
+      max-width: 440px;
+    }
+
+    /* Pill info row */
+    .hero-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .hero-pill {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      backdrop-filter: blur(8px);
+      color: var(--white);
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .hero-pill.stack {
+      background: rgba(255,255,255,0.9);
+      color: var(--orange);
+      border-color: transparent;
+      font-weight: 600;
+    }
+
+    /* MAIN CONTENT */
+    .main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 32px 100px;
+    }
+
+    /* Info cards below hero */
+    .info-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 56px;
+      margin-top: -32px;
+    }
+
+    .info-card {
+      background: var(--white);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      box-shadow: 0 4px 20px rgba(249,115,22,0.08);
+    }
+
+    .info-label {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--light-mid);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .info-value {
+      font-size: 14px;
+      color: var(--dark);
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    /* SECTION */
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--orange);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--dark);
+      letter-spacing: -1px;
+      margin-bottom: 24px;
+      line-height: 1;
+    }
+
+    /* PROJECT GRID */
+    .project-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .proj-card {
+      background: var(--white);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 2px 12px rgba(249,115,22,0.06);
+      transition: box-shadow 0.2s, transform 0.2s;
+      cursor: default;
+    }
+
+    .proj-card:hover {
+      box-shadow: 0 8px 32px rgba(249,115,22,0.14);
+      transform: translateY(-2px);
+    }
+
+    .proj-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .proj-cat {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 100px;
+    }
+    .proj-cat.personal { background: #FEF3C7; color: #92400E; }
+    .proj-cat.freelance { background: #DCFCE7; color: #166534; }
+    .proj-cat.work { background: #EDE9FE; color: #5B21B6; }
+
+    .proj-date { font-size: 12px; color: var(--light-mid); font-weight: 400; }
+
+    .proj-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--dark);
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+
+    .proj-desc {
+      font-size: 13.5px;
+      color: var(--mid);
+      line-height: 1.6;
+      font-weight: 300;
+      font-style: italic;
+      margin-bottom: 14px;
+    }
+
+    .proj-stack { display: flex; flex-wrap: wrap; gap: 6px; }
+    .p-chip {
+      font-size: 11px;
+      font-weight: 600;
+      background: #FFF5EE;
+      color: var(--orange);
+      border: 1px solid var(--peach);
+      padding: 3px 10px;
+      border-radius: 100px;
+    }
+
+    /* FOOTER */
+    .footer {
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 2px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-text {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--light-mid);
+    }
+
+    .footer-links { display: flex; gap: 16px; }
+    .footer-btn {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--orange);
+      border: 1.5px solid var(--peach);
+      padding: 6px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .footer-btn:hover { background: #FFF5EE; }
+
+    @media (max-width: 640px) {
+      .info-row { grid-template-columns: 1fr; margin-top: 16px; }
+      .project-grid { grid-template-columns: 1fr; }
+      .hero-name { font-size: 48px; letter-spacing: -2px; }
+      .footer { flex-direction: column; gap: 16px; }
+    }
+
+    .switcher {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--dark);
+      color: var(--peach);
+      padding: 8px 20px;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      z-index: 200;
+      white-space: nowrap;
+      border-radius: 100px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 600;
+    }
+    .switcher a { color: var(--amber); text-decoration: none; }
+    .switcher a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="hero-section">
+    <div class="hero-inner">
+      <nav class="top-nav">
+        <div class="nav-logo">Piotr Szaran</div>
+        <div class="nav-links">
+          <a href="/">Home</a>
+          <a href="/blog">Blog</a>
+        </div>
+      </nav>
+
+      <div class="hero-badge">
+        <div class="badge-dot"></div>
+        Available for full-time roles
+      </div>
+      <h1 class="hero-name">Piotr<br />Szaran</h1>
+      <p class="hero-sub">Software developer building things people actually use.</p>
+
+      <div class="hero-pills">
+        <div class="hero-pill">TypeScript</div>
+        <div class="hero-pill">Node.js</div>
+        <div class="hero-pill">React</div>
+        <div class="hero-pill">PostgreSQL</div>
+        <div class="hero-pill">Astro</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="info-row">
+      <div class="info-card">
+        <div class="info-label">Education</div>
+        <div class="info-value">— update this field</div>
+      </div>
+      <div class="info-card">
+        <div class="info-label">Currently</div>
+        <div class="info-value">— update this field</div>
+      </div>
+      <div class="info-card">
+        <div class="info-label">Status</div>
+        <div class="info-value">Open to full-time opportunities</div>
+      </div>
+    </div>
+
+    <section>
+      <div class="section-label">Selected work</div>
+      <h2 class="section-title">Projects</h2>
+
+      <div class="project-grid">
+        <div class="proj-card">
+          <div class="proj-top">
+            <span class="proj-cat personal">Personal</span>
+            <span class="proj-date">Mar 2025</span>
+          </div>
+          <div class="proj-name">Portfolio Site v2</div>
+          <div class="proj-desc">Rebuilt with Astro, MDX, Tailwind. Zero JS to the browser by default.</div>
+          <div class="proj-stack">
+            <span class="p-chip">Astro</span>
+            <span class="p-chip">MDX</span>
+            <span class="p-chip">Tailwind</span>
+            <span class="p-chip">Preact</span>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-top">
+            <span class="proj-cat freelance">Freelance</span>
+            <span class="proj-date">Nov 2024</span>
+          </div>
+          <div class="proj-name">E-Commerce Dashboard</div>
+          <div class="proj-desc">Analytics and inventory platform for a UK fashion retailer. Real-time data.</div>
+          <div class="proj-stack">
+            <span class="p-chip">Next.js</span>
+            <span class="p-chip">TypeScript</span>
+            <span class="p-chip">Recharts</span>
+            <span class="p-chip">PostgreSQL</span>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-top">
+            <span class="proj-cat work">Work</span>
+            <span class="proj-date">Aug 2024</span>
+          </div>
+          <div class="proj-name">Developer Tools Suite</div>
+          <div class="proj-desc">CLI tooling and internal web dashboard to streamline deployment pipelines.</div>
+          <div class="proj-stack">
+            <span class="p-chip">Node.js</span>
+            <span class="p-chip">TypeScript</span>
+            <span class="p-chip">React</span>
+            <span class="p-chip">Docker</span>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-top">
+            <span class="proj-cat personal">Personal</span>
+            <span class="proj-date">May 2024</span>
+          </div>
+          <div class="proj-name">Open Source URL Shortener</div>
+          <div class="proj-desc">Self-hosted shortener with analytics, custom domains, and a REST API.</div>
+          <div class="proj-stack">
+            <span class="p-chip">Bun</span>
+            <span class="p-chip">Hono</span>
+            <span class="p-chip">SQLite</span>
+            <span class="p-chip">Fly.io</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span class="footer-text">Piotr Szaran — 2025</span>
+      <div class="footer-links">
+        <a class="footer-btn" href="#">Email</a>
+        <a class="footer-btn" href="#">LinkedIn</a>
+        <a class="footer-btn" href="#">GitHub</a>
+      </div>
+    </footer>
+  </div>
+
+  <nav class="switcher">
+    <a href="/7">←</a>
+    <span>Design 8 / 10 — Vivid</span>
+    <a href="/9">→</a>
+  </nav>
+</body>
+</html>

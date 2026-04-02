@@ -1,0 +1,407 @@
+---
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Design 4 — Japandi — Piotr Szaran</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet" />
+  <style is:global>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sand: #F9F7F3;
+      --warm-white: #FAFAF7;
+      --ink: #1C1C1A;
+      --mid: #6B6457;
+      --light: #B8AFA3;
+      --gold: #A07850;
+      --border: #E0D8CE;
+    }
+
+    html {
+      background: var(--sand);
+    }
+
+    body {
+      background: var(--sand);
+      color: var(--ink);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      font-size: 15px;
+      line-height: 1.8;
+      min-height: 100vh;
+    }
+
+    .page {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 80px 32px 120px;
+    }
+
+    /* NAV */
+    nav.top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 80px;
+    }
+
+    .nav-mark {
+      width: 28px;
+      height: 2px;
+      background: var(--gold);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--mid);
+    }
+
+    /* HERO */
+    .hero { margin-bottom: 80px; }
+
+    .hero-label {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-label::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .hero-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(52px, 10vw, 96px);
+      font-weight: 300;
+      line-height: 1;
+      letter-spacing: -1px;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .hero-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--mid);
+      margin-bottom: 40px;
+    }
+
+    .hero-rule {
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+      margin-bottom: 32px;
+    }
+
+    .hero-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px 40px;
+    }
+
+    .detail-item {}
+    .detail-label {
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--light);
+      font-weight: 400;
+      margin-bottom: 4px;
+    }
+    .detail-value {
+      font-size: 13.5px;
+      color: var(--mid);
+      font-weight: 300;
+    }
+
+    .stack-dots { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+    .s-dot {
+      font-size: 11px;
+      color: var(--mid);
+      font-weight: 300;
+      letter-spacing: 0.02em;
+    }
+    .s-dot::after { content: '·'; margin-left: 6px; color: var(--border); }
+    .s-dot:last-child::after { display: none; }
+
+    /* SECTION */
+    .section { margin-bottom: 60px; }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .section-label {
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--light);
+      font-weight: 400;
+    }
+
+    .section-line { flex: 1; height: 1px; background: var(--border); }
+
+    /* PROJECTS */
+    .project {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      padding: 28px 0;
+      border-bottom: 1px solid var(--border);
+      align-items: start;
+    }
+
+    .project:first-child { border-top: 1px solid var(--border); }
+
+    .project-meta {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+      font-weight: 400;
+    }
+
+    .project-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .project-desc {
+      font-size: 13px;
+      color: var(--mid);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    .project-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .p-tag {
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: var(--light);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      font-weight: 300;
+    }
+
+    .project-date {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      color: var(--light);
+      font-style: italic;
+      white-space: nowrap;
+      padding-top: 4px;
+    }
+
+    /* FOOTER */
+    .footer {
+      padding-top: 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-mark {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      font-style: italic;
+      color: var(--light);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+    .footer-links a { color: var(--mid); text-decoration: none; }
+
+    @media (max-width: 560px) {
+      .hero-details { grid-template-columns: 1fr; }
+      .footer { flex-direction: column; gap: 16px; text-align: center; }
+    }
+
+    .switcher {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--ink);
+      color: var(--sand);
+      padding: 8px 20px;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      z-index: 200;
+      white-space: nowrap;
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+    }
+    .switcher a { color: var(--gold); text-decoration: none; }
+    .switcher a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <nav class="top">
+      <div class="nav-mark"></div>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/blog">Writing</a>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-label">Software Developer</div>
+      <h1 class="hero-name">Piotr<br />Szaran</h1>
+      <p class="hero-sub">Open to full-time opportunities</p>
+      <div class="hero-rule"></div>
+      <div class="hero-details">
+        <div class="detail-item">
+          <div class="detail-label">Education</div>
+          <div class="detail-value">— update this field</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Currently</div>
+          <div class="detail-value">— update this field</div>
+        </div>
+        <div class="detail-item" style="grid-column: 1 / -1;">
+          <div class="detail-label">Core Stack</div>
+          <div class="stack-dots">
+            <span class="s-dot">TypeScript</span>
+            <span class="s-dot">Node.js</span>
+            <span class="s-dot">React</span>
+            <span class="s-dot">PostgreSQL</span>
+            <span class="s-dot">Astro</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="section-label">Selected work</span>
+        <div class="section-line"></div>
+      </div>
+
+      <div class="project">
+        <div>
+          <div class="project-meta">Personal</div>
+          <div class="project-name">Portfolio Site v2</div>
+          <div class="project-desc">Rebuilt personal portfolio with Astro, MDX, and Tailwind. Zero JavaScript shipped to the browser by default.</div>
+          <div class="project-stack">
+            <span class="p-tag">Astro</span>
+            <span class="p-tag">MDX</span>
+            <span class="p-tag">Tailwind</span>
+            <span class="p-tag">Preact</span>
+          </div>
+        </div>
+        <div class="project-date">Mar 2025</div>
+      </div>
+
+      <div class="project">
+        <div>
+          <div class="project-meta">Freelance</div>
+          <div class="project-name">E-Commerce Dashboard</div>
+          <div class="project-desc">Analytics and inventory dashboard for a UK fashion retailer. Real-time data with PostgreSQL.</div>
+          <div class="project-stack">
+            <span class="p-tag">Next.js</span>
+            <span class="p-tag">TypeScript</span>
+            <span class="p-tag">Recharts</span>
+            <span class="p-tag">PostgreSQL</span>
+          </div>
+        </div>
+        <div class="project-date">Nov 2024</div>
+      </div>
+
+      <div class="project">
+        <div>
+          <div class="project-meta">Work</div>
+          <div class="project-name">Developer Tools Suite</div>
+          <div class="project-desc">Internal CLI tooling and web dashboard to streamline deployment pipelines for an engineering team.</div>
+          <div class="project-stack">
+            <span class="p-tag">Node.js</span>
+            <span class="p-tag">TypeScript</span>
+            <span class="p-tag">React</span>
+            <span class="p-tag">Docker</span>
+          </div>
+        </div>
+        <div class="project-date">Aug 2024</div>
+      </div>
+
+      <div class="project">
+        <div>
+          <div class="project-meta">Personal</div>
+          <div class="project-name">Open Source URL Shortener</div>
+          <div class="project-desc">Self-hosted URL shortener with analytics, custom domains, and a REST API. MIT licensed.</div>
+          <div class="project-stack">
+            <span class="p-tag">Bun</span>
+            <span class="p-tag">Hono</span>
+            <span class="p-tag">SQLite</span>
+            <span class="p-tag">Fly.io</span>
+          </div>
+        </div>
+        <div class="project-date">May 2024</div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span class="footer-mark">Piotr Szaran, 2025</span>
+      <div class="footer-links">
+        <a href="mailto:piotr@piotrszaran.com">Email</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">GitHub</a>
+      </div>
+    </footer>
+  </div>
+
+  <nav class="switcher">
+    <a href="/3">←</a>
+    <span>Design 4 / 10 — Japandi</span>
+    <a href="/5">→</a>
+  </nav>
+</body>
+</html>

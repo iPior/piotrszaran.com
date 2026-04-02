@@ -1,0 +1,383 @@
+---
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Design 2 — Swiss — Piotr Szaran</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <style is:global>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #0A0A0A;
+      --paper: #F0EDE6;
+      --red: #D62828;
+      --mid: #555;
+    }
+
+    html, body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 32px 100px;
+    }
+
+    /* TOP RULE */
+    .top-rule {
+      height: 8px;
+      background: var(--ink);
+      margin-bottom: 0;
+    }
+
+    /* HEADER */
+    .site-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 16px 0 14px;
+      border-bottom: 2px solid var(--ink);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    .header-label { color: var(--mid); }
+    .header-red { color: var(--red); font-weight: 700; }
+
+    /* HERO */
+    .hero {
+      padding: 40px 0 0;
+    }
+
+    .hero-kicker {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--red);
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .hero-kicker::after {
+      content: '';
+      display: inline-block;
+      height: 2px;
+      width: 40px;
+      background: var(--red);
+    }
+
+    .hero-name {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(72px, 12vw, 148px);
+      line-height: 0.92;
+      letter-spacing: -2px;
+      color: var(--ink);
+      margin-bottom: 24px;
+    }
+
+    .hero-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-top: 2px solid var(--ink);
+      margin-top: 24px;
+    }
+
+    .hero-meta-item {
+      padding: 16px 0;
+      border-bottom: 1px solid #ccc;
+    }
+    .hero-meta-item:nth-child(odd) { padding-right: 32px; border-right: 1px solid #ccc; }
+    .hero-meta-item:nth-child(even) { padding-left: 32px; }
+
+    .meta-label {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mid);
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .meta-value {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--ink);
+    }
+
+    .stack-inline { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .s-pill {
+      font-size: 11px;
+      background: var(--ink);
+      color: var(--paper);
+      padding: 2px 8px;
+      letter-spacing: 0.05em;
+    }
+
+    /* PROJECTS */
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin: 56px 0 0;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--ink);
+    }
+
+    .section-title {
+      font-family: 'Anton', sans-serif;
+      font-size: 36px;
+      letter-spacing: 0px;
+      line-height: 1;
+    }
+
+    .section-count {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+    .projects-list { margin-top: 0; }
+
+    .project-row {
+      display: grid;
+      grid-template-columns: 48px 1fr 180px;
+      align-items: start;
+      gap: 24px;
+      padding: 20px 0;
+      border-bottom: 1px solid #d4d0c8;
+    }
+
+    .project-num {
+      font-family: 'Anton', sans-serif;
+      font-size: 32px;
+      color: var(--red);
+      line-height: 1;
+    }
+
+    .project-body {}
+
+    .project-name {
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+
+    .project-desc {
+      font-size: 13px;
+      color: var(--mid);
+      font-style: italic;
+      line-height: 1.5;
+      font-weight: 300;
+    }
+
+    .project-right {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .project-cat {
+      display: inline-block;
+      background: var(--ink);
+      color: var(--paper);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      font-weight: 700;
+    }
+    .project-cat.freelance { background: var(--red); }
+    .project-cat.work { background: #333; }
+
+    .project-stack-r { display: flex; flex-wrap: wrap; gap: 4px; justify-content: flex-end; }
+    .s-r {
+      font-size: 10px;
+      color: var(--mid);
+      border: 1px solid #ccc;
+      padding: 1px 6px;
+    }
+
+    .project-date {
+      font-size: 11px;
+      color: #aaa;
+      letter-spacing: 0.08em;
+    }
+
+    /* BOTTOM RULE */
+    .bottom-rule {
+      height: 4px;
+      background: var(--red);
+      margin-top: 48px;
+    }
+
+    @media (max-width: 640px) {
+      .hero-name { font-size: 64px; }
+      .hero-meta { grid-template-columns: 1fr; }
+      .hero-meta-item:nth-child(odd) { border-right: none; padding-right: 0; }
+      .hero-meta-item:nth-child(even) { padding-left: 0; }
+      .project-row { grid-template-columns: 40px 1fr; }
+      .project-right { display: none; }
+    }
+
+    /* Switcher */
+    .switcher {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--ink);
+      color: var(--paper);
+      padding: 8px 20px;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      z-index: 200;
+      white-space: nowrap;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .switcher a { color: var(--red); text-decoration: none; font-weight: 700; }
+    .switcher a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="top-rule"></div>
+  <div class="page">
+    <header class="site-header">
+      <span class="header-label">Portfolio</span>
+      <span class="header-red">Available for hire</span>
+      <span class="header-label">2025</span>
+    </header>
+
+    <section class="hero">
+      <div class="hero-kicker">Software Developer</div>
+      <h1 class="hero-name">Piotr<br />Szaran</h1>
+
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <div class="meta-label">Status</div>
+          <div class="meta-value">Open to full-time opportunities</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="meta-label">Education</div>
+          <div class="meta-value">— update this field</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="meta-label">Currently</div>
+          <div class="meta-value">— update this field</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="meta-label">Core Stack</div>
+          <div class="stack-inline">
+            <span class="s-pill">TypeScript</span>
+            <span class="s-pill">Node.js</span>
+            <span class="s-pill">React</span>
+            <span class="s-pill">PostgreSQL</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-header">
+        <h2 class="section-title">Projects</h2>
+        <span class="section-count">04 entries</span>
+      </div>
+      <div class="projects-list">
+        <div class="project-row">
+          <div class="project-num">01</div>
+          <div class="project-body">
+            <div class="project-name">Portfolio Site v2</div>
+            <div class="project-desc">Rebuilt personal portfolio with Astro, MDX, and Tailwind. Zero JS by default.</div>
+          </div>
+          <div class="project-right">
+            <span class="project-cat personal">Personal</span>
+            <div class="project-stack-r">
+              <span class="s-r">Astro</span>
+              <span class="s-r">MDX</span>
+              <span class="s-r">Tailwind</span>
+            </div>
+            <span class="project-date">Mar 2025</span>
+          </div>
+        </div>
+        <div class="project-row">
+          <div class="project-num">02</div>
+          <div class="project-body">
+            <div class="project-name">E-Commerce Dashboard</div>
+            <div class="project-desc">Analytics and inventory dashboard for a UK fashion retailer. Real-time data.</div>
+          </div>
+          <div class="project-right">
+            <span class="project-cat freelance">Freelance</span>
+            <div class="project-stack-r">
+              <span class="s-r">Next.js</span>
+              <span class="s-r">TypeScript</span>
+              <span class="s-r">Recharts</span>
+            </div>
+            <span class="project-date">Nov 2024</span>
+          </div>
+        </div>
+        <div class="project-row">
+          <div class="project-num">03</div>
+          <div class="project-body">
+            <div class="project-name">Developer Tools Suite</div>
+            <div class="project-desc">Internal CLI tooling and web dashboard to streamline deployment pipelines.</div>
+          </div>
+          <div class="project-right">
+            <span class="project-cat work">Work</span>
+            <div class="project-stack-r">
+              <span class="s-r">Node.js</span>
+              <span class="s-r">TypeScript</span>
+              <span class="s-r">Docker</span>
+            </div>
+            <span class="project-date">Aug 2024</span>
+          </div>
+        </div>
+        <div class="project-row">
+          <div class="project-num">04</div>
+          <div class="project-body">
+            <div class="project-name">Open Source URL Shortener</div>
+            <div class="project-desc">Self-hosted shortener with analytics, custom domains, and a REST API.</div>
+          </div>
+          <div class="project-right">
+            <span class="project-cat personal">Personal</span>
+            <div class="project-stack-r">
+              <span class="s-r">Bun</span>
+              <span class="s-r">Hono</span>
+              <span class="s-r">SQLite</span>
+            </div>
+            <span class="project-date">May 2024</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="bottom-rule"></div>
+  </div>
+
+  <nav class="switcher">
+    <a href="/1">←</a>
+    <span>Design 2 / 10 — Swiss</span>
+    <a href="/3">→</a>
+  </nav>
+</body>
+</html>

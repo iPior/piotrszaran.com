@@ -1,0 +1,414 @@
+---
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Design 6 — Brutalist — Piotr Szaran</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <style is:global>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #080808;
+      --white: #F2F2F2;
+      --yellow: #F5C518;
+      --gray: #888;
+      --dark-gray: #222;
+    }
+
+    html, body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Courier Prime', monospace;
+      min-height: 100vh;
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 32px 120px;
+    }
+
+    /* HEADER BAR */
+    .header-bar {
+      background: var(--yellow);
+      margin: 0 -32px;
+      padding: 8px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header-bar-text {
+      font-family: 'Courier Prime', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--black);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    /* HERO */
+    .hero {
+      padding: 48px 0 0;
+      border-bottom: 3px solid var(--white);
+      padding-bottom: 32px;
+      margin-bottom: 0;
+    }
+
+    .hero-tag {
+      font-family: 'Courier Prime', monospace;
+      font-size: 12px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .hero-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(80px, 16vw, 172px);
+      line-height: 0.88;
+      letter-spacing: 2px;
+      color: var(--white);
+      margin-bottom: 24px;
+    }
+
+    .hero-name span {
+      display: block;
+      color: var(--yellow);
+    }
+
+    .hero-sub-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-top: 1px solid var(--dark-gray);
+    }
+
+    .hero-sub-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--dark-gray);
+    }
+    .hero-sub-item:nth-child(odd) { border-right: 1px solid var(--dark-gray); padding-right: 24px; }
+    .hero-sub-item:nth-child(even) { padding-left: 24px; }
+
+    .sub-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 4px;
+    }
+    .sub-value {
+      font-size: 14px;
+      color: var(--white);
+      line-height: 1.4;
+    }
+
+    .stack-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+    .s-item {
+      font-size: 12px;
+      color: var(--yellow);
+      border: 1px solid var(--dark-gray);
+      padding: 2px 8px;
+      letter-spacing: 0.05em;
+    }
+
+    /* PROJECTS */
+    .projects { margin-top: 0; }
+
+    .proj-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 20px 0 12px;
+      border-bottom: 3px solid var(--yellow);
+      margin-bottom: 0;
+    }
+
+    .proj-header-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 56px;
+      letter-spacing: 2px;
+      line-height: 1;
+      color: var(--white);
+    }
+
+    .proj-header-count {
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+
+    .project-item {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 0;
+      border-bottom: 1px solid var(--dark-gray);
+    }
+
+    .proj-num-col {
+      border-right: 1px solid var(--dark-gray);
+      padding: 24px 16px 24px 0;
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .proj-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 72px;
+      line-height: 0.85;
+      color: var(--dark-gray);
+      letter-spacing: 2px;
+    }
+
+    .proj-body {
+      padding: 24px 0 24px 24px;
+    }
+
+    .proj-meta {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .proj-cat {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 700;
+      background: var(--yellow);
+      color: var(--black);
+      padding: 2px 8px;
+    }
+    .proj-cat.work { background: var(--white); }
+    .proj-cat.freelance { background: var(--gray); color: var(--white); }
+
+    .proj-date {
+      font-size: 12px;
+      color: var(--gray);
+      letter-spacing: 0.08em;
+    }
+
+    .proj-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px;
+      letter-spacing: 1px;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .proj-desc {
+      font-size: 13px;
+      color: #aaa;
+      line-height: 1.6;
+      margin-bottom: 10px;
+      max-width: 520px;
+    }
+
+    .proj-stack { display: flex; flex-wrap: wrap; gap: 6px; }
+    .p-tag {
+      font-size: 11px;
+      border: 1px solid var(--dark-gray);
+      color: var(--gray);
+      padding: 2px 8px;
+      letter-spacing: 0.05em;
+    }
+
+    /* FOOTER BAR */
+    .footer-bar {
+      background: var(--yellow);
+      margin: 48px -32px 0;
+      padding: 12px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--black);
+    }
+    .footer-links a { color: var(--black); text-decoration: none; }
+
+    @media (max-width: 600px) {
+      .hero-name { font-size: 72px; }
+      .hero-sub-grid { grid-template-columns: 1fr; }
+      .hero-sub-item:nth-child(odd) { border-right: none; padding-right: 0; }
+      .hero-sub-item:nth-child(even) { padding-left: 0; }
+      .project-item { grid-template-columns: 60px 1fr; }
+      .proj-num { font-size: 44px; }
+    }
+
+    .switcher {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--yellow);
+      color: var(--black);
+      padding: 8px 20px;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      z-index: 200;
+      white-space: nowrap;
+      font-family: 'Courier Prime', monospace;
+      font-weight: 700;
+    }
+    .switcher a { color: var(--black); text-decoration: none; }
+    .switcher a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="header-bar">
+      <span class="header-bar-text">Available for hire</span>
+      <span class="header-bar-text">2025</span>
+    </div>
+
+    <section class="hero">
+      <div class="hero-tag">Software Developer</div>
+      <h1 class="hero-name">
+        Piotr<span>Szaran</span>
+      </h1>
+      <div class="hero-sub-grid">
+        <div class="hero-sub-item">
+          <div class="sub-label">Status</div>
+          <div class="sub-value">Open to full-time roles</div>
+        </div>
+        <div class="hero-sub-item">
+          <div class="sub-label">Education</div>
+          <div class="sub-value">— update this field</div>
+        </div>
+        <div class="hero-sub-item">
+          <div class="sub-label">Currently</div>
+          <div class="sub-value">— update this field</div>
+        </div>
+        <div class="hero-sub-item">
+          <div class="sub-label">Stack</div>
+          <div class="stack-row">
+            <span class="s-item">TS</span>
+            <span class="s-item">Node</span>
+            <span class="s-item">React</span>
+            <span class="s-item">PG</span>
+            <span class="s-item">Astro</span>
+            <span class="s-item">Docker</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="projects">
+      <div class="proj-header">
+        <h2 class="proj-header-title">Projects</h2>
+        <span class="proj-header-count">04 total</span>
+      </div>
+
+      <div class="project-item">
+        <div class="proj-num-col"><div class="proj-num">01</div></div>
+        <div class="proj-body">
+          <div class="proj-meta">
+            <span class="proj-cat personal">Personal</span>
+            <span class="proj-date">Mar 2025</span>
+          </div>
+          <div class="proj-name">Portfolio Site v2</div>
+          <div class="proj-desc">Rebuilt portfolio with Astro, MDX, and Tailwind. Zero JavaScript to the browser by default.</div>
+          <div class="proj-stack">
+            <span class="p-tag">Astro</span>
+            <span class="p-tag">MDX</span>
+            <span class="p-tag">Tailwind</span>
+            <span class="p-tag">Preact</span>
+            <span class="p-tag">Vercel</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-item">
+        <div class="proj-num-col"><div class="proj-num">02</div></div>
+        <div class="proj-body">
+          <div class="proj-meta">
+            <span class="proj-cat freelance">Freelance</span>
+            <span class="proj-date">Nov 2024</span>
+          </div>
+          <div class="proj-name">E-Commerce Dashboard</div>
+          <div class="proj-desc">Analytics and inventory dashboard for a UK fashion retailer. Real-time data with PostgreSQL.</div>
+          <div class="proj-stack">
+            <span class="p-tag">Next.js</span>
+            <span class="p-tag">TypeScript</span>
+            <span class="p-tag">Recharts</span>
+            <span class="p-tag">PostgreSQL</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-item">
+        <div class="proj-num-col"><div class="proj-num">03</div></div>
+        <div class="proj-body">
+          <div class="proj-meta">
+            <span class="proj-cat work">Work</span>
+            <span class="proj-date">Aug 2024</span>
+          </div>
+          <div class="proj-name">Developer Tools Suite</div>
+          <div class="proj-desc">Internal CLI tooling and web dashboard to streamline deployment pipelines.</div>
+          <div class="proj-stack">
+            <span class="p-tag">Node.js</span>
+            <span class="p-tag">TypeScript</span>
+            <span class="p-tag">React</span>
+            <span class="p-tag">Docker</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-item">
+        <div class="proj-num-col"><div class="proj-num">04</div></div>
+        <div class="proj-body">
+          <div class="proj-meta">
+            <span class="proj-cat personal">Personal</span>
+            <span class="proj-date">May 2024</span>
+          </div>
+          <div class="proj-name">Open Source URL Shortener</div>
+          <div class="proj-desc">Self-hosted shortener with analytics, custom domains, and a REST API. MIT licensed.</div>
+          <div class="proj-stack">
+            <span class="p-tag">Bun</span>
+            <span class="p-tag">Hono</span>
+            <span class="p-tag">SQLite</span>
+            <span class="p-tag">Fly.io</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-bar">
+      <span class="header-bar-text">Piotr Szaran</span>
+      <div class="footer-links">
+        <a href="#">Email</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">GitHub</a>
+      </div>
+    </div>
+  </div>
+
+  <nav class="switcher">
+    <a href="/5">←</a>
+    <span>Design 6 / 10 — Brutalist</span>
+    <a href="/7">→</a>
+  </nav>
+</body>
+</html>

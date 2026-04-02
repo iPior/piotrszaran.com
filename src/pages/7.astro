@@ -1,0 +1,470 @@
+---
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Design 7 — Glass Dark — Piotr Szaran</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style is:global>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-deep: #040C14;
+      --bg-mid: #071624;
+      --glass: rgba(255,255,255,0.04);
+      --glass-border: rgba(255,255,255,0.08);
+      --glass-hover: rgba(255,255,255,0.07);
+      --cyan: #22D3EE;
+      --cyan-dim: rgba(34,211,238,0.15);
+      --emerald: #10B981;
+      --text: #E2EAF4;
+      --text-mid: #8BA8C4;
+      --text-dim: #4A6480;
+    }
+
+    html, body {
+      background: var(--bg-deep);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+    }
+
+    /* BACKGROUND EFFECTS */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 15% -10%, rgba(6,182,212,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 90% 110%, rgba(16,185,129,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 50% 50%, rgba(30,58,138,0.15) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Noise grain */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.4;
+    }
+
+    .page {
+      position: relative;
+      z-index: 2;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 32px 120px;
+    }
+
+    /* NAV */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 80px;
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--cyan);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      font-size: 13px;
+      color: var(--text-mid);
+      letter-spacing: 0.05em;
+    }
+    .nav-links a { color: var(--text-mid); text-decoration: none; }
+    .nav-links a:hover { color: var(--text); }
+
+    /* HERO */
+    .hero { margin-bottom: 64px; }
+
+    .hero-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .dot-pulse {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--emerald);
+      box-shadow: 0 0 8px var(--emerald);
+    }
+
+    .eyebrow-text {
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--emerald);
+      font-weight: 500;
+    }
+
+    .hero-name {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(52px, 9vw, 96px);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -2px;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .hero-name .accent { color: var(--cyan); }
+
+    .hero-sub {
+      font-size: 18px;
+      color: var(--text-mid);
+      font-weight: 300;
+      margin-bottom: 40px;
+      max-width: 480px;
+      line-height: 1.6;
+    }
+
+    /* GLASS CARDS — hero info */
+    .hero-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .glass-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 16px;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+
+    .glass-card:hover { background: var(--glass-hover); }
+
+    .card-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .card-value {
+      font-size: 14px;
+      color: var(--text);
+      font-weight: 400;
+      line-height: 1.4;
+    }
+
+    .stack-wrap { display: flex; flex-wrap: wrap; gap: 4px; }
+    .s-chip {
+      font-size: 11px;
+      background: var(--cyan-dim);
+      color: var(--cyan);
+      border: 1px solid rgba(34,211,238,0.2);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 400;
+    }
+
+    /* SECTION */
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--glass-border);
+      margin: 0 16px;
+    }
+
+    .section-count {
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    /* PROJECT GRID */
+    .project-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .project-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 20px;
+      border-radius: 8px;
+      transition: background 0.2s, border-color 0.2s;
+      cursor: default;
+    }
+
+    .project-card:hover {
+      background: var(--glass-hover);
+      border-color: rgba(34,211,238,0.2);
+    }
+
+    .project-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .p-cat {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+    .p-cat.personal { background: rgba(34,211,238,0.12); color: var(--cyan); border: 1px solid rgba(34,211,238,0.2); }
+    .p-cat.freelance { background: rgba(16,185,129,0.12); color: var(--emerald); border: 1px solid rgba(16,185,129,0.2); }
+    .p-cat.work { background: rgba(139,168,196,0.12); color: var(--text-mid); border: 1px solid rgba(139,168,196,0.2); }
+
+    .p-date { font-size: 11px; color: var(--text-dim); }
+
+    .p-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+
+    .p-desc {
+      font-size: 13px;
+      color: var(--text-mid);
+      line-height: 1.6;
+      margin-bottom: 12px;
+      font-weight: 300;
+    }
+
+    .p-stack { display: flex; flex-wrap: wrap; gap: 4px; }
+    .p-tag {
+      font-size: 10px;
+      color: var(--text-dim);
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 1px 6px;
+      border-radius: 3px;
+    }
+
+    /* FOOTER */
+    .footer {
+      margin-top: 64px;
+      padding-top: 24px;
+      border-top: 1px solid var(--glass-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-dim);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+    .footer-links a { color: var(--text-dim); text-decoration: none; transition: color 0.15s; }
+    .footer-links a:hover { color: var(--cyan); }
+
+    @media (max-width: 640px) {
+      .hero-cards { grid-template-columns: 1fr 1fr; }
+      .project-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 440px) {
+      .hero-cards { grid-template-columns: 1fr; }
+    }
+
+    .switcher {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(4,12,20,0.95);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(12px);
+      color: var(--text-mid);
+      padding: 8px 20px;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      z-index: 200;
+      white-space: nowrap;
+      border-radius: 6px;
+      font-family: 'Outfit', sans-serif;
+    }
+    .switcher a { color: var(--cyan); text-decoration: none; font-weight: 500; }
+    .switcher a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <nav class="nav">
+      <div class="nav-logo">PS</div>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/blog">Blog</a>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-eyebrow">
+        <div class="dot-pulse"></div>
+        <span class="eyebrow-text">Available for hire</span>
+      </div>
+      <h1 class="hero-name">Piotr<br /><span class="accent">Szaran</span></h1>
+      <p class="hero-sub">Software developer building thoughtful, production-ready software.</p>
+
+      <div class="hero-cards">
+        <div class="glass-card">
+          <div class="card-label">Education</div>
+          <div class="card-value">— update this field</div>
+        </div>
+        <div class="glass-card">
+          <div class="card-label">Currently</div>
+          <div class="card-value">— update this field</div>
+        </div>
+        <div class="glass-card">
+          <div class="card-label">Core Stack</div>
+          <div class="stack-wrap">
+            <span class="s-chip">TypeScript</span>
+            <span class="s-chip">Node.js</span>
+            <span class="s-chip">React</span>
+            <span class="s-chip">PostgreSQL</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <span class="section-title">Projects</span>
+        <div class="section-line"></div>
+        <span class="section-count">4 total</span>
+      </div>
+
+      <div class="project-grid">
+        <div class="project-card">
+          <div class="project-top">
+            <span class="p-cat personal">Personal</span>
+            <span class="p-date">Mar 2025</span>
+          </div>
+          <div class="p-name">Portfolio Site v2</div>
+          <div class="p-desc">Rebuilt with Astro, MDX, and Tailwind. Zero JavaScript shipped to the browser by default.</div>
+          <div class="p-stack">
+            <span class="p-tag">Astro</span>
+            <span class="p-tag">MDX</span>
+            <span class="p-tag">Tailwind</span>
+            <span class="p-tag">Preact</span>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-top">
+            <span class="p-cat freelance">Freelance</span>
+            <span class="p-date">Nov 2024</span>
+          </div>
+          <div class="p-name">E-Commerce Dashboard</div>
+          <div class="p-desc">Analytics and inventory dashboard for a UK fashion retailer with real-time data.</div>
+          <div class="p-stack">
+            <span class="p-tag">Next.js</span>
+            <span class="p-tag">TypeScript</span>
+            <span class="p-tag">Recharts</span>
+            <span class="p-tag">PostgreSQL</span>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-top">
+            <span class="p-cat work">Work</span>
+            <span class="p-date">Aug 2024</span>
+          </div>
+          <div class="p-name">Developer Tools Suite</div>
+          <div class="p-desc">Internal CLI tooling and web dashboard to streamline deployment pipelines.</div>
+          <div class="p-stack">
+            <span class="p-tag">Node.js</span>
+            <span class="p-tag">TypeScript</span>
+            <span class="p-tag">React</span>
+            <span class="p-tag">Docker</span>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-top">
+            <span class="p-cat personal">Personal</span>
+            <span class="p-date">May 2024</span>
+          </div>
+          <div class="p-name">Open Source URL Shortener</div>
+          <div class="p-desc">Self-hosted shortener with analytics, custom domains, and a REST API. MIT licensed.</div>
+          <div class="p-stack">
+            <span class="p-tag">Bun</span>
+            <span class="p-tag">Hono</span>
+            <span class="p-tag">SQLite</span>
+            <span class="p-tag">Fly.io</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span class="footer-name">Piotr Szaran</span>
+      <div class="footer-links">
+        <a href="#">Email</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">GitHub</a>
+      </div>
+    </footer>
+  </div>
+
+  <nav class="switcher">
+    <a href="/6">←</a>
+    <span>Design 7 / 10 — Glass Dark</span>
+    <a href="/8">→</a>
+  </nav>
+</body>
+</html>
