@@ -10,7 +10,8 @@
       "Bash(bun run:*)",
       "Bash(python -c \"import sys,json; v=json.load\\(sys.stdin\\); print\\([x for x in v if not any\\(s in x for s in ['alpha','beta','rc']\\)][-10:]\\)\")",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(bunx astro:*)"
     ]
   }
 }

@@ -1,0 +1,462 @@
+---
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Design 1 — Terminal — Piotr Szaran</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400&display=swap" rel="stylesheet" />
+  <style is:inline>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --green: #3fb950;
+      --bright-green: #56d364;
+      --cyan: #58a6ff;
+      --amber: #d29922;
+      --red: #f85149;
+      --text: #c9d1d9;
+      --dim: #6e7681;
+      --white: #e6edf3;
+    }
+
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* WINDOW CHROME */
+    .window-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .dot--red { background: #ff5f57; }
+    .dot--yellow { background: #febc2e; }
+    .dot--green { background: #28c840; }
+    .window-title {
+      flex: 1;
+      text-align: center;
+      font-size: 12px;
+      color: var(--dim);
+      letter-spacing: 0.05em;
+    }
+    .dot-spacer { width: 52px; }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 32px 100px;
+    }
+
+    /* HEADER */
+    .site-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 16px 0 14px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--dim);
+    }
+    .header-path { color: var(--cyan); }
+    .header-status {
+      color: var(--bright-green);
+      font-weight: 500;
+    }
+    .header-status::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--bright-green);
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    .header-branch { color: var(--dim); }
+
+    /* HERO */
+    .hero {
+      padding: 40px 0 0;
+    }
+
+    .hero-prompt {
+      font-size: 13px;
+      color: var(--dim);
+      margin-bottom: 12px;
+    }
+    .hero-prompt .prompt-symbol { color: var(--green); font-weight: 700; }
+    .hero-prompt .prompt-cmd { color: var(--cyan); }
+
+    .hero-name {
+      font-size: clamp(48px, 10vw, 96px);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -2px;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+    .hero-name .accent { color: var(--green); }
+
+    .cursor {
+      display: inline-block;
+      width: 3px;
+      height: 0.85em;
+      background: var(--green);
+      margin-left: 4px;
+      vertical-align: baseline;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    .hero-sub {
+      font-size: 14px;
+      color: var(--dim);
+      margin-top: 8px;
+      font-style: italic;
+      font-weight: 300;
+    }
+    .hero-sub .comment { color: var(--dim); }
+
+    /* META GRID */
+    .hero-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-top: 1px solid var(--border);
+      margin-top: 28px;
+    }
+
+    .hero-meta-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-meta-item:nth-child(odd) { padding-right: 32px; border-right: 1px solid var(--border); }
+    .hero-meta-item:nth-child(even) { padding-left: 32px; }
+
+    .meta-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--dim);
+      margin-bottom: 6px;
+    }
+    .meta-label::before {
+      content: '# ';
+      color: var(--green);
+    }
+
+    .meta-value {
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .stack-inline { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .s-pill {
+      font-size: 11px;
+      color: var(--green);
+      border: 1px solid var(--green);
+      padding: 2px 8px;
+      border-radius: 2px;
+    }
+
+    /* PROJECTS SECTION */
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin: 48px 0 0;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.5px;
+    }
+    .section-title::before {
+      content: '$ ls ';
+      color: var(--green);
+      font-weight: 400;
+    }
+
+    .section-count {
+      font-size: 11px;
+      color: var(--dim);
+      letter-spacing: 0.05em;
+    }
+
+    .projects-list { margin-top: 0; }
+
+    .project-row {
+      display: grid;
+      grid-template-columns: 40px 1fr 180px;
+      align-items: start;
+      gap: 20px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+    .project-row:hover {
+      background: var(--surface);
+      margin: 0 -12px;
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+
+    .project-num {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--amber);
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .project-name {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--white);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+
+    .project-desc {
+      font-size: 12px;
+      color: var(--dim);
+      font-style: italic;
+      line-height: 1.5;
+      font-weight: 300;
+    }
+
+    .project-right {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .project-cat {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 2px;
+      font-weight: 700;
+      border: 1px solid;
+    }
+    .project-cat.personal { color: var(--cyan); border-color: var(--cyan); }
+    .project-cat.freelance { color: var(--amber); border-color: var(--amber); }
+    .project-cat.work { color: var(--green); border-color: var(--green); }
+
+    .project-stack-r { display: flex; flex-wrap: wrap; gap: 4px; justify-content: flex-end; }
+    .s-r {
+      font-size: 10px;
+      color: var(--dim);
+      border: 1px solid var(--border);
+      padding: 1px 6px;
+      border-radius: 2px;
+    }
+
+    .project-date {
+      font-size: 11px;
+      color: var(--dim);
+    }
+
+    /* BOTTOM */
+    .bottom-rule {
+      height: 2px;
+      background: var(--green);
+      margin-top: 48px;
+      opacity: 0.5;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      .hero-name { font-size: 48px; letter-spacing: -1px; }
+      .hero-meta { grid-template-columns: 1fr; }
+      .hero-meta-item:nth-child(odd) { border-right: none; padding-right: 0; }
+      .hero-meta-item:nth-child(even) { padding-left: 0; }
+      .project-row { grid-template-columns: 32px 1fr; }
+      .project-right { display: none; }
+      .window-title { display: none; }
+    }
+
+    /* SWITCHER */
+    .switcher {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 20px;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      z-index: 200;
+      white-space: nowrap;
+      font-family: 'JetBrains Mono', monospace;
+      border-radius: 4px;
+    }
+    .switcher a { color: var(--green); text-decoration: none; font-weight: 700; }
+    .switcher a:hover { color: var(--bright-green); }
+  </style>
+</head>
+<body>
+  <div class="window-bar">
+    <span class="dot dot--red"></span>
+    <span class="dot dot--yellow"></span>
+    <span class="dot dot--green"></span>
+    <span class="window-title">piotr@dev ~ /portfolio</span>
+    <span class="dot-spacer"></span>
+  </div>
+
+  <div class="page">
+    <header class="site-header">
+      <span class="header-path">~/portfolio</span>
+      <span class="header-status">Available for hire</span>
+      <span class="header-branch">main *</span>
+    </header>
+
+    <section class="hero">
+      <div class="hero-prompt">
+        <span class="prompt-symbol">$</span> <span class="prompt-cmd">whoami</span> --verbose
+      </div>
+      <h1 class="hero-name">Piotr<br /><span class="accent">Szaran</span><span class="cursor"></span></h1>
+      <div class="hero-sub"><span class="comment">// Software Developer</span></div>
+
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <div class="meta-label">Status</div>
+          <div class="meta-value">Open to full-time opportunities</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="meta-label">Education</div>
+          <div class="meta-value">— update this field</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="meta-label">Currently</div>
+          <div class="meta-value">— update this field</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="meta-label">Core Stack</div>
+          <div class="stack-inline">
+            <span class="s-pill">TypeScript</span>
+            <span class="s-pill">Node.js</span>
+            <span class="s-pill">React</span>
+            <span class="s-pill">PostgreSQL</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-header">
+        <h2 class="section-title">projects/</h2>
+        <span class="section-count">4 items</span>
+      </div>
+      <div class="projects-list">
+        <div class="project-row">
+          <div class="project-num">01</div>
+          <div class="project-body">
+            <div class="project-name">Portfolio Site v2</div>
+            <div class="project-desc">Rebuilt personal portfolio with Astro, MDX, and Tailwind. Zero JS by default.</div>
+          </div>
+          <div class="project-right">
+            <span class="project-cat personal">Personal</span>
+            <div class="project-stack-r">
+              <span class="s-r">Astro</span>
+              <span class="s-r">MDX</span>
+              <span class="s-r">Tailwind</span>
+            </div>
+            <span class="project-date">Mar 2025</span>
+          </div>
+        </div>
+        <div class="project-row">
+          <div class="project-num">02</div>
+          <div class="project-body">
+            <div class="project-name">E-Commerce Dashboard</div>
+            <div class="project-desc">Analytics and inventory dashboard for a UK fashion retailer. Real-time data.</div>
+          </div>
+          <div class="project-right">
+            <span class="project-cat freelance">Freelance</span>
+            <div class="project-stack-r">
+              <span class="s-r">Next.js</span>
+              <span class="s-r">TypeScript</span>
+              <span class="s-r">Recharts</span>
+            </div>
+            <span class="project-date">Nov 2024</span>
+          </div>
+        </div>
+        <div class="project-row">
+          <div class="project-num">03</div>
+          <div class="project-body">
+            <div class="project-name">Developer Tools Suite</div>
+            <div class="project-desc">Internal CLI tooling and web dashboard to streamline deployment pipelines.</div>
+          </div>
+          <div class="project-right">
+            <span class="project-cat work">Work</span>
+            <div class="project-stack-r">
+              <span class="s-r">Node.js</span>
+              <span class="s-r">TypeScript</span>
+              <span class="s-r">Docker</span>
+            </div>
+            <span class="project-date">Aug 2024</span>
+          </div>
+        </div>
+        <div class="project-row">
+          <div class="project-num">04</div>
+          <div class="project-body">
+            <div class="project-name">Open Source URL Shortener</div>
+            <div class="project-desc">Self-hosted shortener with analytics, custom domains, and a REST API.</div>
+          </div>
+          <div class="project-right">
+            <span class="project-cat personal">Personal</span>
+            <div class="project-stack-r">
+              <span class="s-r">Bun</span>
+              <span class="s-r">Hono</span>
+              <span class="s-r">SQLite</span>
+            </div>
+            <span class="project-date">May 2024</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="bottom-rule"></div>
+  </div>
+
+  <nav class="switcher">
+    <a href="/5">&larr;</a>
+    <span>Design 1 / 5 &mdash; Terminal</span>
+    <a href="/2">&rarr;</a>
+  </nav>
+</body>
+</html>
