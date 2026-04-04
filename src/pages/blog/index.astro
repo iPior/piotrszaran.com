@@ -1,8 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import BlogCard from '../../components/BlogCard.astro';
 import { getCollection } from 'astro:content';
-import { calculateReadingTime } from '../../lib/utils';
+import { calculateReadingTime, formatDate } from '../../lib/utils';
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
@@ -12,24 +11,75 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
   title="Blog — Piotr Szaran"
   description="Technical writing on software development."
 >
-  <h1 class="text-3xl font-bold mb-8 text-site-text">Blog</h1>
-  {posts.length === 0 ? (
-    <p class="text-site-dim">No posts yet.</p>
-  ) : (
-    <div class="grid gap-4">
-      {posts.map((post) => {
-        const readingTime = post.data.readingTime ?? calculateReadingTime(post.body ?? '');
-        return (
-          <BlogCard
-            slug={post.slug}
-            title={post.data.title}
-            date={post.data.date}
-            description={post.data.description}
-            readingTime={readingTime}
-            tags={post.data.tags}
-          />
-        );
-      })}
+  <section>
+    <div class="mb-2.5 text-xs text-site-dim">
+      <span class="text-site-mauve">export</span> <span class="text-site-mauve">const</span> writing
+      <span class="text-site-overlay">=</span> <span class="text-site-overlay">{'{'}</span>
     </div>
-  )}
+    <h1 class="text-4xl font-bold leading-none tracking-tight text-site-text sm:text-6xl md:text-7xl">
+      <span class="text-site-blue">Blog</span>
+    </h1>
+    <div class="mt-2.5 text-sm text-site-dim">
+      <span class="italic text-site-dim">// Technical writing on software development.</span>
+    </div>
+  </section>
+
+  <section class="mt-10">
+    <div class="flex items-baseline gap-3 border-b border-site-border pb-2.5">
+      <h2 class="text-lg font-semibold text-site-text">
+        <span class="font-normal text-site-mauve">const</span> <span class="text-site-yellow">posts</span>
+      </h2>
+      <span class="text-xs text-site-dim">// {posts.length} items</span>
+    </div>
+
+    {posts.length === 0 ? (
+      <p class="py-6 text-site-dim">No posts yet.</p>
+    ) : (
+      <div>
+        {posts.map((post, idx) => {
+          const readingTime = post.data.readingTime ?? calculateReadingTime(post.body ?? '');
+          return (
+            <article class="border-b border-site-border py-4 transition-colors duration-100 hover:-mx-3 hover:rounded hover:bg-site-surface-hover hover:px-3">
+              <div class="flex items-start gap-4">
+                <div class="w-9 text-lg font-medium leading-tight text-site-peach max-sm:w-7">
+                  {String(idx + 1).padStart(2, '0')}
+                </div>
+
+                <div class="min-w-0 flex-1">
+                  <a href={`/blog/${post.slug}`} class="group inline-flex items-center gap-2">
+                    <h3 class="text-base font-semibold leading-snug text-site-blue">{post.data.title}</h3>
+                    <span class="text-site-dim transition-colors group-hover:text-site-blue">→</span>
+                  </a>
+                  <p class="mt-1 text-xs italic leading-relaxed text-site-dim">{post.data.description}</p>
+
+                  {post.data.tags && post.data.tags.length > 0 && (
+                    <div class="mt-2.5 flex flex-wrap gap-1">
+                      {post.data.tags.map((tag) => (
+                        <span class="rounded-sm border border-site-border px-1.5 py-0 text-xs text-site-dim">#{tag}</span>
+                      ))}
+                    </div>
+                  )}
+
+                  <div class="mt-2 flex items-center gap-3 text-xs text-site-dim sm:hidden">
+                    <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+                    <span aria-hidden="true">·</span>
+                    <span>{readingTime} min read</span>
+                  </div>
+                </div>
+
+                <div class="w-44 flex-col items-end gap-1 text-right max-sm:hidden flex">
+                  <time datetime={post.data.date.toISOString()} class="text-xs text-site-dim">
+                    {formatDate(post.data.date)}
+                  </time>
+                  <span class="text-xs text-site-green">{readingTime} min read</span>
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    )}
+  </section>
+
+  <div class="mt-10 h-px bg-site-border"></div>
 </BaseLayout>

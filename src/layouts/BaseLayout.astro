@@ -17,11 +17,14 @@ const { title, description, image } = Astro.props;
 <html lang="en" class="bg-site-bg">
   <head>
     <BaseHead title={title} description={description} image={image} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   </head>
   <body class="min-h-screen flex flex-col bg-site-bg text-site-text font-mono text-sm leading-relaxed antialiased">
     <NoiseOverlay />
     <HeaderBar />
-    <main class="flex-1 max-w-4xl mx-auto w-full px-4 pt-8 pb-24">
+    <main class="mx-auto flex-1 w-full max-w-5xl px-8 pt-8 pb-24">
       <slot />
     </main>
     <FooterBar />

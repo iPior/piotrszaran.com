@@ -2,13 +2,28 @@
 import BaseHead from '../components/BaseHead.astro';
 import FooterBar from '../components/FooterBar.astro';
 import HeaderBar from '../components/HeaderBar.astro';
+import BlogSection from '../components/home/BlogSection.astro';
 import HeroPanel from '../components/home/HeroPanel.astro';
 import NoiseOverlay from '../components/NoiseOverlay.astro';
 import ProjectsSection from '../components/home/ProjectsSection.astro';
 import { coreStack, profileFields, projects, statusBarLeft, statusBarRight } from '../data/home/homeTheme';
+import { getCollection } from 'astro:content';
+import { calculateReadingTime } from '../lib/utils';
 
 const title = 'Piotr Szaran — Portfolio';
 const description = 'Software developer portfolio featuring profile details and selected projects.';
+
+const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 4)
+  .map((post) => ({
+    slug: post.slug,
+    title: post.data.title,
+    description: post.data.description,
+    date: post.data.date,
+    readingTime: post.data.readingTime ?? calculateReadingTime(post.body ?? ''),
+    tags: post.data.tags ?? []
+  }));
 ---
 
 <!doctype html>
@@ -33,6 +48,7 @@ const description = 'Software developer portfolio featuring profile details and 
     />
 
     <ProjectsSection projects={projects} />
+    <BlogSection posts={blogPosts} />
 
     <div class="mt-10 h-px bg-site-border"></div>
   </div>

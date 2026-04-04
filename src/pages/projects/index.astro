@@ -1,52 +1,100 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import CategoryBadge from '../../components/CategoryBadge.astro';
-import StackPills from '../../components/StackPills.astro';
 import { getCollection } from 'astro:content';
 import { formatDate } from '../../lib/utils';
 
 const projects = (await getCollection('projects')).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 );
+
+const categoryToneClasses = {
+  personal: 'bg-site-blue/10 text-site-blue',
+  freelance: 'bg-site-peach/10 text-site-peach',
+  work: 'bg-site-green/10 text-site-green'
+} as const;
 ---
 
 <BaseLayout
   title="Projects — Piotr Szaran"
   description="Selected software projects, case studies, and build notes."
 >
-  <h1 class="text-3xl font-bold mb-8 text-site-text">Projects</h1>
-  {projects.length === 0 ? (
-    <p class="text-site-dim">No projects yet.</p>
-  ) : (
-    <div class="grid gap-4 sm:grid-cols-2">
-      {projects.map((project) => (
-        <a
-          href={`/projects/${project.slug}`}
-          class="block border border-site-border bg-site-surface rounded-lg p-5 hover:border-site-blue transition-colors"
-        >
-          {project.data.thumbnail && (
-            <img
-              src={project.data.thumbnail}
-              alt={project.data.title}
-              class="w-full h-40 object-cover rounded mb-4"
-              loading="lazy"
-            />
-          )}
-          <div class="flex items-center gap-3 mb-2">
-            <CategoryBadge category={project.data.category} />
-            <time class="text-xs text-site-dim">{formatDate(project.data.date)}</time>
-          </div>
-          <h2 class="font-semibold text-lg mb-1 text-site-text">{project.data.title}</h2>
-          <p class="text-site-subtext text-sm mb-3">{project.data.description}</p>
-          {project.data.stack && project.data.stack.length > 0 && (
-            <StackPills stack={project.data.stack} />
-          )}
-          <div class="flex gap-3 mt-3 text-xs text-site-blue">
-            {project.data.liveUrl && <span>Live ↗</span>}
-            {project.data.githubUrl && <span>GitHub ↗</span>}
-          </div>
-        </a>
-      ))}
+  <section>
+    <div class="mb-2.5 text-xs text-site-dim">
+      <span class="text-site-mauve">export</span> <span class="text-site-mauve">const</span> projectIndex
+      <span class="text-site-overlay">=</span> <span class="text-site-overlay">{'{'}</span>
     </div>
-  )}
+    <h1 class="text-4xl font-bold leading-none tracking-tight text-site-text sm:text-6xl md:text-7xl">
+      <span class="text-site-blue">Projects</span>
+    </h1>
+    <div class="mt-2.5 text-sm text-site-dim">
+      <span class="italic text-site-dim">// Selected software projects, case studies, and build notes.</span>
+    </div>
+  </section>
+
+  <section class="mt-10">
+    <div class="flex items-baseline gap-3 border-b border-site-border pb-2.5">
+      <h2 class="text-lg font-semibold text-site-text">
+        <span class="font-normal text-site-mauve">const</span> <span class="text-site-yellow">projectList</span>
+      </h2>
+      <span class="text-xs text-site-dim">// {projects.length} items</span>
+    </div>
+
+    {projects.length === 0 ? (
+      <p class="py-6 text-site-dim">No projects yet.</p>
+    ) : (
+      <div>
+        {projects.map((project, idx) => (
+          <article class="border-b border-site-border py-4 transition-colors duration-100 hover:-mx-3 hover:rounded hover:bg-site-surface-hover hover:px-3">
+            <div class="flex items-start gap-4">
+              <div class="w-9 text-lg font-medium leading-tight text-site-peach max-sm:w-7">
+                {String(idx + 1).padStart(2, '0')}
+              </div>
+
+              <div class="min-w-0 flex-1">
+                <a href={`/projects/${project.slug}`} class="group inline-flex items-center gap-2">
+                  <h3 class="text-base font-semibold leading-snug text-site-blue">{project.data.title}</h3>
+                  <span class="text-site-dim transition-colors group-hover:text-site-blue">→</span>
+                </a>
+                <p class="mt-1 text-xs italic leading-relaxed text-site-dim">{project.data.description}</p>
+
+                <div class="mt-2.5 flex flex-wrap gap-1">
+                  {(project.data.stack ?? []).map((item) => (
+                    <span class="rounded-sm border border-site-border px-1.5 py-0 text-xs text-site-dim">{item}</span>
+                  ))}
+                </div>
+
+                <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+                  <span class:list={[
+                    'inline-block rounded px-2 py-0.5 font-medium tracking-wider sm:hidden',
+                    categoryToneClasses[project.data.category]
+                  ]}>
+                    {project.data.category}
+                  </span>
+                  <time class="text-site-dim sm:hidden">{formatDate(project.data.date)}</time>
+                  {project.data.liveUrl && (
+                    <a href={project.data.liveUrl} target="_blank" rel="noopener noreferrer" class="text-site-blue hover:underline">Live ↗</a>
+                  )}
+                  {project.data.githubUrl && (
+                    <a href={project.data.githubUrl} target="_blank" rel="noopener noreferrer" class="text-site-blue hover:underline">GitHub ↗</a>
+                  )}
+                </div>
+              </div>
+
+              <div class="w-40 flex-col items-end gap-2 text-right max-sm:hidden flex">
+                <span class:list={[
+                  'inline-block rounded px-2 py-0.5 text-xs font-medium tracking-wider',
+                  categoryToneClasses[project.data.category]
+                ]}>
+                  {project.data.category}
+                </span>
+                <time class="text-xs text-site-dim">{formatDate(project.data.date)}</time>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    )}
+  </section>
+
+  <div class="mt-10 h-px bg-site-border"></div>
 </BaseLayout>
