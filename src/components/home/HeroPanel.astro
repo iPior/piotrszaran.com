@@ -1,15 +1,32 @@
 ---
-import type { ProfileField } from '../../data/home/homeTheme';
+interface ProfileField {
+  key: string;
+  value: string;
+}
 
 interface Props {
   firstName: string;
   lastName: string;
   role: string;
-  profileFields: ProfileField[];
-  coreStack: string[];
+  profileFields?: ProfileField[];
+  coreStack?: string[];
 }
 
-const { firstName, lastName, role, profileFields, coreStack } = Astro.props;
+const defaultProfileFields: ProfileField[] = [
+  { key: 'status', value: 'Open to full-time opportunities' },
+  { key: 'education', value: '&mdash; update this field' },
+  { key: 'currently', value: '&mdash; update this field' }
+];
+
+const defaultCoreStack = ['TypeScript', 'Node.js', 'React', 'PostgreSQL'];
+
+const {
+  firstName,
+  lastName,
+  role,
+  profileFields = defaultProfileFields,
+  coreStack = defaultCoreStack
+} = Astro.props;
 ---
 
 <section class="pt-9">

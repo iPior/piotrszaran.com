@@ -6,7 +6,6 @@ import BlogSection from '../components/home/BlogSection.astro';
 import HeroPanel from '../components/home/HeroPanel.astro';
 import NoiseOverlay from '../components/NoiseOverlay.astro';
 import ProjectsSection from '../components/home/ProjectsSection.astro';
-import { coreStack, profileFields, projects, statusBarLeft, statusBarRight } from '../data/home/homeTheme';
 import { getCollection } from 'astro:content';
 import { calculateReadingTime } from '../lib/utils';
 
@@ -23,6 +22,33 @@ const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
     date: post.data.date,
     readingTime: post.data.readingTime ?? calculateReadingTime(post.body ?? ''),
     tags: post.data.tags ?? []
+  }));
+
+const categoryLabels = {
+  personal: 'Personal',
+  freelance: 'Freelance',
+  work: 'Work'
+} as const;
+
+const categoryTones = {
+  personal: 'blue',
+  freelance: 'peach',
+  work: 'green'
+} as const;
+
+const projects = (await getCollection('projects'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 10)
+  .map((project) => ({
+    title: project.data.title,
+    description: project.data.description,
+    category: categoryLabels[project.data.category],
+    categoryTone: categoryTones[project.data.category],
+    tags: project.data.stack ?? [],
+    date: project.data.date.toLocaleDateString('en-US', {
+      month: 'short',
+      year: 'numeric'
+    })
   }));
 ---
 
@@ -43,8 +69,6 @@ const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
       firstName="Piotr"
       lastName="Szaran"
       role="Software Developer"
-      profileFields={profileFields}
-      coreStack={coreStack}
     />
 
     <ProjectsSection projects={projects} />
@@ -52,6 +76,6 @@ const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
 
   </div>
 
-  <FooterBar leftItems={statusBarLeft} rightItems={statusBarRight} />
+  <FooterBar />
 </body>
 </html>

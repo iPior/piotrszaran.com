@@ -1,5 +1,12 @@
 ---
-import type { ProjectEntry } from '../../data/home/homeTheme';
+interface ProjectEntry {
+  title: string;
+  description: string;
+  category: string;
+  categoryTone: 'blue' | 'peach' | 'green';
+  tags: string[];
+  date: string;
+}
 
 interface Props {
   projects: ProjectEntry[];
