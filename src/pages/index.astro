@@ -60,11 +60,11 @@ const projects = (await getCollection('projects'))
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 </head>
-<body class="bg-site-bg text-site-text font-mono text-sm leading-relaxed antialiased">
+<body class="min-h-screen flex flex-col bg-site-bg text-site-text font-mono text-sm leading-relaxed antialiased">
   <NoiseOverlay />
   <HeaderBar />
 
-  <div class="mx-auto max-w-5xl px-8 pb-24">
+  <main class="mx-auto flex-1 w-full max-w-5xl px-8 pb-24">
     <HeroPanel
       firstName="Piotr"
       lastName="Szaran"
@@ -74,7 +74,7 @@ const projects = (await getCollection('projects'))
     <ProjectsSection projects={projects} />
     <BlogSection posts={blogPosts} />
 
-  </div>
+  </main>
 
   <FooterBar />
 </body>

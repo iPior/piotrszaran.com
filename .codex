@@ -1,0 +1,1 @@
+Project note: Use `bun` for all package scripts and dependency commands in this repo (do not use `npm`).
