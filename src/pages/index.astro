@@ -50,7 +50,6 @@ const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
     <ProjectsSection projects={projects} />
     <BlogSection posts={blogPosts} />
 
-    <div class="mt-10 h-px bg-site-border"></div>
   </div>
 
   <FooterBar leftItems={statusBarLeft} rightItems={statusBarRight} />
