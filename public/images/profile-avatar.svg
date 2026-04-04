@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-labelledby="title desc">
+  <title id="title">Piotr Szaran profile avatar</title>
+  <desc id="desc">Stylized avatar tile with initials PS</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1f2937" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+  </defs>
+  <rect width="240" height="240" rx="26" fill="url(#bg)" />
+  <circle cx="120" cy="95" r="48" fill="#334155" />
+  <path d="M45 208c8-34 38-57 75-57s67 23 75 57" fill="#334155" />
+  <text x="120" y="220" font-family="'Geist Mono', monospace" font-size="28" text-anchor="middle" fill="#93c5fd">PS</text>
+</svg>

@@ -13,6 +13,11 @@ const tabs = [
   { label: 'Projects', href: '/projects', icon: 'projects' }
 ] satisfies HeaderTab[];
 
+const themeFamilies = [
+  { id: 'catppuccin', label: 'Catppuccin' },
+  { id: 'nord', label: 'Nord' }
+] as const;
+
 function isActive(href: string): boolean {
   if (href === '/') {
     return currentPath === '/';
@@ -24,41 +29,161 @@ function isActive(href: string): boolean {
 
 <header class="border-b border-site-border bg-site-tab">
   <div class="mx-auto w-full max-w-5xl px-8">
-    <div class="flex items-stretch text-xs">
-      {
-        tabs.map((tab) => (
-          <a
-            href={tab.href}
-            class:list={[
-              'flex items-center gap-2 whitespace-nowrap border-r border-site-border px-4 py-2',
-              isActive(tab.href)
-                ? '-mb-px border-b-2 border-site-blue bg-site-bg text-site-text'
-                : 'text-site-dim hover:text-site-subtext'
-            ]}
-          >
-            <span aria-hidden="true" class="inline-flex h-3.5 w-3.5 items-center justify-center">
-              {tab.icon === 'home' && (
-                <svg viewBox="0 0 16 16" class="h-3.5 w-3.5" fill="none">
-                  <path d="M2.5 7.2 8 2.8l5.5 4.4v6.3H9.8V10H6.2v3.5H2.5V7.2Z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round" />
-                </svg>
-              )}
-              {tab.icon === 'blog' && (
-                <svg viewBox="0 0 16 16" class="h-3.5 w-3.5" fill="none">
-                  <rect x="3" y="2.5" width="10" height="11" rx="1.4" stroke="currentColor" stroke-width="1.25" />
-                  <path d="M5.2 6h5.6M5.2 8.3h5.6M5.2 10.6h3.8" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" />
-                </svg>
-              )}
-              {tab.icon === 'projects' && (
-                <svg viewBox="0 0 16 16" class="h-3.5 w-3.5" fill="none">
-                  <path d="M1.8 5.3h5.7l1.1 1.6h5v5.8H1.8V5.3Z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round" />
-                  <path d="M1.8 6.9h11.8" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" />
-                </svg>
-              )}
-            </span>
-            {tab.label}
-          </a>
-        ))
-      }
+    <div class="flex items-stretch justify-between text-xs">
+      <nav class="flex min-w-0 items-stretch overflow-x-auto">
+        {
+          tabs.map((tab) => (
+            <a
+              href={tab.href}
+              class:list={[
+                'flex items-center gap-2 whitespace-nowrap border-r border-site-border px-4 py-2',
+                isActive(tab.href)
+                  ? '-mb-px border-b-2 border-site-blue bg-site-bg text-site-text'
+                  : 'text-site-dim hover:text-site-subtext'
+              ]}
+            >
+              <span aria-hidden="true" class="inline-flex h-3.5 w-3.5 items-center justify-center">
+                {tab.icon === 'home' && (
+                  <svg viewBox="0 0 16 16" class="h-3.5 w-3.5" fill="none">
+                    <path d="M2.5 7.2 8 2.8l5.5 4.4v6.3H9.8V10H6.2v3.5H2.5V7.2Z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round" />
+                  </svg>
+                )}
+                {tab.icon === 'blog' && (
+                  <svg viewBox="0 0 16 16" class="h-3.5 w-3.5" fill="none">
+                    <rect x="3" y="2.5" width="10" height="11" rx="1.4" stroke="currentColor" stroke-width="1.25" />
+                    <path d="M5.2 6h5.6M5.2 8.3h5.6M5.2 10.6h3.8" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" />
+                  </svg>
+                )}
+                {tab.icon === 'projects' && (
+                  <svg viewBox="0 0 16 16" class="h-3.5 w-3.5" fill="none">
+                    <path d="M1.8 5.3h5.7l1.1 1.6h5v5.8H1.8V5.3Z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round" />
+                    <path d="M1.8 6.9h11.8" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" />
+                  </svg>
+                )}
+              </span>
+              {tab.label}
+            </a>
+          ))
+        }
+      </nav>
+      <div class="flex shrink-0 items-stretch">
+        <details data-theme-menu class="theme-menu relative border-l border-r border-site-border">
+          <summary class="flex h-full list-none cursor-pointer select-none items-center gap-1.5 px-3 py-2 text-site-dim leading-none transition-colors hover:bg-site-surface hover:text-site-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-site-blue/70">
+            <span class="leading-none">Theme</span>
+            <svg class="theme-menu-chevron h-3 w-3 transition-transform" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </summary>
+          <div class="absolute right-0 top-full z-30 mt-2 min-w-40 rounded border border-site-border bg-site-surface p-1 shadow-xl">
+            <div class="px-2 py-1 text-[10px] uppercase tracking-wide text-site-overlay">Palette</div>
+            {
+              themeFamilies.map((themeFamily) => (
+                <button
+                  type="button"
+                  role="menuitemradio"
+                  aria-checked="false"
+                  data-theme-family-option={themeFamily.id}
+                  data-active="false"
+                  class="theme-family-option text-left text-xs"
+                >
+                  <span>{themeFamily.label}</span>
+                  <span data-theme-family-check aria-hidden="true">
+                    <svg viewBox="0 0 16 16" class="h-3.5 w-3.5" fill="none">
+                      <path d="m3.5 8.4 2.7 2.8 6.3-6.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </span>
+                </button>
+              ))
+            }
+          </div>
+        </details>
+        <button
+          type="button"
+          data-theme-toggle
+          aria-label="Switch to light mode"
+          aria-pressed="false"
+          class="theme-toggle inline-flex items-center border-r border-site-border px-3 text-site-dim transition-colors hover:bg-site-surface hover:text-site-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-site-blue/70"
+        >
+          <span class="relative inline-flex h-4 w-4 items-center justify-center" aria-hidden="true">
+            <svg class="theme-icon theme-icon--sun h-4 w-4" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5" />
+              <path d="M12 2.5v2.75M12 18.75v2.75M4.22 4.22l1.95 1.95M17.83 17.83l1.95 1.95M2.5 12h2.75M18.75 12h2.75M4.22 19.78l1.95-1.95M17.83 6.17l1.95-1.95" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+            <svg class="theme-icon theme-icon--moon h-4 w-4" viewBox="0 0 24 24" fill="none">
+              <path d="M15.9 3.9a8.9 8.9 0 1 0 4.2 16.7 9.2 9.2 0 0 1-4.2-16.7Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+            </svg>
+          </span>
+          <span class="sr-only">Toggle color theme</span>
+        </button>
+      </div>
     </div>
   </div>
 </header>
+
+<script is:inline>
+  (() => {
+    const root = document.documentElement;
+    const toggles = document.querySelectorAll('[data-theme-toggle]');
+    const familyOptions = document.querySelectorAll('[data-theme-family-option]');
+    const menus = document.querySelectorAll('[data-theme-menu]');
+    const validFamilies = ['catppuccin', 'nord'];
+    if (!toggles.length && !familyOptions.length) return;
+
+    const getTheme = () => (root.dataset.theme === 'light' ? 'light' : 'dark');
+    const getThemeFamily = () => {
+      const currentFamily = root.dataset.themeFamily;
+      return validFamilies.includes(currentFamily) ? currentFamily : 'catppuccin';
+    };
+
+    const syncToggleState = (theme) => {
+      const isLight = theme === 'light';
+      toggles.forEach((toggle) => {
+        toggle.setAttribute('aria-pressed', String(isLight));
+        toggle.setAttribute('aria-label', isLight ? 'Switch to dark mode' : 'Switch to light mode');
+      });
+    };
+
+    const syncThemeFamilyState = (themeFamily) => {
+      familyOptions.forEach((option) => {
+        const isActive = option.dataset.themeFamilyOption === themeFamily;
+        option.dataset.active = isActive ? 'true' : 'false';
+        option.setAttribute('aria-checked', String(isActive));
+      });
+    };
+
+    syncToggleState(getTheme());
+    syncThemeFamilyState(getThemeFamily());
+
+    toggles.forEach((toggle) => {
+      toggle.addEventListener('click', () => {
+        const nextTheme = getTheme() === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = nextTheme;
+        localStorage.setItem('theme', nextTheme);
+        syncToggleState(nextTheme);
+      });
+    });
+
+    familyOptions.forEach((option) => {
+      option.addEventListener('click', () => {
+        const nextFamily = option.dataset.themeFamilyOption;
+        if (!validFamilies.includes(nextFamily)) return;
+        root.dataset.themeFamily = nextFamily;
+        localStorage.setItem('themeFamily', nextFamily);
+        syncThemeFamilyState(nextFamily);
+        const openMenu = option.closest('details');
+        if (openMenu) {
+          openMenu.removeAttribute('open');
+        }
+      });
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!(event.target instanceof Node)) return;
+      menus.forEach((menu) => {
+        if (!menu.contains(event.target)) {
+          menu.removeAttribute('open');
+        }
+      });
+    });
+  })();
+</script>
