@@ -346,27 +346,6 @@
       .status-bar { display: none; }
       .tab { padding: 8px 12px; font-size: 11px; }
     }
-
-    /* SWITCHER */
-    .switcher {
-      position: fixed;
-      bottom: 8px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      background: var(--tab-bg);
-      border: 1px solid var(--border);
-      color: var(--subtext);
-      padding: 6px 20px;
-      font-size: 11px;
-      z-index: 200;
-      white-space: nowrap;
-      border-radius: 3px;
-    }
-    .switcher a { color: var(--blue); text-decoration: none; font-weight: 600; }
-    .switcher a:hover { color: var(--peach); }
   </style>
 </head>
 <body>
@@ -512,11 +491,5 @@
       <span class="status-item-green">Prettier</span>
     </div>
   </div>
-
-  <nav class="switcher">
-    <a href="/3">&larr;</a>
-    <span>Design 4 / 5 &mdash; IDE</span>
-    <a href="/5">&rarr;</a>
-  </nav>
 </body>
 </html>
