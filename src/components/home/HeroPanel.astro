@@ -1,0 +1,54 @@
+---
+import type { ProfileField } from '../../data/home/ideHome';
+
+interface Props {
+  firstName: string;
+  lastName: string;
+  role: string;
+  profileFields: ProfileField[];
+  coreStack: string[];
+}
+
+const { firstName, lastName, role, profileFields, coreStack } = Astro.props;
+---
+
+<section class="pt-9">
+  <div class="mb-2.5 text-xs text-ide-dim">
+    <span class="text-ide-mauve">export</span> <span class="text-ide-mauve">const</span> developer
+    <span class="text-ide-overlay">=</span> <span class="text-ide-overlay">{'{'}</span>
+  </div>
+  <h1 class="text-4xl font-bold leading-none tracking-tight text-ide-text sm:text-6xl md:text-7xl lg:text-8xl">
+    <span class="text-ide-blue">{firstName}</span><br />
+    <span class="font-normal text-ide-yellow">{lastName}</span>
+  </h1>
+  <div class="mt-2.5 text-sm text-ide-dim"><span class="italic text-ide-dim">// {role}</span></div>
+
+  <div class="mt-6 grid grid-cols-1 overflow-hidden rounded border border-ide-border bg-ide-surface sm:grid-cols-2">
+    {
+      profileFields.map((field, idx) => (
+        <div
+          class:list={[
+            'border-b border-ide-border px-4 py-3.5',
+            idx % 2 === 0 ? 'sm:border-r' : '',
+            idx >= profileFields.length - 1 ? 'sm:border-b-0' : ''
+          ]}
+        >
+          <div class="mb-1 text-xs font-normal text-ide-mauve"><span class="text-ide-overlay">.</span>{field.key}</div>
+          <div class="text-sm text-ide-text">
+            <span class="text-ide-green">&quot;</span><Fragment set:html={field.value} /><span class="text-ide-green">&quot;</span>
+          </div>
+        </div>
+      ))
+    }
+    <div class="px-4 py-3.5">
+      <div class="mb-1 text-xs font-normal text-ide-mauve"><span class="text-ide-overlay">.</span>coreStack</div>
+      <div class="mt-1.5 flex flex-wrap gap-1.5">
+        {
+          coreStack.map((technology) => (
+            <span class="rounded border border-ide-border bg-ide-surface-hover px-2.5 py-0.5 text-xs text-ide-peach">{technology}</span>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>

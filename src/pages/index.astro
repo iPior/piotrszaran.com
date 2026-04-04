@@ -1,171 +1,45 @@
 ---
-import '../styles/global.css';
+import BaseHead from '../components/BaseHead.astro';
+import HeroPanel from '../components/home/HeroPanel.astro';
+import IdeFooterBar from '../components/home/IdeFooterBar.astro';
+import IdeHeaderBar from '../components/home/IdeHeaderBar.astro';
+import IdeNoiseOverlay from '../components/home/IdeNoiseOverlay.astro';
+import IdeTopTabs from '../components/home/IdeTopTabs.astro';
+import ProjectsSection from '../components/home/ProjectsSection.astro';
+import { coreStack, profileFields, projects, statusBarLeft, statusBarRight, topTabs } from '../data/home/ideHome';
+
+const title = 'Design 4 - IDE - Piotr Szaran';
+const description = 'Piotr Szaran portfolio in an IDE-inspired layout, featuring profile details and selected projects.';
 ---
+
 <!doctype html>
 <html lang="en" class="bg-ide-bg">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Design 4 — IDE — Piotr Szaran</title>
+  <BaseHead title={title} description={description} />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 </head>
 <body class="bg-ide-bg text-ide-text font-mono text-sm leading-relaxed antialiased">
-  <!-- Noise generator — zero-asset grain texture -->
-  <svg class="absolute h-0 w-0" aria-hidden="true">
-    <filter id="grain" x="0%" y="0%" width="100%" height="100%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
-      <feColorMatrix type="saturate" values="0" />
-    </filter>
-  </svg>
-  <div aria-hidden="true" class="pointer-events-none fixed inset-0 z-50 bg-transparent opacity-15 [filter:url(#grain)]"></div>
-
-  <div class="flex items-stretch overflow-x-auto border-b border-ide-border bg-ide-tab text-xs">
-    <div class="-mb-px flex items-center gap-2 whitespace-nowrap border-r border-ide-border border-b-2 border-ide-blue bg-ide-bg px-4 py-2 text-ide-text">
-      <span class="text-xs text-ide-blue">{}</span>
-      portfolio.ts
-    </div>
-    <div class="flex items-center gap-2 whitespace-nowrap border-r border-ide-border px-4 py-2 text-ide-dim">
-      <span class="text-xs text-ide-yellow">{}</span>
-      package.json
-    </div>
-    <div class="flex items-center gap-2 whitespace-nowrap border-r border-ide-border px-4 py-2 text-ide-dim">
-      <span class="text-xs text-ide-subtext">#</span>
-      README.md
-    </div>
-  </div>
+  <IdeNoiseOverlay />
+  <IdeTopTabs tabs={topTabs} />
 
   <div class="mx-auto max-w-5xl px-8 pb-24">
-    <header class="flex items-center justify-between border-b border-ide-border py-2.5 text-xs text-ide-dim">
-      <span class="font-medium text-ide-blue">portfolio.ts</span>
-      <span class="inline-flex items-center gap-1 text-ide-green">
-        <span class="h-1.5 w-1.5 rounded-full bg-ide-green"></span>
-        Available for hire
-      </span>
-      <span class="text-ide-mauve">main</span>
-    </header>
+    <IdeHeaderBar />
 
-    <section class="pt-9">
-      <div class="mb-2.5 text-xs text-ide-dim"><span class="text-ide-mauve">export</span> <span class="text-ide-mauve">const</span> developer <span class="text-ide-overlay">=</span> <span class="text-ide-overlay">{'{'}</span></div>
-      <h1 class="text-4xl font-bold leading-none tracking-tight text-ide-text sm:text-6xl md:text-7xl lg:text-8xl"><span class="text-ide-blue">Piotr</span><br /><span class="font-normal text-ide-yellow">Szaran</span></h1>
-      <div class="mt-2.5 text-sm text-ide-dim"><span class="italic text-ide-dim">// Software Developer</span></div>
+    <HeroPanel
+      firstName="Piotr"
+      lastName="Szaran"
+      role="Software Developer"
+      profileFields={profileFields}
+      coreStack={coreStack}
+    />
 
-      <div class="mt-6 grid grid-cols-1 overflow-hidden rounded border border-ide-border bg-ide-surface sm:grid-cols-2">
-        <div class="border-b border-ide-border px-4 py-3.5 sm:border-r">
-          <div class="mb-1 text-xs font-normal text-ide-mauve"><span class="text-ide-overlay">.</span>status</div>
-          <div class="text-sm text-ide-text"><span class="text-ide-green">&quot;</span>Open to full-time opportunities<span class="text-ide-green">&quot;</span></div>
-        </div>
-        <div class="border-b border-ide-border px-4 py-3.5">
-          <div class="mb-1 text-xs font-normal text-ide-mauve"><span class="text-ide-overlay">.</span>education</div>
-          <div class="text-sm text-ide-text"><span class="text-ide-green">&quot;</span>&mdash; update this field<span class="text-ide-green">&quot;</span></div>
-        </div>
-        <div class="border-b border-ide-border px-4 py-3.5 sm:border-b-0 sm:border-r">
-          <div class="mb-1 text-xs font-normal text-ide-mauve"><span class="text-ide-overlay">.</span>currently</div>
-          <div class="text-sm text-ide-text"><span class="text-ide-green">&quot;</span>&mdash; update this field<span class="text-ide-green">&quot;</span></div>
-        </div>
-        <div class="px-4 py-3.5">
-          <div class="mb-1 text-xs font-normal text-ide-mauve"><span class="text-ide-overlay">.</span>coreStack</div>
-          <div class="mt-1.5 flex flex-wrap gap-1.5">
-            <span class="rounded border border-ide-border bg-ide-surface-hover px-2.5 py-0.5 text-xs text-ide-peach">TypeScript</span>
-            <span class="rounded border border-ide-border bg-ide-surface-hover px-2.5 py-0.5 text-xs text-ide-peach">Node.js</span>
-            <span class="rounded border border-ide-border bg-ide-surface-hover px-2.5 py-0.5 text-xs text-ide-peach">React</span>
-            <span class="rounded border border-ide-border bg-ide-surface-hover px-2.5 py-0.5 text-xs text-ide-peach">PostgreSQL</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <div class="mt-10 flex items-baseline gap-3 border-b border-ide-border pb-2.5">
-        <h2 class="text-lg font-semibold text-ide-text"><span class="font-normal text-ide-mauve">const</span> <span class="text-ide-yellow">projects</span></h2>
-        <span class="text-xs text-ide-dim">// 4 items</span>
-      </div>
-      <div>
-        <div class="flex items-start gap-4 border-b border-ide-border py-4 transition-colors duration-100 hover:-mx-3 hover:rounded hover:bg-ide-surface-hover hover:px-3">
-          <div class="w-9 text-lg font-medium leading-tight text-ide-peach max-sm:w-7">01</div>
-          <div class="min-w-0 flex-1">
-            <div class="mb-1 text-base font-semibold leading-snug text-ide-blue">Portfolio Site v2</div>
-            <div class="text-xs italic leading-relaxed text-ide-dim">Rebuilt personal portfolio with Astro, MDX, and Tailwind. Zero JS by default.</div>
-          </div>
-          <div class="w-40 flex-col items-end gap-2 text-right max-sm:hidden flex">
-            <span class="inline-block rounded bg-ide-blue/10 text-ide-blue px-2 py-0.5 text-xs font-medium tracking-wider">Personal</span>
-            <div class="flex flex-wrap justify-end gap-1">
-              <span class="rounded-sm border border-ide-border px-1.5 py-0 text-xs text-ide-dim">Astro</span>
-              <span class="rounded-sm border border-ide-border px-1.5 py-0 text-xs text-ide-dim">MDX</span>
-              <span class="rounded-sm border border-ide-border px-1.5 py-0 text-xs text-ide-dim">Tailwind</span>
-            </div>
-            <span class="text-xs text-ide-dim">Mar 2025</span>
-          </div>
-        </div>
-
-        <div class="flex items-start gap-4 border-b border-ide-border py-4 transition-colors duration-100 hover:-mx-3 hover:rounded hover:bg-ide-surface-hover hover:px-3">
-          <div class="w-9 text-lg font-medium leading-tight text-ide-peach max-sm:w-7">02</div>
-          <div class="min-w-0 flex-1">
-            <div class="mb-1 text-base font-semibold leading-snug text-ide-blue">E-Commerce Dashboard</div>
-            <div class="text-xs italic leading-relaxed text-ide-dim">Analytics and inventory dashboard for a UK fashion retailer. Real-time data.</div>
-          </div>
-          <div class="w-40 flex-col items-end gap-2 text-right max-sm:hidden flex">
-            <span class="inline-block rounded bg-ide-peach/10 text-ide-peach px-2 py-0.5 text-xs font-medium tracking-wider">Freelance</span>
-            <div class="flex flex-wrap justify-end gap-1">
-              <span class="rounded-sm border border-ide-border px-1.5 py-0 text-xs text-ide-dim">Next.js</span>
-              <span class="rounded-sm border border-ide-border px-1.5 py-0 text-xs text-ide-dim">TypeScript</span>
-              <span class="rounded-sm border border-ide-border px-1.5 py-0 text-xs text-ide-dim">Recharts</span>
-            </div>
-            <span class="text-xs text-ide-dim">Nov 2024</span>
-          </div>
-        </div>
-
-        <div class="flex items-start gap-4 border-b border-ide-border py-4 transition-colors duration-100 hover:-mx-3 hover:rounded hover:bg-ide-surface-hover hover:px-3">
-          <div class="w-9 text-lg font-medium leading-tight text-ide-peach max-sm:w-7">03</div>
-          <div class="min-w-0 flex-1">
-            <div class="mb-1 text-base font-semibold leading-snug text-ide-blue">Developer Tools Suite</div>
-            <div class="text-xs italic leading-relaxed text-ide-dim">Internal CLI tooling and web dashboard to streamline deployment pipelines.</div>
-          </div>
-          <div class="w-40 flex-col items-end gap-2 text-right max-sm:hidden flex">
-            <span class="inline-block rounded bg-ide-green/10 text-ide-green px-2 py-0.5 text-xs font-medium tracking-wider">Work</span>
-            <div class="flex flex-wrap justify-end gap-1">
-              <span class="rounded-sm border border-ide-border px-1.5 py-0 text-xs text-ide-dim">Node.js</span>
-              <span class="rounded-sm border border-ide-border px-1.5 py-0 text-xs text-ide-dim">TypeScript</span>
-              <span class="rounded-sm border border-ide-border px-1.5 py-0 text-xs text-ide-dim">Docker</span>
-            </div>
-            <span class="text-xs text-ide-dim">Aug 2024</span>
-          </div>
-        </div>
-
-        <div class="flex items-start gap-4 border-b border-ide-border py-4 transition-colors duration-100 hover:-mx-3 hover:rounded hover:bg-ide-surface-hover hover:px-3">
-          <div class="w-9 text-lg font-medium leading-tight text-ide-peach max-sm:w-7">04</div>
-          <div class="min-w-0 flex-1">
-            <div class="mb-1 text-base font-semibold leading-snug text-ide-blue">Open Source URL Shortener</div>
-            <div class="text-xs italic leading-relaxed text-ide-dim">Self-hosted shortener with analytics, custom domains, and a REST API.</div>
-          </div>
-          <div class="w-40 flex-col items-end gap-2 text-right max-sm:hidden flex">
-            <span class="inline-block rounded bg-ide-blue/10 text-ide-blue px-2 py-0.5 text-xs font-medium tracking-wider">Personal</span>
-            <div class="flex flex-wrap justify-end gap-1">
-              <span class="rounded-sm border border-ide-border px-1.5 py-0 text-xs text-ide-dim">Bun</span>
-              <span class="rounded-sm border border-ide-border px-1.5 py-0 text-xs text-ide-dim">Hono</span>
-              <span class="rounded-sm border border-ide-border px-1.5 py-0 text-xs text-ide-dim">SQLite</span>
-            </div>
-            <span class="text-xs text-ide-dim">May 2024</span>
-          </div>
-        </div>
-      </div>
-    </section>
+    <ProjectsSection projects={projects} />
 
     <div class="mt-10 h-px bg-ide-border"></div>
   </div>
 
-  <div class="fixed inset-x-0 bottom-12 z-40 flex items-center justify-between border-t border-ide-border bg-ide-surface px-4 py-1 text-xs text-ide-dim max-sm:hidden">
-    <div class="flex items-center gap-3.5">
-      <span class="text-ide-blue">main</span>
-      <span>TypeScript</span>
-      <span>UTF-8</span>
-    </div>
-    <div class="flex items-center gap-3.5">
-      <span>Ln 1, Col 1</span>
-      <span>Spaces: 2</span>
-      <span class="text-ide-green">Prettier</span>
-    </div>
-  </div>
+  <IdeFooterBar leftItems={statusBarLeft} rightItems={statusBarRight} />
 </body>
 </html>

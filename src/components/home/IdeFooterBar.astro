@@ -1,0 +1,25 @@
+---
+interface Props {
+  leftItems: string[];
+  rightItems: string[];
+}
+
+const { leftItems, rightItems } = Astro.props;
+---
+
+<div class="fixed inset-x-0 bottom-12 z-40 flex items-center justify-between border-t border-ide-border bg-ide-surface px-4 py-1 text-xs text-ide-dim max-sm:hidden">
+  <div class="flex items-center gap-3.5">
+    {
+      leftItems.map((item, idx) => (
+        <span class:list={idx === 0 ? 'text-ide-blue' : ''}>{item}</span>
+      ))
+    }
+  </div>
+  <div class="flex items-center gap-3.5">
+    {
+      rightItems.map((item, idx) => (
+        <span class:list={idx === rightItems.length - 1 ? 'text-ide-green' : ''}>{item}</span>
+      ))
+    }
+  </div>
+</div>
