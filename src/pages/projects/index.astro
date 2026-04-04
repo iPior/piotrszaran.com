@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CategoryBadge from '../../components/CategoryBadge.astro';
+import StackPills from '../../components/StackPills.astro';
+import { getCollection } from 'astro:content';
+import { formatDate } from '../../lib/utils';
+
+const projects = (await getCollection('projects')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+---
+
+<BaseLayout
+  title="Projects — Piotr Szaran"
+  description="Selected software projects, case studies, and build notes."
+>
+  <h1 class="text-3xl font-bold mb-8 text-site-text">Projects</h1>
+  {projects.length === 0 ? (
+    <p class="text-site-dim">No projects yet.</p>
+  ) : (
+    <div class="grid gap-4 sm:grid-cols-2">
+      {projects.map((project) => (
+        <a
+          href={`/projects/${project.slug}`}
+          class="block border border-site-border bg-site-surface rounded-lg p-5 hover:border-site-blue transition-colors"
+        >
+          {project.data.thumbnail && (
+            <img
+              src={project.data.thumbnail}
+              alt={project.data.title}
+              class="w-full h-40 object-cover rounded mb-4"
+              loading="lazy"
+            />
+          )}
+          <div class="flex items-center gap-3 mb-2">
+            <CategoryBadge category={project.data.category} />
+            <time class="text-xs text-site-dim">{formatDate(project.data.date)}</time>
+          </div>
+          <h2 class="font-semibold text-lg mb-1 text-site-text">{project.data.title}</h2>
+          <p class="text-site-subtext text-sm mb-3">{project.data.description}</p>
+          {project.data.stack && project.data.stack.length > 0 && (
+            <StackPills stack={project.data.stack} />
+          )}
+          <div class="flex gap-3 mt-3 text-xs text-site-blue">
+            {project.data.liveUrl && <span>Live ↗</span>}
+            {project.data.githubUrl && <span>GitHub ↗</span>}
+          </div>
+        </a>
+      ))}
+    </div>
+  )}
+</BaseLayout>

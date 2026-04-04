@@ -1,10 +1,3 @@
-export interface HomeTab {
-  icon: string;
-  iconClass: string;
-  label: string;
-  active?: boolean;
-}
-
 export interface ProfileField {
   key: string;
   value: string;
@@ -18,12 +11,6 @@ export interface ProjectEntry {
   tags: string[];
   date: string;
 }
-
-export const topTabs: HomeTab[] = [
-  { icon: '{}', iconClass: 'text-site-blue', label: 'portfolio.ts', active: true },
-  { icon: '{}', iconClass: 'text-site-yellow', label: 'package.json' },
-  { icon: '#', iconClass: 'text-site-subtext', label: 'README.md' }
-];
 
 export const profileFields: ProfileField[] = [
   { key: 'status', value: 'Open to full-time opportunities' },

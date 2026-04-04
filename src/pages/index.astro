@@ -1,12 +1,11 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
-import FooterBar from '../components/home/FooterBar.astro';
-import HeaderBar from '../components/home/HeaderBar.astro';
+import FooterBar from '../components/FooterBar.astro';
+import HeaderBar from '../components/HeaderBar.astro';
 import HeroPanel from '../components/home/HeroPanel.astro';
-import NoiseOverlay from '../components/home/NoiseOverlay.astro';
+import NoiseOverlay from '../components/NoiseOverlay.astro';
 import ProjectsSection from '../components/home/ProjectsSection.astro';
-import TopTabs from '../components/home/TopTabs.astro';
-import { coreStack, profileFields, projects, statusBarLeft, statusBarRight, topTabs } from '../data/home/homeTheme';
+import { coreStack, profileFields, projects, statusBarLeft, statusBarRight } from '../data/home/homeTheme';
 
 const title = 'Piotr Szaran — Portfolio';
 const description = 'Software developer portfolio featuring profile details and selected projects.';
@@ -22,11 +21,9 @@ const description = 'Software developer portfolio featuring profile details and 
 </head>
 <body class="bg-site-bg text-site-text font-mono text-sm leading-relaxed antialiased">
   <NoiseOverlay />
-  <TopTabs tabs={topTabs} />
+  <HeaderBar />
 
   <div class="mx-auto max-w-5xl px-8 pb-24">
-    <HeaderBar />
-
     <HeroPanel
       firstName="Piotr"
       lastName="Szaran"

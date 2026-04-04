@@ -11,12 +11,12 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 
 {tocHeadings.length > 0 && (
   <nav aria-label="Table of contents" class="text-sm">
-    <p class="font-semibold mb-3 text-gray-900 text-xs uppercase tracking-wide">On this page</p>
+    <p class="font-semibold mb-3 text-site-subtext text-xs uppercase tracking-wide">On this page</p>
     <ul class="space-y-2">
       {tocHeadings.map((heading) => (
         <li class={heading.depth === 3 ? 'pl-3' : ''}>
           <a href={`#${heading.slug}`}
-             class="text-gray-500 hover:text-gray-900 leading-snug block">
+             class="text-site-dim hover:text-site-text leading-snug block">
             {heading.text}
           </a>
         </li>

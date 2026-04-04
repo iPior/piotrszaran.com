@@ -22,9 +22,9 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 const CATEGORY_BADGE_COLORS: Record<string, string> = {
-  freelance: 'border-blue-300 text-blue-700',
-  work: 'border-green-300 text-green-700',
-  personal: 'border-purple-300 text-purple-700',
+  freelance: 'border-site-peach text-site-peach bg-site-peach/10',
+  work: 'border-site-green text-site-green bg-site-green/10',
+  personal: 'border-site-blue text-site-blue bg-site-blue/10',
 };
 
 function formatDate(dateStr: string): string {
@@ -53,8 +53,8 @@ export default function ProjectFilter({ projects }: { projects: Project[] }) {
             onClick={() => setActive(cat)}
             class={`text-sm border rounded-full px-3 py-1 transition-colors ${
               active === cat
-                ? 'bg-gray-900 text-white border-gray-900'
-                : 'border-gray-300 text-gray-600 hover:border-gray-500'
+                ? 'bg-site-blue text-site-bg border-site-blue'
+                : 'border-site-border text-site-subtext hover:border-site-subtext'
             }`}
           >
             {CATEGORY_LABELS[cat]}
@@ -64,14 +64,14 @@ export default function ProjectFilter({ projects }: { projects: Project[] }) {
 
       {/* Project grid */}
       {filtered.length === 0 ? (
-        <p class="text-gray-500 text-sm">No projects in this category.</p>
+        <p class="text-site-dim text-sm">No projects in this category.</p>
       ) : (
         <div class="grid gap-4 sm:grid-cols-2">
           {filtered.map((project) => (
             <a
               key={project.id}
               href={`/projects/${project.id}`}
-              class="block border border-gray-200 rounded-lg p-5 hover:border-gray-400 transition-colors"
+              class="block border border-site-border bg-site-surface rounded-lg p-5 hover:border-site-blue transition-colors"
             >
               {project.thumbnail && (
                 <img
@@ -87,20 +87,20 @@ export default function ProjectFilter({ projects }: { projects: Project[] }) {
                 >
                   {CATEGORY_LABELS[project.category]}
                 </span>
-                <time class="text-xs text-gray-500">{formatDate(project.date)}</time>
+                <time class="text-xs text-site-dim">{formatDate(project.date)}</time>
               </div>
-              <h3 class="font-semibold text-lg mb-1">{project.title}</h3>
-              <p class="text-gray-600 text-sm mb-3">{project.description}</p>
+              <h3 class="font-semibold text-lg mb-1 text-site-text">{project.title}</h3>
+              <p class="text-site-subtext text-sm mb-3">{project.description}</p>
               {project.stack && project.stack.length > 0 && (
                 <div class="flex flex-wrap gap-1.5">
                   {project.stack.map((tech) => (
-                    <span key={tech} class="text-xs bg-gray-100 text-gray-700 rounded px-2 py-0.5">
+                    <span key={tech} class="text-xs bg-site-surface-hover text-site-peach border border-site-border rounded px-2 py-0.5">
                       {tech}
                     </span>
                   ))}
                 </div>
               )}
-              <div class="flex gap-3 mt-3 text-xs text-blue-600">
+              <div class="flex gap-3 mt-3 text-xs text-site-blue">
                 {project.liveUrl && <span>Live ↗</span>}
                 {project.githubUrl && <span>GitHub ↗</span>}
               </div>

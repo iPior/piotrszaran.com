@@ -9,8 +9,8 @@ const { href, title, description } = Astro.props;
 ---
 
 <a href={href} target="_blank" rel="noopener noreferrer"
-   class="flex flex-col gap-1 border border-gray-200 rounded-lg p-4 my-4 hover:border-gray-400 transition-colors no-underline">
-  <span class="font-medium text-gray-900">{title}</span>
-  {description && <span class="text-sm text-gray-500">{description}</span>}
-  <span class="text-xs text-blue-600 mt-1">{href}</span>
+   class="flex flex-col gap-1 border border-site-border bg-site-surface rounded-lg p-4 my-4 hover:border-site-blue transition-colors no-underline">
+  <span class="font-medium text-site-text">{title}</span>
+  {description && <span class="text-sm text-site-subtext">{description}</span>}
+  <span class="text-xs text-site-blue mt-1">{href}</span>
 </a>
