@@ -1,0 +1,52 @@
+---
+import type { ProfileField } from './types';
+
+interface Props {
+  profileFields: ProfileField[];
+  coreStack: string[];
+}
+
+const { profileFields, coreStack } = Astro.props;
+---
+
+<div
+  class="mt-6 grid grid-cols-1 overflow-hidden rounded border border-site-border bg-site-surface sm:grid-cols-2"
+>
+  {
+    profileFields.map((field, idx) => (
+      <div
+        class:list={[
+          'border-b border-site-border px-4 py-3.5',
+          idx % 2 === 0 ? 'sm:border-r' : '',
+          idx >= profileFields.length - 1 ? 'sm:border-b-0' : '',
+        ]}
+      >
+        <div class="mb-1 text-xs font-normal text-site-mauve">
+          <span class="text-site-overlay">.</span>
+          {field.key}
+        </div>
+        <div class="text-sm text-site-text">
+          <>
+            <span class="text-site-green">&quot;</span>
+            <Fragment set:html={field.value} />
+            <span class="text-site-green">&quot;</span>
+          </>
+        </div>
+      </div>
+    ))
+  }
+  <div class="px-4 py-3.5">
+    <div class="mb-1 text-xs font-normal text-site-mauve">
+      <span class="text-site-overlay">.</span>coreStack
+    </div>
+    <div class="mt-1.5 flex flex-wrap gap-1.5">
+      {
+        coreStack.map((technology) => (
+          <span class="rounded border border-site-border bg-site-surface-hover px-2.5 py-0.5 text-xs text-site-peach">
+            {technology}
+          </span>
+        ))
+      }
+    </div>
+  </div>
+</div>

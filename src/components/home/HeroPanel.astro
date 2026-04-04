@@ -1,8 +1,8 @@
 ---
-interface ProfileField {
-  key: string;
-  value: string;
-}
+import HeroGrid from './hero/HeroGrid.astro';
+import HeroHeader from './hero/HeroHeader.astro';
+import HeroSocials from './hero/HeroSocials.astro';
+import type { ProfileField, SocialLink } from './hero/types';
 
 interface Props {
   firstName: string;
@@ -12,6 +12,7 @@ interface Props {
   profileImageAlt?: string;
   profileFields?: ProfileField[];
   coreStack?: string[];
+  socialLinks?: SocialLink[];
 }
 
 const defaultProfileFields: ProfileField[] = [
@@ -22,6 +23,12 @@ const defaultProfileFields: ProfileField[] = [
 
 const defaultCoreStack = ["TypeScript", "Node.js", "React", "PostgreSQL"];
 
+const defaultSocialLinks: SocialLink[] = [
+  { label: "GitHub", href: "https://github.com/piotrszaran", icon: "github" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/update-this-profile", icon: "linkedin" },
+  { label: "Email", href: "mailto:update-this@email.com", icon: "email" },
+];
+
 const {
   firstName,
   lastName,
@@ -30,80 +37,18 @@ const {
   profileImageAlt = `${firstName} ${lastName} profile photo`,
   profileFields = defaultProfileFields,
   coreStack = defaultCoreStack,
+  socialLinks = defaultSocialLinks,
 } = Astro.props;
 ---
 
 <section class="pt-9">
-  <div class="mb-2.5 text-xs text-site-dim">
-    <span class="text-site-mauve">export</span>
-    <span class="text-site-mauve">const</span> developer
-    <span class="text-site-overlay">=</span>
-    <span class="text-site-overlay">{"{"}</span>
-  </div>
-  <div class="flex items-start justify-between gap-4 sm:gap-6">
-    <div>
-      <h1
-        class="text-4xl font-bold leading-none tracking-tight text-site-text sm:text-6xl md:text-7xl lg:text-8xl"
-      >
-        <span class="text-site-blue">{firstName}</span><br />
-        <span class="font-normal text-site-yellow">{lastName}</span>
-      </h1>
-      <div class="mt-2.5 text-sm text-site-dim">
-        <span class="italic text-site-dim">{"}"} // {role}</span>
-      </div>
-    </div>
-    {
-      profileImageSrc && (
-        <img
-          src={profileImageSrc}
-          alt={profileImageAlt}
-          class="h-16 w-16 shrink-0 rounded border border-site-border object-cover sm:h-24 sm:w-24 md:h-28 md:w-28"
-          loading="eager"
-          decoding="async"
-        />
-      )
-    }
-  </div>
-
-  <div
-    class="mt-6 grid grid-cols-1 overflow-hidden rounded border border-site-border bg-site-surface sm:grid-cols-2"
-  >
-    {
-      profileFields.map((field, idx) => (
-        <div
-          class:list={[
-            "border-b border-site-border px-4 py-3.5",
-            idx % 2 === 0 ? "sm:border-r" : "",
-            idx >= profileFields.length - 1 ? "sm:border-b-0" : "",
-          ]}
-        >
-          <div class="mb-1 text-xs font-normal text-site-mauve">
-            <span class="text-site-overlay">.</span>
-            {field.key}
-          </div>
-          <div class="text-sm text-site-text">
-            <>
-              <span class="text-site-green">&quot;</span>
-              <Fragment set:html={field.value} />
-              <span class="text-site-green">&quot;</span>
-            </>
-          </div>
-        </div>
-      ))
-    }
-    <div class="px-4 py-3.5">
-      <div class="mb-1 text-xs font-normal text-site-mauve">
-        <span class="text-site-overlay">.</span>coreStack
-      </div>
-      <div class="mt-1.5 flex flex-wrap gap-1.5">
-        {
-          coreStack.map((technology) => (
-            <span class="rounded border border-site-border bg-site-surface-hover px-2.5 py-0.5 text-xs text-site-peach">
-              {technology}
-            </span>
-          ))
-        }
-      </div>
-    </div>
-  </div>
+  <HeroHeader
+    firstName={firstName}
+    lastName={lastName}
+    role={role}
+    profileImageSrc={profileImageSrc}
+    profileImageAlt={profileImageAlt}
+  />
+  <HeroSocials socialLinks={socialLinks} />
+  <HeroGrid profileFields={profileFields} coreStack={coreStack} />
 </section>
