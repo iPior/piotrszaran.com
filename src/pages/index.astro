@@ -1,31 +1,31 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
+import FooterBar from '../components/home/FooterBar.astro';
+import HeaderBar from '../components/home/HeaderBar.astro';
 import HeroPanel from '../components/home/HeroPanel.astro';
-import IdeFooterBar from '../components/home/IdeFooterBar.astro';
-import IdeHeaderBar from '../components/home/IdeHeaderBar.astro';
-import IdeNoiseOverlay from '../components/home/IdeNoiseOverlay.astro';
-import IdeTopTabs from '../components/home/IdeTopTabs.astro';
+import NoiseOverlay from '../components/home/NoiseOverlay.astro';
 import ProjectsSection from '../components/home/ProjectsSection.astro';
-import { coreStack, profileFields, projects, statusBarLeft, statusBarRight, topTabs } from '../data/home/ideHome';
+import TopTabs from '../components/home/TopTabs.astro';
+import { coreStack, profileFields, projects, statusBarLeft, statusBarRight, topTabs } from '../data/home/homeTheme';
 
-const title = 'Design 4 - IDE - Piotr Szaran';
-const description = 'Piotr Szaran portfolio in an IDE-inspired layout, featuring profile details and selected projects.';
+const title = 'Piotr Szaran — Portfolio';
+const description = 'Software developer portfolio featuring profile details and selected projects.';
 ---
 
 <!doctype html>
-<html lang="en" class="bg-ide-bg">
+<html lang="en" class="bg-site-bg">
 <head>
   <BaseHead title={title} description={description} />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 </head>
-<body class="bg-ide-bg text-ide-text font-mono text-sm leading-relaxed antialiased">
-  <IdeNoiseOverlay />
-  <IdeTopTabs tabs={topTabs} />
+<body class="bg-site-bg text-site-text font-mono text-sm leading-relaxed antialiased">
+  <NoiseOverlay />
+  <TopTabs tabs={topTabs} />
 
   <div class="mx-auto max-w-5xl px-8 pb-24">
-    <IdeHeaderBar />
+    <HeaderBar />
 
     <HeroPanel
       firstName="Piotr"
@@ -37,9 +37,9 @@ const description = 'Piotr Szaran portfolio in an IDE-inspired layout, featuring
 
     <ProjectsSection projects={projects} />
 
-    <div class="mt-10 h-px bg-ide-border"></div>
+    <div class="mt-10 h-px bg-site-border"></div>
   </div>
 
-  <IdeFooterBar leftItems={statusBarLeft} rightItems={statusBarRight} />
+  <FooterBar leftItems={statusBarLeft} rightItems={statusBarRight} />
 </body>
 </html>

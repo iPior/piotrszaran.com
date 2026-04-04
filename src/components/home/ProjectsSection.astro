@@ -1,5 +1,5 @@
 ---
-import type { ProjectEntry } from '../../data/home/ideHome';
+import type { ProjectEntry } from '../../data/home/homeTheme';
 
 interface Props {
   projects: ProjectEntry[];
@@ -8,27 +8,27 @@ interface Props {
 const { projects } = Astro.props;
 
 const toneClasses: Record<ProjectEntry['categoryTone'], string> = {
-  blue: 'bg-ide-blue/10 text-ide-blue',
-  peach: 'bg-ide-peach/10 text-ide-peach',
-  green: 'bg-ide-green/10 text-ide-green'
+  blue: 'bg-site-blue/10 text-site-blue',
+  peach: 'bg-site-peach/10 text-site-peach',
+  green: 'bg-site-green/10 text-site-green'
 };
 ---
 
 <section>
-  <div class="mt-10 flex items-baseline gap-3 border-b border-ide-border pb-2.5">
-    <h2 class="text-lg font-semibold text-ide-text"><span class="font-normal text-ide-mauve">const</span> <span class="text-ide-yellow">projects</span></h2>
-    <span class="text-xs text-ide-dim">// {projects.length} items</span>
+  <div class="mt-10 flex items-baseline gap-3 border-b border-site-border pb-2.5">
+    <h2 class="text-lg font-semibold text-site-text"><span class="font-normal text-site-mauve">const</span> <span class="text-site-yellow">projects</span></h2>
+    <span class="text-xs text-site-dim">// {projects.length} items</span>
   </div>
   <div>
     {
       projects.map((project, idx) => (
-        <div class="flex items-start gap-4 border-b border-ide-border py-4 transition-colors duration-100 hover:-mx-3 hover:rounded hover:bg-ide-surface-hover hover:px-3">
-          <div class="w-9 text-lg font-medium leading-tight text-ide-peach max-sm:w-7">
+        <div class="flex items-start gap-4 border-b border-site-border py-4 transition-colors duration-100 hover:-mx-3 hover:rounded hover:bg-site-surface-hover hover:px-3">
+          <div class="w-9 text-lg font-medium leading-tight text-site-peach max-sm:w-7">
             {String(idx + 1).padStart(2, '0')}
           </div>
           <div class="min-w-0 flex-1">
-            <div class="mb-1 text-base font-semibold leading-snug text-ide-blue">{project.title}</div>
-            <div class="text-xs italic leading-relaxed text-ide-dim">{project.description}</div>
+            <div class="mb-1 text-base font-semibold leading-snug text-site-blue">{project.title}</div>
+            <div class="text-xs italic leading-relaxed text-site-dim">{project.description}</div>
           </div>
           <div class="w-40 flex-col items-end gap-2 text-right max-sm:hidden flex">
             <span class:list={['inline-block rounded px-2 py-0.5 text-xs font-medium tracking-wider', toneClasses[project.categoryTone]]}>
@@ -37,11 +37,11 @@ const toneClasses: Record<ProjectEntry['categoryTone'], string> = {
             <div class="flex flex-wrap justify-end gap-1">
               {
                 project.tags.map((tag) => (
-                  <span class="rounded-sm border border-ide-border px-1.5 py-0 text-xs text-ide-dim">{tag}</span>
+                  <span class="rounded-sm border border-site-border px-1.5 py-0 text-xs text-site-dim">{tag}</span>
                 ))
               }
             </div>
-            <span class="text-xs text-ide-dim">{project.date}</span>
+            <span class="text-xs text-site-dim">{project.date}</span>
           </div>
         </div>
       ))

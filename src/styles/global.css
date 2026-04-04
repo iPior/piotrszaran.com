@@ -1,20 +1,35 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ide-bg: #1e1e2e;
-  --color-ide-surface: #181825;
-  --color-ide-surface-hover: #242438;
-  --color-ide-tab: #11111b;
-  --color-ide-border: #313244;
-  --color-ide-text: #cdd6f4;
-  --color-ide-subtext: #a6adc8;
-  --color-ide-dim: #6c7086;
-  --color-ide-overlay: #585b70;
-  --color-ide-blue: #89b4fa;
-  --color-ide-green: #a6e3a1;
-  --color-ide-peach: #fab387;
-  --color-ide-mauve: #cba6f7;
-  --color-ide-yellow: #f9e2af;
+  --color-site-bg: #1e1e2e;
+  --color-site-surface: #181825;
+  --color-site-surface-hover: #242438;
+  --color-site-tab: #11111b;
+  --color-site-border: #313244;
+  --color-site-text: #cdd6f4;
+  --color-site-subtext: #a6adc8;
+  --color-site-dim: #6c7086;
+  --color-site-overlay: #585b70;
+  --color-site-blue: #89b4fa;
+  --color-site-green: #a6e3a1;
+  --color-site-peach: #fab387;
+  --color-site-mauve: #cba6f7;
+  --color-site-yellow: #f9e2af;
+  /* Keep legacy aliases so /themes pages stay unchanged. */
+  --color-ide-bg: var(--color-site-bg);
+  --color-ide-surface: var(--color-site-surface);
+  --color-ide-surface-hover: var(--color-site-surface-hover);
+  --color-ide-tab: var(--color-site-tab);
+  --color-ide-border: var(--color-site-border);
+  --color-ide-text: var(--color-site-text);
+  --color-ide-subtext: var(--color-site-subtext);
+  --color-ide-dim: var(--color-site-dim);
+  --color-ide-overlay: var(--color-site-overlay);
+  --color-ide-blue: var(--color-site-blue);
+  --color-ide-green: var(--color-site-green);
+  --color-ide-peach: var(--color-site-peach);
+  --color-ide-mauve: var(--color-site-mauve);
+  --color-ide-yellow: var(--color-site-yellow);
 }
 
 /* Prose styles for MDX content */

@@ -1,4 +1,4 @@
-export interface IdeTab {
+export interface HomeTab {
   icon: string;
   iconClass: string;
   label: string;
@@ -19,10 +19,10 @@ export interface ProjectEntry {
   date: string;
 }
 
-export const topTabs: IdeTab[] = [
-  { icon: '{}', iconClass: 'text-ide-blue', label: 'portfolio.ts', active: true },
-  { icon: '{}', iconClass: 'text-ide-yellow', label: 'package.json' },
-  { icon: '#', iconClass: 'text-ide-subtext', label: 'README.md' }
+export const topTabs: HomeTab[] = [
+  { icon: '{}', iconClass: 'text-site-blue', label: 'portfolio.ts', active: true },
+  { icon: '{}', iconClass: 'text-site-yellow', label: 'package.json' },
+  { icon: '#', iconClass: 'text-site-subtext', label: 'README.md' }
 ];
 
 export const profileFields: ProfileField[] = [

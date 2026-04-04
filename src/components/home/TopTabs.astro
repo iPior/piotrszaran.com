@@ -1,0 +1,25 @@
+---
+import type { HomeTab } from '../../data/home/homeTheme';
+
+interface Props {
+  tabs: HomeTab[];
+}
+
+const { tabs } = Astro.props;
+---
+
+<div class="flex items-stretch overflow-x-auto border-b border-site-border bg-site-tab text-xs">
+  {
+    tabs.map((tab) => (
+      <div
+        class:list={[
+          'flex items-center gap-2 whitespace-nowrap border-r border-site-border px-4 py-2',
+          tab.active ? '-mb-px border-b-2 border-site-blue bg-site-bg text-site-text' : 'text-site-dim'
+        ]}
+      >
+        <span class:list={['text-xs', tab.iconClass]}>{tab.icon}</span>
+        {tab.label}
+      </div>
+    ))
+  }
+</div>
