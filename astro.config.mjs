@@ -1,9 +1,9 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
-import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 import preact from '@astrojs/preact';
 import vercel from '@astrojs/vercel';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   site: 'https://piotrszaran.com',
@@ -11,10 +11,12 @@ export default defineConfig({
   adapter: vercel(),
   integrations: [
     mdx(),
-    tailwind(),
     sitemap(),
     preact(),
   ],
+  vite: {
+    plugins: [tailwindcss()],
+  },
   markdown: {
     shikiConfig: {
       theme: 'github-dark',

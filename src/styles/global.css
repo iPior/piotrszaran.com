@@ -1,6 +1,21 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-ide-bg: #1e1e2e;
+  --color-ide-surface: #181825;
+  --color-ide-surface-hover: #242438;
+  --color-ide-tab: #11111b;
+  --color-ide-border: #313244;
+  --color-ide-text: #cdd6f4;
+  --color-ide-subtext: #a6adc8;
+  --color-ide-dim: #6c7086;
+  --color-ide-overlay: #585b70;
+  --color-ide-blue: #89b4fa;
+  --color-ide-green: #a6e3a1;
+  --color-ide-peach: #fab387;
+  --color-ide-mauve: #cba6f7;
+  --color-ide-yellow: #f9e2af;
+}
 
 /* Prose styles for MDX content */
 @layer components {
