@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import ProjectCard from '../projects/ProjectCard.astro';
+import ProjectCard from '../projects/ProjectCard';
 
 interface Props {
   projects: CollectionEntry<'projects'>[];
@@ -29,6 +29,7 @@ const { projects } = Astro.props;
             title={project.data.title}
             description={project.data.description}
             category={project.data.category}
+            href={`/projects/${project.slug}`}
             dateLabel={project.data.date.toLocaleDateString('en-US', {
               month: 'short',
               year: 'numeric'

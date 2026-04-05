@@ -1,12 +1,29 @@
 ---
-title: "Personal Website Number 2"
-date: 2026-04-04
+title: "Portfolio Site v2"
+date: 2026-04-15
 category: "personal"
-description: ""
-stack: []
-featured: false
+description: "A rebuilt personal portfolio using Astro, MDX, and Tailwind."
+stack: ["Astro", "MDX", "Tailwind CSS", "Preact", "Vercel"]
+liveUrl: "https://piotrszaran.com"
+githubUrl: "https://github.com/piotrszaran/portfolio"
+blogSlug: "why-i-rebuilt-my-portfolio"
+featured: true
 ---
 
 ## Overview
 
-TBD.
+This is a from-scratch rebuild of my personal portfolio. The previous version used Next.js with Payload CMS and Supabase — this version drops all of that in favor of Astro with MDX content stored directly in the repository.
+
+## Architecture
+
+Fully static site generated at build time. All content authored in MDX with typed frontmatter schemas via Astro content collections. Zero JavaScript shipped to the browser except for one interactive filter component. No runtime database dependencies.
+
+## Key Decisions
+
+- **Astro over Next.js**: The portfolio is a content site, not a web app. Astro's zero-JS-by-default approach is the right model.
+- **Files over CMS**: Content lives in the repo. No third-party dependency, no API calls at runtime, works offline, easy to version.
+- **Preact over React**: The one interactive component (project filter) is 3KB of Preact vs 40KB of React.
+
+## What I Learned
+
+Astro's content collections provide exactly the right level of structure — typed schemas without a database, automatic slug generation without configuration, and MDX support without a custom pipeline.

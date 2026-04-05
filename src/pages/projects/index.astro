@@ -1,66 +1,37 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import ProjectCard from "../../components/projects/ProjectCard.astro";
+import ProjectFilter from "../../components/projects/ProjectFilter";
+import ProjectPageIntro from "../../components/projects/ProjectPageIntro.astro";
 import { getCollection } from "astro:content";
-import { formatDate } from "../../lib/utils";
 
 const projects = (await getCollection("projects")).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
+
+const filterProjects = projects.map((project) => ({
+  id: project.slug,
+  title: project.data.title,
+  description: project.data.description,
+  category: project.data.category,
+  date: project.data.date.toISOString(),
+  stack: project.data.stack ?? [],
+  liveUrl: project.data.liveUrl,
+  githubUrl: project.data.githubUrl,
+}));
 ---
 
 <BaseLayout
   title="Projects — Piotr Szaran"
   description="Selected software projects, case studies, and build notes."
 >
-  <section>
-    <div class="mb-2.5 text-xs text-site-dim">
-      <span class="text-site-mauve">export</span>
-      <span class="text-site-mauve">const</span> projectIndex
-      <span class="text-site-overlay">=</span>
-      <span class="text-site-overlay">{"{"}</span>
-    </div>
-    <h1
-      class="text-4xl font-bold leading-none tracking-tight text-site-text sm:text-6xl md:text-7xl"
-    >
-      <span class="text-site-blue">Projects</span>
-    </h1>
-    <div class="mt-2.5 text-sm text-site-dim">
-      <span class="italic text-site-dim"
-        >{"}"} // Selected software projects, case studies, and build notes.</span
-      >
-    </div>
-  </section>
+  <ProjectPageIntro />
 
   <section class="mt-10">
-    <div class="flex items-baseline gap-3 border-b border-site-border pb-2.5">
-      <h2 class="text-lg font-semibold text-site-text">
-        <span class="font-normal text-site-mauve">const</span>
-        <span class="text-site-yellow">projectList</span>
-      </h2>
-      <span class="text-xs text-site-dim">// {projects.length} items</span>
-    </div>
-
     {
       projects.length === 0 ? (
         <p class="py-6 text-site-dim">No projects yet.</p>
       ) : (
-        <div>
-          {projects.map((project, idx) => (
-            <ProjectCard
-              index={idx}
-              title={project.data.title}
-              description={project.data.description}
-              category={project.data.category}
-              dateLabel={formatDate(project.data.date)}
-              tags={project.data.stack ?? []}
-              href={`/projects/${project.slug}`}
-              liveUrl={project.data.liveUrl}
-              githubUrl={project.data.githubUrl}
-              layout="list"
-            />
-          ))}
-        </div>
+        <ProjectFilter client:load projects={filterProjects} />
       )
     }
   </section>
