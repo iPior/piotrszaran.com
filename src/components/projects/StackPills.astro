@@ -4,12 +4,106 @@ interface Props {
 }
 
 const { stack } = Astro.props;
+
+const SKILL_ICON_MAP: Record<string, string> = {
+  'TypeScript': 'ts',
+  'JavaScript': 'js',
+  'Next.js': 'nextjs',
+  'Node.js': 'nodejs',
+  'React': 'react',
+  'Preact': 'react',
+  'Vite': 'vite',
+  'Tailwind': 'tailwind',
+  'Tailwind CSS': 'tailwind',
+  'Astro': 'astro',
+  'HTML': 'html',
+  'CSS': 'css',
+  'Docker': 'docker',
+  'Cloudflare': 'cloudflare',
+  'GitHub Actions': 'githubactions',
+  'PowerShell': 'powershell',
+  'Raspberry Pi': 'raspberrypi',
+  'PHP': 'php',
+  'WordPress': 'wordpress',
+  'Supabase': 'supabase',
+  'Vercel': 'vercel',
+  'Bun': 'bun',
+  'Sanity': 'sanity',
+  'Spotify API': 'spotify',
+  'Framer Motion': 'framermotion',
+  'WPF': 'dotnet',
+};
+
+const SIMPLE_ICON_MAP: Record<string, string> = {
+  'MDX': 'mdx',
+  'PM2': 'pm2',
+  'Render': 'render',
+  'Netlify': 'netlify',
+  'Anthropic API': 'anthropic',
+  'Payload': 'payloadcms',
+  'Shadcn/ui': 'shadcnui',
+  'NextAuth.js': 'authjs',
+  'MariaDB': 'mariadb',
+  'Resend': 'resend',
+  'Claude Code': 'anthropic',
+  'XAML': 'xaml',
+};
+
+const getMonogram = (tech: string): string => {
+  const cleaned = tech.replace(/[^a-zA-Z0-9+\s]/g, ' ').trim();
+  if (!cleaned) return '?';
+
+  const words = cleaned.split(/\s+/).filter(Boolean);
+  if (words.length >= 2) return `${words[0][0]}${words[1][0]}`.toUpperCase();
+
+  return cleaned.slice(0, 2).toUpperCase();
+};
+
+const getIconSources = (tech: string): { primary: string | null; fallback: string | null } => {
+  const skillId = SKILL_ICON_MAP[tech];
+  const simpleId = SIMPLE_ICON_MAP[tech];
+
+  return {
+    primary: skillId ? `https://skillicons.dev/icons?i=${skillId}` : null,
+    fallback: simpleId ? `https://cdn.simpleicons.org/${simpleId}` : null,
+  };
+};
 ---
 
-<div class="flex flex-wrap gap-1.5">
-  {stack.map((tech) => (
-    <span class="text-xs bg-site-surface-hover text-site-peach border border-site-border rounded px-2 py-0.5">
-      {tech}
-    </span>
-  ))}
+<div class="flex flex-wrap gap-3">
+  {stack.map((tech) => {
+    const { primary, fallback } = getIconSources(tech);
+    const monogram = getMonogram(tech);
+
+    return (
+      <div class="w-[92px]">
+        <div class="flex flex-col items-center gap-2 text-center">
+          <div class="w-12 h-12 rounded-lg border border-site-border bg-site-surface-hover flex items-center justify-center relative overflow-hidden">
+            {primary || fallback ? (
+              <img
+                src={primary ?? fallback!}
+                data-fallback-src={fallback ?? ''}
+                alt={`${tech} logo`}
+                title={tech}
+                loading="lazy"
+                class="w-10 h-10 object-contain"
+                onerror="if (this.dataset.fallbackSrc && this.src !== this.dataset.fallbackSrc) { this.src = this.dataset.fallbackSrc; return; } this.style.display='none'; const fallback = this.parentElement && this.parentElement.querySelector('[data-icon-fallback]'); if (fallback) fallback.style.display='flex';"
+              />
+            ) : null}
+            <span
+              data-icon-fallback
+              class:list={[
+                'absolute inset-0 items-center justify-center text-[11px] font-semibold tracking-wide text-site-subtext',
+                primary || fallback ? 'hidden' : 'flex',
+              ]}
+              aria-hidden="true"
+            >
+              {monogram}
+            </span>
+          </div>
+          <span class="text-xs text-site-dim leading-tight">{tech}</span>
+        </div>
+      </div>
+    );
+  })}
 </div>
