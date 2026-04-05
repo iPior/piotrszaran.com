@@ -70,17 +70,14 @@ const TAG_COLORS: Record<string, string> = {
   'anthropic api': 'd97757',
 };
 
-const DEFAULT_TAG_COLOR = '0f172a';
+const THEME_COLOR_PLACEHOLDER = '__THEME_DEFAULT_BADGE_COLOR__';
+const DEFAULT_THEME_BADGE_COLOR = '313244';
 const LOGO_COLOR = 'ffffff';
 
-function getShieldSrc(tag: string, tagColorMode: ShieldBadgeColorMode): string {
+function getShieldSrc(tag: string, color: string): string {
   const normalizedTag = tag.trim().toLowerCase();
   const encodedTag = encodeURIComponent(tag);
   const logo = TAG_LOGOS[normalizedTag];
-  const color =
-    tagColorMode === 'uniform'
-      ? DEFAULT_TAG_COLOR
-      : TAG_COLORS[normalizedTag] ?? DEFAULT_TAG_COLOR;
 
   if (!logo) {
     return `https://img.shields.io/badge/${encodedTag}-${color}?style=flat-square`;
@@ -100,16 +97,31 @@ export default function ShieldBadges({
 
   return (
     <div class={className}>
-      {tags.map((tag, idx) => (
-        <img
-          key={`${tag}-${idx}`}
-          src={getShieldSrc(tag, tagColorMode)}
-          alt={`${tag} badge`}
-          class="h-5"
-          loading="lazy"
-          decoding="async"
-        />
-      ))}
+      {tags.map((tag, idx) => {
+        const normalizedTag = tag.trim().toLowerCase();
+        const mappedColor = TAG_COLORS[normalizedTag];
+        const usesThemeDefault =
+          tagColorMode === 'uniform' || mappedColor === undefined;
+        const initialColor = usesThemeDefault
+          ? DEFAULT_THEME_BADGE_COLOR
+          : mappedColor;
+
+        return (
+          <img
+            key={`${tag}-${idx}`}
+            src={getShieldSrc(tag, initialColor)}
+            data-theme-shield-template={
+              usesThemeDefault
+                ? getShieldSrc(tag, THEME_COLOR_PLACEHOLDER)
+                : undefined
+            }
+            alt={`${tag} badge`}
+            class="h-5"
+            loading="lazy"
+            decoding="async"
+          />
+        );
+      })}
     </div>
   );
 }

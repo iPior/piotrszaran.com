@@ -126,6 +126,8 @@ function isActive(href: string): boolean {
     const toggles = document.querySelectorAll('[data-theme-toggle]');
     const familyOptions = document.querySelectorAll('[data-theme-family-option]');
     const menus = document.querySelectorAll('[data-theme-menu]');
+    const defaultThemeShieldColor = '313244';
+    const themeShieldColorPlaceholder = '__THEME_DEFAULT_BADGE_COLOR__';
     const validFamilies = ['catppuccin', 'nord'];
     if (!toggles.length && !familyOptions.length) return;
 
@@ -133,6 +135,56 @@ function isActive(href: string): boolean {
     const getThemeFamily = () => {
       const currentFamily = root.dataset.themeFamily;
       return validFamilies.includes(currentFamily) ? currentFamily : 'catppuccin';
+    };
+    const toShieldHexColor = (color) => {
+      const value = color.trim();
+      if (!value) return null;
+
+      if (value.startsWith('#')) {
+        const rawHex = value.slice(1);
+        if (/^[0-9a-fA-F]{3}$/.test(rawHex)) {
+          return rawHex
+            .split('')
+            .map((char) => `${char}${char}`)
+            .join('')
+            .toLowerCase();
+        }
+        if (/^[0-9a-fA-F]{6}$/.test(rawHex)) {
+          return rawHex.toLowerCase();
+        }
+        return null;
+      }
+
+      const rgbMatch = value.match(
+        /^rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})/i
+      );
+      if (!rgbMatch) return null;
+
+      const toHex = (channel) => {
+        const numeric = Number(channel);
+        if (Number.isNaN(numeric)) return '00';
+        const clamped = Math.max(0, Math.min(255, numeric));
+        return clamped.toString(16).padStart(2, '0');
+      };
+
+      return `${toHex(rgbMatch[1])}${toHex(rgbMatch[2])}${toHex(rgbMatch[3])}`;
+    };
+    const getThemeShieldColor = () => {
+      const rootStyles = getComputedStyle(root);
+      const borderColor = rootStyles.getPropertyValue('--color-site-border');
+      return toShieldHexColor(borderColor) ?? defaultThemeShieldColor;
+    };
+    const syncThemeShieldBadges = () => {
+      const nextColor = getThemeShieldColor();
+      const badges = document.querySelectorAll('img[data-theme-shield-template]');
+      badges.forEach((badge) => {
+        const template = badge.dataset.themeShieldTemplate;
+        if (!template) return;
+        const nextSrc = template.replace(themeShieldColorPlaceholder, nextColor);
+        if (badge.getAttribute('src') !== nextSrc) {
+          badge.setAttribute('src', nextSrc);
+        }
+      });
     };
 
     const syncToggleState = (theme) => {
@@ -153,6 +205,13 @@ function isActive(href: string): boolean {
 
     syncToggleState(getTheme());
     syncThemeFamilyState(getThemeFamily());
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        syncThemeShieldBadges();
+      });
+    } else {
+      syncThemeShieldBadges();
+    }
 
     toggles.forEach((toggle) => {
       toggle.addEventListener('click', () => {
@@ -160,6 +219,7 @@ function isActive(href: string): boolean {
         root.dataset.theme = nextTheme;
         localStorage.setItem('theme', nextTheme);
         syncToggleState(nextTheme);
+        syncThemeShieldBadges();
       });
     });
 
@@ -170,6 +230,7 @@ function isActive(href: string): boolean {
         root.dataset.themeFamily = nextFamily;
         localStorage.setItem('themeFamily', nextFamily);
         syncThemeFamilyState(nextFamily);
+        syncThemeShieldBadges();
         const openMenu = option.closest('details');
         if (openMenu) {
           openMenu.removeAttribute('open');
@@ -185,5 +246,12 @@ function isActive(href: string): boolean {
         }
       });
     });
+
+    const badgeObserver = new MutationObserver(() => {
+      syncThemeShieldBadges();
+    });
+    if (document.body) {
+      badgeObserver.observe(document.body, { childList: true, subtree: true });
+    }
   })();
 </script>
