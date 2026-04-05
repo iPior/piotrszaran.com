@@ -24,32 +24,9 @@ const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
     tags: post.data.tags ?? []
   }));
 
-const categoryLabels = {
-  personal: 'Personal',
-  freelance: 'Freelance',
-  work: 'Work'
-} as const;
-
-const categoryTones = {
-  personal: 'blue',
-  freelance: 'peach',
-  work: 'green'
-} as const;
-
 const projects = (await getCollection('projects'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 10)
-  .map((project) => ({
-    title: project.data.title,
-    description: project.data.description,
-    category: categoryLabels[project.data.category],
-    categoryTone: categoryTones[project.data.category],
-    tags: project.data.stack ?? [],
-    date: project.data.date.toLocaleDateString('en-US', {
-      month: 'short',
-      year: 'numeric'
-    })
-  }));
+  .slice(0, 15);
 ---
 
 <!doctype html>

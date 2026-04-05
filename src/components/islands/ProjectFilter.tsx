@@ -1,11 +1,17 @@
 /** @jsxImportSource preact */
 import { useState } from 'preact/hooks';
+import { formatDate } from '../../lib/utils';
+import {
+  PROJECT_CATEGORY_LABELS,
+  PROJECT_CATEGORY_TONE_CLASSES,
+  type ProjectCategory,
+} from '../../lib/projects';
 
 interface Project {
   id: string;
   title: string;
   date: string;
-  category: 'freelance' | 'work' | 'personal';
+  category: ProjectCategory;
   description: string;
   stack?: string[];
   thumbnail?: string;
@@ -14,34 +20,18 @@ interface Project {
   blogSlug?: string;
 }
 
-const CATEGORY_LABELS: Record<string, string> = {
+const CATEGORY_LABELS = {
   all: 'All',
-  freelance: 'Freelance',
-  work: 'Work',
-  personal: 'Personal',
-};
-
-const CATEGORY_BADGE_COLORS: Record<string, string> = {
-  freelance: 'border-site-peach text-site-peach bg-site-peach/10',
-  work: 'border-site-green text-site-green bg-site-green/10',
-  personal: 'border-site-blue text-site-blue bg-site-blue/10',
-};
-
-function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-}
+  ...PROJECT_CATEGORY_LABELS,
+} as const;
 
 export default function ProjectFilter({ projects }: { projects: Project[] }) {
-  const [active, setActive] = useState<string>('all');
+  const [active, setActive] = useState<'all' | ProjectCategory>('all');
 
   const filtered =
     active === 'all' ? projects : projects.filter((p) => p.category === active);
 
-  const categories = ['all', 'freelance', 'work', 'personal'];
+  const categories: Array<'all' | ProjectCategory> = ['all', 'freelance', 'work', 'personal'];
 
   return (
     <div>
@@ -62,49 +52,78 @@ export default function ProjectFilter({ projects }: { projects: Project[] }) {
         ))}
       </div>
 
-      {/* Project grid */}
+      {/* Project list */}
       {filtered.length === 0 ? (
         <p class="text-site-dim text-sm">No projects in this category.</p>
       ) : (
-        <div class="grid gap-4 sm:grid-cols-2">
-          {filtered.map((project) => (
-            <a
+        <div>
+          {filtered.map((project, idx) => (
+            <article
               key={project.id}
-              href={`/projects/${project.id}`}
-              class="block border border-site-border bg-site-surface rounded-lg p-5 hover:border-site-blue transition-colors"
+              class="border-b border-site-border py-4 transition-colors duration-100 hover:-mx-3 hover:rounded hover:bg-site-surface-hover hover:px-3"
             >
-              {project.thumbnail && (
-                <img
-                  src={project.thumbnail}
-                  alt={project.title}
-                  class="w-full h-40 object-cover rounded mb-4"
-                  loading="lazy"
-                />
-              )}
-              <div class="flex items-center gap-3 mb-2">
-                <span
-                  class={`text-xs border rounded-full px-2.5 py-0.5 font-medium ${CATEGORY_BADGE_COLORS[project.category]}`}
-                >
-                  {CATEGORY_LABELS[project.category]}
-                </span>
-                <time class="text-xs text-site-dim">{formatDate(project.date)}</time>
-              </div>
-              <h3 class="font-semibold text-lg mb-1 text-site-text">{project.title}</h3>
-              <p class="text-site-subtext text-sm mb-3">{project.description}</p>
-              {project.stack && project.stack.length > 0 && (
-                <div class="flex flex-wrap gap-1.5">
-                  {project.stack.map((tech) => (
-                    <span key={tech} class="text-xs bg-site-surface-hover text-site-peach border border-site-border rounded px-2 py-0.5">
-                      {tech}
-                    </span>
-                  ))}
+              <div class="flex items-start gap-4">
+                <div class="w-9 text-lg font-medium leading-tight text-site-peach max-sm:w-7">
+                  {String(idx + 1).padStart(2, '0')}
                 </div>
-              )}
-              <div class="flex gap-3 mt-3 text-xs text-site-blue">
-                {project.liveUrl && <span>Live ↗</span>}
-                {project.githubUrl && <span>GitHub ↗</span>}
+
+                <div class="min-w-0 flex-1">
+                  <a href={`/projects/${project.id}`} class="group inline-flex items-center gap-2">
+                    <h3 class="text-base font-semibold leading-snug text-site-blue">{project.title}</h3>
+                    <span class="text-site-dim transition-colors group-hover:text-site-blue">→</span>
+                  </a>
+                  {project.description && (
+                    <p class="mt-1 text-xs italic leading-relaxed text-site-dim">{project.description}</p>
+                  )}
+                  {project.stack && project.stack.length > 0 && (
+                    <div class="mt-2.5 flex flex-wrap gap-1">
+                      {project.stack.map((tech) => (
+                        <span key={tech} class="rounded-sm border border-site-border px-1.5 py-0 text-xs text-site-dim">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+                    <span
+                      class={`inline-block rounded px-2 py-0.5 font-medium tracking-wider sm:hidden ${PROJECT_CATEGORY_TONE_CLASSES[project.category]}`}
+                    >
+                      {PROJECT_CATEGORY_LABELS[project.category]}
+                    </span>
+                    <time class="text-site-dim sm:hidden">{formatDate(new Date(project.date))}</time>
+                    {project.liveUrl && (
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-site-blue hover:underline"
+                      >
+                        Live ↗
+                      </a>
+                    )}
+                    {project.githubUrl && (
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-site-blue hover:underline"
+                      >
+                        GitHub ↗
+                      </a>
+                    )}
+                  </div>
+                </div>
+
+                <div class="w-40 flex-col items-end gap-2 text-right max-sm:hidden flex">
+                  <span
+                    class={`inline-block rounded px-2 py-0.5 text-xs font-medium tracking-wider ${PROJECT_CATEGORY_TONE_CLASSES[project.category]}`}
+                  >
+                    {PROJECT_CATEGORY_LABELS[project.category]}
+                  </span>
+                  <time class="text-xs text-site-dim">{formatDate(new Date(project.date))}</time>
+                </div>
               </div>
-            </a>
+            </article>
           ))}
         </div>
       )}

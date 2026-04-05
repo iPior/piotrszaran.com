@@ -1,24 +1,12 @@
 ---
-interface ProjectEntry {
-  title: string;
-  description: string;
-  category: string;
-  categoryTone: 'blue' | 'peach' | 'green';
-  tags: string[];
-  date: string;
-}
+import type { CollectionEntry } from 'astro:content';
+import ProjectCard from '../projects/ProjectCard.astro';
 
 interface Props {
-  projects: ProjectEntry[];
+  projects: CollectionEntry<'projects'>[];
 }
 
 const { projects } = Astro.props;
-
-const toneClasses: Record<ProjectEntry['categoryTone'], string> = {
-  blue: 'bg-site-blue/10 text-site-blue',
-  peach: 'bg-site-peach/10 text-site-peach',
-  green: 'bg-site-green/10 text-site-green'
-};
 ---
 
 <section>
@@ -29,32 +17,28 @@ const toneClasses: Record<ProjectEntry['categoryTone'], string> = {
     </div>
     <a href="/projects" class="text-xs text-site-blue hover:underline">View all →</a>
   </div>
-  <div>
-    {
-      projects.map((project, idx) => (
-        <div class="flex items-start gap-4 border-b border-site-border py-4 transition-colors duration-100 hover:-mx-3 hover:rounded hover:bg-site-surface-hover hover:px-3">
-          <div class="w-9 text-lg font-medium leading-tight text-site-peach max-sm:w-7">
-            {String(idx + 1).padStart(2, '0')}
-          </div>
-          <div class="min-w-0 flex-1">
-            <div class="mb-1 text-base font-semibold leading-snug text-site-blue">{project.title}</div>
-            <div class="text-xs italic leading-relaxed text-site-dim">{project.description}</div>
-          </div>
-          <div class="w-40 flex-col items-end gap-2 text-right max-sm:hidden flex">
-            <span class:list={['inline-block rounded px-2 py-0.5 text-xs font-medium tracking-wider', toneClasses[project.categoryTone]]}>
-              {project.category}
-            </span>
-            <div class="flex flex-wrap justify-end gap-1">
-              {
-                project.tags.map((tag) => (
-                  <span class="rounded-sm border border-site-border px-1.5 py-0 text-xs text-site-dim">{tag}</span>
-                ))
-              }
-            </div>
-            <span class="text-xs text-site-dim">{project.date}</span>
-          </div>
-        </div>
-      ))
-    }
-  </div>
+
+  {
+    projects.length === 0 ? (
+      <p class="py-6 text-site-dim">No projects yet.</p>
+    ) : (
+      <div>
+        {projects.map((project, idx) => (
+          <ProjectCard
+            index={idx}
+            title={project.data.title}
+            description={project.data.description}
+            category={project.data.category}
+            dateLabel={project.data.date.toLocaleDateString('en-US', {
+              month: 'short',
+              year: 'numeric'
+            })}
+            tags={project.data.stack ?? []}
+            layout="home"
+            tagColorMode="uniform"
+          />
+        ))}
+      </div>
+    )
+  }
 </section>
