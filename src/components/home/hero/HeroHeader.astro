@@ -7,7 +7,8 @@ interface Props {
   profileImageAlt: string;
 }
 
-const { firstName, lastName, role, profileImageSrc, profileImageAlt } = Astro.props;
+const { firstName, lastName, role, profileImageSrc, profileImageAlt } =
+  Astro.props;
 ---
 
 <div class="mb-2.5 text-xs text-site-dim">
@@ -16,27 +17,24 @@ const { firstName, lastName, role, profileImageSrc, profileImageAlt } = Astro.pr
   <span class="text-site-overlay">=</span>
   <span class="text-site-overlay">{"{"}</span>
 </div>
-<div class="flex items-start justify-between gap-4 sm:gap-6">
-  <div>
-    <h1
-      class="text-4xl font-bold leading-none tracking-tight text-site-text sm:text-6xl md:text-7xl lg:text-8xl"
-    >
+<div>
+  <div class="flex items-start gap-4 sm:gap-6 text-4xl leading-none sm:text-6xl md:text-7xl lg:text-8xl">
+    {
+      profileImageSrc && (
+        <img
+          src={profileImageSrc}
+          alt={profileImageAlt}
+          class="mt-[0.05em] h-[1.9em] w-[1.9em] shrink-0 rounded-2xl border border-site-border object-cover"
+          loading="eager"
+          decoding="async"
+        />
+      )
+    }
+    <h1 class="font-bold tracking-tight text-site-text">
       <span class="text-site-blue">{firstName}</span><br />
       <span class="font-normal text-site-yellow">{lastName}</span>
     </h1>
-    <div class="mt-2.5 text-sm text-site-dim">
-      <span class="italic text-site-dim">{"}"} // {role}</span>
-    </div>
   </div>
-  {
-    profileImageSrc && (
-      <img
-        src={profileImageSrc}
-        alt={profileImageAlt}
-        class="h-16 w-16 shrink-0 rounded border border-site-border object-cover sm:h-24 sm:w-24 md:h-28 md:w-28"
-        loading="eager"
-        decoding="async"
-      />
-    )
-  }
-</div>
+  <div class="mt-2.5 text-sm text-site-dim">
+    <span class="italic text-site-dim">{"}"} // {role}</span>
+  </div>
