@@ -1,0 +1,30 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BlogPostListItem from "./BlogPostListItem.astro";
+
+interface Props {
+  posts: CollectionEntry<"blog">[];
+}
+
+const { posts } = Astro.props;
+---
+
+<section class="mt-10">
+  <div class="flex items-baseline gap-3 border-b border-site-border pb-2.5">
+    <h2 class="text-lg font-semibold text-site-text">
+      <span class="font-normal text-site-mauve">const</span>
+      <span class="text-site-yellow">posts</span>
+    </h2>
+    <span class="text-xs text-site-dim">// {posts.length} items</span>
+  </div>
+
+  {
+    posts.length === 0 ? (
+      <p class="py-6 text-site-dim">No posts yet.</p>
+    ) : (
+      <div>
+        {posts.map((post, index) => <BlogPostListItem post={post} index={index} />)}
+      </div>
+    )
+  }
+</section>
