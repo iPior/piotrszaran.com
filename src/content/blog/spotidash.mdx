@@ -1,0 +1,65 @@
+---
+title: "A Deeper Dive"
+date: 2025-05-07
+description: "SpotiDash is a web application that provides users with a personalized dashboard for exploring their favorite music on Spotify. Leveraging the Spotify API, SpotiDash allows users to view their top tracks, artists, and new releases, all in one place."
+projectSlug: "spotidash"
+tags: ["nextjs", "typescript", "spotify-api", "tailwind", "auth"]
+coverImage: "/images/blog/spotidash.png"
+draft: false
+---
+
+> **Source Code:** https://github.com/iPior/nextjs-spotify-dashboard
+
+### Overview
+
+SpotiDash is a web application that provides users with a personalized dashboard for exploring their favorite music on Spotify. Leveraging the Spotify API, SpotiDash allows users to view their top tracks, artists, and new releases, all in one place. The application features a sleek and responsive design built with Next.js and styled using Tailwind CSS, ensuring a smooth user experience across devices. With authentication handled by NextAuth.js, users can securely log in and access their music data effortlessly. Enjoy discovering and managing your music preferences with SpotiDash!
+
+### Goals of the Project
+
+- The goal of this project was to further elaborate on my learning and try out a React framework. After reading online, it seemed that Next.js was the obvious choice because:
+  - It provided great structure for the project with its file-based routing.
+  - Server-side rendering (SSR) and serverless deployment.
+  - Easy integration with Vercel, a new hosting platform I wanted to deploy to.
+
+Amongst other things, Next.js was a new technology to me, and it seemed to be very popular.
+
+- Another big goal of mine was to develop and deploy something that would be fun for others to use. I am really into music, and I always loved seeing the top artists/songs at the end of the year in my Spotify Wrapped. Why not develop something that can show me those stats more often?
+- Fully responsive design that looked great. Up until now, most of my projects have been for learning purposes, so I have not spent too much time designing them. This time around, I wanted to develop something that looked good too.
+- The last goal of the project was to develop something in TypeScript. Given that my last two projects were both in JavaScript, I thought this would be a great opportunity to make the jump.
+
+### Technologies Used
+
+- **Next.js:** A React framework for building server-side rendered applications.
+- **React:** A JavaScript library for building user interfaces.
+- **TypeScript:** A typed superset of JavaScript that compiles to plain JavaScript.
+- **Tailwind CSS:** A utility-first CSS framework for styling.
+- **Shadcn/ui:** A popular and customizable component library.
+- **Framer Motion:** A library for animations in React applications.
+- **Spotify API:** Used to fetch music data for the application.
+- **NextAuth.js:** Authentication for Next.js applications.
+
+### Backstory
+
+As mentioned in the goals of the project, I have always loved the end of the year when everyone gets their Spotify Wrapped, Apple Music Replay, and other music streaming service recaps. My friends and I take this time to send each other screenshots of the music we have been listening to, and it provides cool insights into what genres, artists, and songs everyone has been enjoying.
+
+I even tried to develop a similar project at the beginning of my coding journey. It was done with Flask, HTML, and CSS, but it turned out to not be too pleasant on the eyes. Honestly speaking, I lacked the technical skills to bring my idea to life. I always knew I would give this idea another attempt, but I was not sure when, and with what technologies.
+
+As I started learning about TypeScript, Next.js, and generally dove deeper into the world of web development, I thought this would be a great opportunity to revisit this idea.
+
+### What I Learned
+
+- I learned a lot about Next.js, including:
+  - File-based routing
+  - Client/Server-side code
+  - Creating API routes directly within the Next.js application
+- Deploying production to Vercel.
+- A deeper dive into Tailwind CSS and responsive design.
+- Dark mode and light mode theming.
+- Component libraries such as Shadcn/ui.
+- I also learned that you need permission from Spotify to allow your application users to log in with their Spotify accounts. Instead of doing so, I added a list of friends who were keen to test the application to the user group, and they were fine with testing/using the application. Perhaps in the future, for other web app ideas using Spotify's API, I will reach out for those permissions.
+
+### What I Would Do Differently
+
+- Currently, with the way the application is designed, API calls for Recently Released, Top Artists, and Top Songs data are fetched once a day. This was done to avoid making too many calls since the data does not change frequently. Having not used a database, I instinctively stored this data in local storage. With my knowledge now, I should have used IndexedDB with a library such as Dexie.js.
+- As a less experienced coder, I would have chosen a different authentication library instead of Auth.js (formerly Next-auth.js). While using JWT (JSON Web Tokens) for authentication, I had to implement my own refresh token function because it does not come out of the box in Auth.js. Additionally, I could not refer to their documentation for assistance because it is very poorly written.
+- Lastly, I could have perhaps used a different streaming service's API. I noticed that many cool endpoints that could provide insightful information about a user's listening habits have been deprecated. I ended up having to write my own custom function to display recently played tracks.

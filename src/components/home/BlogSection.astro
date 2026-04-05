@@ -38,7 +38,7 @@ const { posts } = Astro.props;
             <article class="border-b border-site-border py-4 transition-colors duration-100 hover:-mx-3 hover:rounded hover:bg-site-surface-hover hover:px-3">
               <div class="flex items-start gap-4">
                 <div class="w-9 text-lg font-medium leading-tight text-site-peach max-sm:w-7">
-                  {String(idx + 1).padStart(2, '0')}
+                  {String(posts.length - idx).padStart(2, '0')}
                 </div>
 
                 <div class="min-w-0 flex-1">
@@ -51,7 +51,7 @@ const { posts } = Astro.props;
                   {post.tags.length > 0 && (
                     <div class="mt-2.5 flex flex-wrap gap-1">
                       {post.tags.map((tag) => (
-                        <span class="rounded-sm border border-site-border px-1.5 py-0 text-xs text-site-dim">#{tag}</span>
+                        <span class="rounded-sm border border-site-border px-1.5 py-0 text-xs text-site-peach">#{tag}</span>
                       ))}
                     </div>
                   )}

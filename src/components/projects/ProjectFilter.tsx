@@ -43,7 +43,7 @@ export default function ProjectFilter({ projects }: { projects: Project[] }) {
           {filtered.map((project, idx) => (
             <ProjectCard
               key={project.id}
-              index={idx}
+              itemNumber={filtered.length - idx}
               title={project.title}
               description={project.description}
               category={project.category}

@@ -25,7 +25,7 @@ const { projects } = Astro.props;
       <div>
         {projects.map((project, idx) => (
           <ProjectCard
-            index={idx}
+            itemNumber={projects.length - idx}
             title={project.data.title}
             description={project.data.description}
             category={project.data.category}

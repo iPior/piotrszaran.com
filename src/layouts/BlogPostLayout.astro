@@ -14,7 +14,7 @@ interface Props {
 }
 
 const { post, headings, readingTime, relatedProject } = Astro.props;
-const { title, description, date, tags } = post.data;
+const { title, description, date, tags, coverImage } = post.data;
 ---
 
 <BaseLayout title={`${title} — Piotr Szaran`} description={description}>
@@ -44,6 +44,16 @@ const { title, description, date, tags } = post.data;
             <a href={`/projects/${relatedProject.slug}`} class="text-site-blue hover:underline font-medium">
               View project overview →
             </a>
+          </div>
+        )}
+        {coverImage && (
+          <div class="mt-6">
+            <img
+              src={coverImage}
+              alt={`${title} cover image`}
+              loading="eager"
+              class="w-full rounded-lg border border-site-border bg-site-surface object-cover"
+            />
           </div>
         )}
       </header>

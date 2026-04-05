@@ -23,7 +23,7 @@ const { posts } = Astro.props;
       <p class="py-6 text-site-dim">No posts yet.</p>
     ) : (
       <div>
-        {posts.map((post, index) => <BlogCard post={post} index={index} />)}
+        {posts.map((post, index) => <BlogCard post={post} itemNumber={posts.length - index} />)}
       </div>
     )
   }

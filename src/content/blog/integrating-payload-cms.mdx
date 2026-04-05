@@ -1,0 +1,44 @@
+---
+title: "My Experience Using PayloadCMS with Next.js"
+date: 2025-06-19
+description: "As I expanded my personal site, I needed a CMS that fit my developer workflow. This post covers my journey with PayloadCMS, why it stood out over Sanity, and how it helped me build a clean, serverless blog setup."
+projectSlug: "first-personal-website"
+tags: ["nextjs", "payloadcms", "sanity", "vercel", "cms"]
+coverImage: "/images/blog/integrating-payload-cms.png"
+draft: false
+---
+
+### From Idea to Blog
+
+After finishing the development of my personal website, I knew it was just the beginning. There was much more I wanted to implement as I continued learning and building.
+
+One of the features I envisioned was a blog/dev logs page that would dive deeper into each project. While the primary goal of each project was to learn, I also wanted to document:
+
+- The technologies I used
+- Why I made certain decisions
+- What I would do differently next time
+
+At the same time, I was working on a freelance project where the client also wanted a content management system (CMS) to manage their own content. This prompted me to start researching CMS options.
+
+Since both projects were built with **Next.js**, I narrowed my CMS choices down to two: **Sanity** and **PayloadCMS**. These two offer very different developer experiences, but both are capable. From what I read, PayloadCMS can be a bit harder to get started with due to limited documentation, while Sanity requires a hosted backend.
+
+To keep my deployment on **Vercel** serverless, I ultimately chose **PayloadCMS**. Personally, I did not find the documentation too difficult to navigate, though I was not doing anything overly complex like implementing live previews.
+
+I also had the chance to try out **Sanity**, which I ended up using for the client project. Between the two, I found that:
+
+- [**Sanity**](https://www.sanity.io/) has a more polished UI, making it friendlier for non-technical users. It integrates easily and offers many built-in plugins.
+- [**PayloadCMS**](https://payloadcms.com/) offers a better developer experience and is less restrictive in terms of customization.
+
+### What I Like About PayloadCMS
+
+- **Open Source**: Maintained by a great team and recently acquired by Figma.
+- **Serverless Deployment**: I deployed everything on Vercel, keeping it all within a single deployment.
+- **Email Integration**: I used **Resend**, a developer-first email service, for my contact form.
+- **Database Flexibility**:
+  - **Vercel Blob** for image storage
+  - **Supabase** for structured data
+- **Lexical Rich Text Editor**: Makes writing and customizing blog posts like this one super easy.
+
+### Conclusion
+
+While my use case for PayloadCMS was relatively simple, it is clear that it can handle much more complex projects. I will definitely consider using it for future freelance work where it fits the requirements.

@@ -6,7 +6,7 @@ import {
 import ShieldBadges, { type ShieldBadgeColorMode } from './ShieldBadges';
 
 interface Props {
-  index: number;
+  itemNumber: number;
   title: string;
   description: string;
   category: ProjectCategory;
@@ -20,7 +20,7 @@ interface Props {
 }
 
 export default function ProjectCard({
-  index,
+  itemNumber,
   title,
   description,
   category,
@@ -39,7 +39,7 @@ export default function ProjectCard({
     <article class="border-b border-site-border py-4 transition-colors duration-100 hover:-mx-3 hover:rounded hover:bg-site-surface-hover hover:px-3">
       <div class="flex items-start gap-4">
         <div class="w-9 text-lg font-medium leading-tight text-site-peach max-sm:w-7">
-          {String(index + 1).padStart(2, '0')}
+          {String(itemNumber).padStart(2, '0')}
         </div>
 
         <div class="min-w-0 flex-1">
