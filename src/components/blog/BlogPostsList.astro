@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import BlogPostListItem from "./BlogPostListItem.astro";
+import BlogCard from "./BlogCard.astro";
 
 interface Props {
   posts: CollectionEntry<"blog">[];
@@ -23,7 +23,7 @@ const { posts } = Astro.props;
       <p class="py-6 text-site-dim">No posts yet.</p>
     ) : (
       <div>
-        {posts.map((post, index) => <BlogPostListItem post={post} index={index} />)}
+        {posts.map((post, index) => <BlogCard post={post} index={index} />)}
       </div>
     )
   }
