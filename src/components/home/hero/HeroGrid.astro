@@ -1,5 +1,6 @@
 ---
-import type { ProfileField } from './types';
+import type { ProfileField } from "./types";
+import StackPills from "../../projects/StackPills.astro";
 
 interface Props {
   profileFields: ProfileField[];
@@ -7,46 +8,61 @@ interface Props {
 }
 
 const { profileFields, coreStack } = Astro.props;
+
+const normalizeKey = (key: string) => key.trim().toLowerCase();
+const preferredOrder = ["education", "location", "experience"];
+const profileFieldsByKey = new Map(
+  profileFields.map((field) => [normalizeKey(field.key), field]),
+);
+const orderedProfileFields = [
+  ...preferredOrder
+    .map((key) => profileFieldsByKey.get(key))
+    .filter((field): field is ProfileField => Boolean(field)),
+  ...profileFields.filter(
+    (field) => !preferredOrder.includes(normalizeKey(field.key)),
+  ),
+];
+const totalCells = 1 + orderedProfileFields.length;
+const totalRowsDesktop = Math.ceil(totalCells / 2);
 ---
 
 <div
   class="mt-6 grid grid-cols-1 overflow-hidden rounded border border-site-border bg-site-surface sm:grid-cols-2"
 >
-  {
-    profileFields.map((field, idx) => (
-      <div
-        class:list={[
-          'border-b border-site-border px-4 py-3.5',
-          idx % 2 === 0 ? 'sm:border-r' : '',
-          idx >= profileFields.length - 1 ? 'sm:border-b-0' : '',
-        ]}
-      >
-        <div class="mb-1 text-xs font-normal text-site-mauve">
-          <span class="text-site-overlay">.</span>
-          {field.key}
-        </div>
-        <div class="text-sm text-site-text">
-          <>
-            <span class="text-site-green">&quot;</span>
-            <Fragment set:html={field.value} />
-            <span class="text-site-green">&quot;</span>
-          </>
-        </div>
-      </div>
-    ))
-  }
-  <div class="px-4 py-3.5">
+  <div
+    class:list={[
+      "border-site-border px-4 py-3.5 sm:border-r",
+      totalCells > 1 ? "border-b" : "",
+      totalRowsDesktop > 1 ? "sm:border-b" : "",
+    ]}
+  >
     <div class="mb-1 text-xs font-normal text-site-mauve">
-      <span class="text-site-overlay">.</span>coreStack
+      <span class="text-site-overlay">. </span>coreStack
     </div>
-    <div class="mt-1.5 flex flex-wrap gap-1.5">
-      {
-        coreStack.map((technology) => (
-          <span class="rounded border border-site-border bg-site-surface-hover px-2.5 py-0.5 text-xs text-site-peach">
-            {technology}
-          </span>
-        ))
-      }
+    <div class="mt-2">
+      <StackPills stack={coreStack} />
     </div>
   </div>
+  {
+    orderedProfileFields.map((field, idx) => {
+      return (
+        <div
+          class:list={[
+            "border-site-border px-4 py-3.5",
+            idx + 1 < totalCells ? "border-b" : "",
+            (idx + 1) % 2 === 0 ? "sm:border-r" : "",
+            Math.floor((idx + 1) / 2) < totalRowsDesktop - 1 ? "sm:border-b" : "",
+          ]}
+        >
+          <div class="mb-1 text-xs font-normal text-site-mauve">
+            <span class="text-site-overlay">.</span>
+            {field.key}
+          </div>
+          <div class="text-sm text-site-text pl-4">
+            <Fragment set:html={field.value} />
+          </div>
+        </div>
+      );
+    })
+  }
 </div>
