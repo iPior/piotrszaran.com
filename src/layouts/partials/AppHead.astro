@@ -15,15 +15,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   (() => {
     const root = document.documentElement;
     const validFamilies = ['catppuccin', 'nord'];
-    const syncThemeColor = () => {
-      const themeColorMeta = document.querySelector('meta[name="theme-color"]');
-      if (!themeColorMeta) return;
-
-      const siteBackground = getComputedStyle(root).getPropertyValue('--color-site-bg').trim();
-      if (siteBackground) {
-        themeColorMeta.setAttribute('content', siteBackground);
-      }
-    };
 
     try {
       const storedTheme = localStorage.getItem('theme');
@@ -37,24 +28,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       root.dataset.theme = 'dark';
       root.dataset.themeFamily = 'catppuccin';
     }
-
-    window.__syncThemeColor = () => {
-      syncThemeColor();
-      requestAnimationFrame(syncThemeColor);
-    };
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', window.__syncThemeColor, { once: true });
-    } else {
-      window.__syncThemeColor();
-    }
   })();
 </script>
 
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#1e1e2e" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <meta name="generator" content={Astro.generator} />
 
