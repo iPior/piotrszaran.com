@@ -1,9 +1,12 @@
 ---
-interface Props {
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+export interface Props {
   firstName: string;
   lastName: string;
   role: string;
-  profileImageSrc?: string;
+  profileImageSrc?: string | ImageMetadata;
   profileImageAlt: string;
 }
 
@@ -19,17 +22,31 @@ const { firstName, lastName, role, profileImageSrc, profileImageAlt } =
 </div>
 <div>
   <div class="flex items-center gap-3 text-5xl leading-none sm:gap-6 sm:text-6xl md:text-7xl lg:text-8xl">
-    {
-      profileImageSrc && (
-        <img
-          src={profileImageSrc}
-          alt={profileImageAlt}
-          class="h-[2.2em] w-[2.2em] shrink-0 rounded-2xl border border-site-border object-cover"
-          loading="eager"
-          decoding="async"
-        />
-      )
-    }
+    {profileImageSrc && typeof profileImageSrc === 'string' && (
+      <img
+        src={profileImageSrc}
+        alt={profileImageAlt}
+        class="h-[2.2em] w-[2.2em] shrink-0 rounded-2xl border border-site-border object-cover"
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
+      />
+    )}
+    {profileImageSrc && typeof profileImageSrc !== 'string' && (
+      <Image
+        src={profileImageSrc}
+        alt={profileImageAlt}
+        class="h-[2.2em] w-[2.2em] shrink-0 rounded-2xl border border-site-border object-cover"
+        width={212}
+        height={212}
+        densities={[1, 1.5, 2, 3, 4]}
+        format="webp"
+        quality={85}
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
+      />
+    )}
     <h1 class="m-0 font-bold tracking-tight text-site-text">
       <span class="text-site-blue">{firstName}</span><br />
       <span class="font-normal text-site-yellow">{lastName}</span>

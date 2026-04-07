@@ -4,6 +4,7 @@ import BlogSection from '../features/home/components/BlogSection.astro';
 import HeroPanel from '../features/home/components/HeroPanel.astro';
 import ProjectsSection from '../features/home/components/ProjectsSection.astro';
 import { getCollection } from 'astro:content';
+import profilePhoto from '../assets/images/pior.jpeg';
 
 const title = 'Piotr Szaran — Portfolio';
 const description = 'Software developer portfolio featuring profile details and selected projects.';
@@ -28,7 +29,7 @@ const projects = allProjects.slice(0, PROJECTS_SECTION_LIMIT);
     firstName="Piotr"
     lastName="Szaran"
     role="full stack developer"
-    profileImageSrc="/images/pior.jpeg"
+    profileImageSrc={profilePhoto}
     profileImageAlt="Piotr Szaran profile picture"
   />
 

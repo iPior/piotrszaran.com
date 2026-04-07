@@ -3,12 +3,13 @@ import HeroGrid from './hero/HeroGrid.astro';
 import HeroHeader from './hero/HeroHeader.astro';
 import HeroSocials from './hero/HeroSocials.astro';
 import type { ProfileField, SocialLink } from './hero/types';
+import type { ImageMetadata } from 'astro';
 
-interface Props {
+export interface Props {
   firstName: string;
   lastName: string;
   role: string;
-  profileImageSrc?: string;
+  profileImageSrc?: string | ImageMetadata;
   profileImageAlt?: string;
   profileFields?: ProfileField[];
   coreStack?: string[];
