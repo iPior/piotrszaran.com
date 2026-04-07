@@ -169,15 +169,15 @@
   }
 
   .prose h2 {
-    @apply text-2xl font-bold mt-10 mb-4 text-site-text;
+    @apply mt-8 mb-3 text-xl font-bold text-site-text sm:mt-10 sm:mb-4 sm:text-2xl;
   }
 
   .prose h3 {
-    @apply text-xl font-semibold mt-8 mb-3 text-site-text;
+    @apply mt-6 mb-2.5 text-lg font-semibold text-site-text sm:mt-8 sm:mb-3 sm:text-xl;
   }
 
   .prose p {
-    @apply mb-4;
+    @apply mb-4 text-[0.95rem] sm:text-base;
   }
 
   .prose a {
@@ -185,19 +185,19 @@
   }
 
   .prose ul {
-    @apply list-disc list-outside pl-6 mb-4 space-y-1;
+    @apply mb-4 list-outside list-disc space-y-1 pl-5 sm:pl-6;
   }
 
   .prose ol {
-    @apply list-decimal list-outside pl-6 mb-4 space-y-1;
+    @apply mb-4 list-outside list-decimal space-y-1 pl-5 sm:pl-6;
   }
 
   .prose blockquote {
-    @apply border-l-4 border-site-border pl-4 text-site-subtext italic my-4;
+    @apply my-4 border-l-4 border-site-border pl-3 italic text-site-subtext sm:pl-4;
   }
 
   .prose pre {
-    @apply rounded-lg p-4 overflow-x-auto my-4 text-sm bg-site-surface border border-site-border;
+    @apply my-4 overflow-x-auto rounded-lg border border-site-border bg-site-surface p-3 text-xs sm:p-4 sm:text-sm;
   }
 
   .prose code:not(pre code) {
@@ -209,6 +209,6 @@
   }
 
   .prose img {
-    @apply rounded-lg my-6;
+    @apply my-5 rounded-lg sm:my-6;
   }
 }

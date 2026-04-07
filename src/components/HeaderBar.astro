@@ -28,7 +28,7 @@ function isActive(href: string): boolean {
 ---
 
 <header class="border-b border-site-border bg-site-tab">
-  <div class="mx-auto w-full max-w-5xl px-8">
+  <div class="mx-auto w-full max-w-5xl sm:px-6 lg:px-8">
     <div class="flex items-stretch justify-between text-xs">
       <nav class="flex min-w-0 items-stretch overflow-x-auto">
         {
@@ -36,7 +36,7 @@ function isActive(href: string): boolean {
             <a
               href={tab.href}
               class:list={[
-                'flex items-center gap-2 whitespace-nowrap border-r border-site-border px-4 py-2',
+                'flex items-center gap-1.5 whitespace-nowrap border-r border-site-border px-3 py-2 sm:gap-2 sm:px-4',
                 isActive(tab.href)
                   ? '-mb-px border-b-2 border-site-blue bg-site-bg text-site-text'
                   : 'text-site-dim hover:text-site-subtext'
@@ -68,8 +68,8 @@ function isActive(href: string): boolean {
       </nav>
       <div class="flex shrink-0 items-stretch">
         <details data-theme-menu class="theme-menu relative border-l border-r border-site-border">
-          <summary class="flex h-full list-none cursor-pointer select-none items-center gap-1.5 px-3 py-2 text-site-dim leading-none transition-colors hover:bg-site-surface hover:text-site-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-site-blue/70">
-            <span class="leading-none">Theme</span>
+          <summary class="flex h-full list-none cursor-pointer select-none items-center gap-1 px-2 py-2 text-site-dim leading-none transition-colors hover:bg-site-surface hover:text-site-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-site-blue/70 sm:gap-1.5 sm:px-3">
+            <span class="hidden leading-none sm:inline">Theme</span>
             <svg class="theme-menu-chevron h-3 w-3 transition-transform" viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
@@ -102,7 +102,7 @@ function isActive(href: string): boolean {
           data-theme-toggle
           aria-label="Switch to light mode"
           aria-pressed="false"
-          class="theme-toggle inline-flex items-center border-r border-site-border px-3 text-site-dim transition-colors hover:bg-site-surface hover:text-site-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-site-blue/70"
+          class="theme-toggle inline-flex items-center border-r border-site-border px-2 text-site-dim transition-colors hover:bg-site-surface hover:text-site-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-site-blue/70 sm:px-3"
         >
           <span class="relative inline-flex h-4 w-4 items-center justify-center" aria-hidden="true">
             <svg class="theme-icon theme-icon--sun h-4 w-4" viewBox="0 0 24 24" fill="none">
@@ -128,6 +128,8 @@ function isActive(href: string): boolean {
     const menus = document.querySelectorAll('[data-theme-menu]');
     const defaultThemeShieldColor = '313244';
     const themeShieldColorPlaceholder = '__THEME_DEFAULT_BADGE_COLOR__';
+    const defaultThemeSimpleIconColor = 'e2e8f0';
+    const themeSimpleIconColorPlaceholder = '__THEME_SIMPLE_ICON_COLOR__';
     const validFamilies = ['catppuccin', 'nord'];
     if (!toggles.length && !familyOptions.length) return;
 
@@ -174,6 +176,11 @@ function isActive(href: string): boolean {
       const borderColor = rootStyles.getPropertyValue('--color-site-border');
       return toShieldHexColor(borderColor) ?? defaultThemeShieldColor;
     };
+    const getThemeSimpleIconColor = () => {
+      const rootStyles = getComputedStyle(root);
+      const subtextColor = rootStyles.getPropertyValue('--color-site-subtext');
+      return toShieldHexColor(subtextColor) ?? defaultThemeSimpleIconColor;
+    };
     const syncThemeShieldBadges = () => {
       const nextColor = getThemeShieldColor();
       const badges = document.querySelectorAll('img[data-theme-shield-template]');
@@ -183,6 +190,21 @@ function isActive(href: string): boolean {
         const nextSrc = template.replace(themeShieldColorPlaceholder, nextColor);
         if (badge.getAttribute('src') !== nextSrc) {
           badge.setAttribute('src', nextSrc);
+        }
+      });
+    };
+    const syncThemeSimpleIcons = () => {
+      const nextColor = getThemeSimpleIconColor();
+      const icons = document.querySelectorAll('img[data-theme-simple-icon-template]');
+      icons.forEach((icon) => {
+        const template = icon.dataset.themeSimpleIconTemplate;
+        if (!template) return;
+        const nextSrc = template.replace(themeSimpleIconColorPlaceholder, nextColor);
+        if (icon.getAttribute('src') !== nextSrc) {
+          icon.setAttribute('src', nextSrc);
+        }
+        if (icon.dataset.fallbackSrc !== nextSrc) {
+          icon.dataset.fallbackSrc = nextSrc;
         }
       });
     };
@@ -208,9 +230,11 @@ function isActive(href: string): boolean {
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => {
         syncThemeShieldBadges();
+        syncThemeSimpleIcons();
       });
     } else {
       syncThemeShieldBadges();
+      syncThemeSimpleIcons();
     }
 
     toggles.forEach((toggle) => {
@@ -220,6 +244,7 @@ function isActive(href: string): boolean {
         localStorage.setItem('theme', nextTheme);
         syncToggleState(nextTheme);
         syncThemeShieldBadges();
+        syncThemeSimpleIcons();
       });
     });
 
@@ -231,6 +256,7 @@ function isActive(href: string): boolean {
         localStorage.setItem('themeFamily', nextFamily);
         syncThemeFamilyState(nextFamily);
         syncThemeShieldBadges();
+        syncThemeSimpleIcons();
         const openMenu = option.closest('details');
         if (openMenu) {
           openMenu.removeAttribute('open');
@@ -249,6 +275,7 @@ function isActive(href: string): boolean {
 
     const badgeObserver = new MutationObserver(() => {
       syncThemeShieldBadges();
+      syncThemeSimpleIcons();
     });
     if (document.body) {
       badgeObserver.observe(document.body, { childList: true, subtree: true });

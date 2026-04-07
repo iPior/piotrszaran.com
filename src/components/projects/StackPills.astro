@@ -49,6 +49,17 @@ const SIMPLE_ICON_MAP: Record<string, string> = {
   'XAML': 'xaml',
 };
 
+const THEME_SIMPLE_ICON_COLOR_PLACEHOLDER = '__THEME_SIMPLE_ICON_COLOR__';
+const DEFAULT_THEME_SIMPLE_ICON_COLOR = 'e2e8f0';
+const THEME_AWARE_SIMPLE_ICON_IDS = new Set([
+  'mdx',
+  'payloadcms',
+  'shadcnui',
+  'authjs',
+  'resend',
+  'xaml',
+]);
+
 const getMonogram = (tech: string): string => {
   const cleaned = tech.replace(/[^a-zA-Z0-9+\s]/g, ' ').trim();
   if (!cleaned) return '?';
@@ -59,34 +70,49 @@ const getMonogram = (tech: string): string => {
   return cleaned.slice(0, 2).toUpperCase();
 };
 
-const getIconSources = (tech: string): { primary: string | null; fallback: string | null } => {
+const getIconSources = (
+  tech: string
+): { primary: string | null; fallback: string | null; fallbackTemplate: string | null } => {
   const skillId = SKILL_ICON_MAP[tech];
   const simpleId = SIMPLE_ICON_MAP[tech];
+  const isThemeAwareSimpleIcon = simpleId
+    ? THEME_AWARE_SIMPLE_ICON_IDS.has(simpleId)
+    : false;
+  const simplePath = simpleId
+    ? `https://cdn.simpleicons.org/${simpleId}${
+        isThemeAwareSimpleIcon ? `/${DEFAULT_THEME_SIMPLE_ICON_COLOR}` : ''
+      }`
+    : null;
+  const simpleTemplate = simpleId && isThemeAwareSimpleIcon
+    ? `https://cdn.simpleicons.org/${simpleId}/${THEME_SIMPLE_ICON_COLOR_PLACEHOLDER}`
+    : null;
 
   return {
     primary: skillId ? `https://skillicons.dev/icons?i=${skillId}` : null,
-    fallback: simpleId ? `https://cdn.simpleicons.org/${simpleId}` : null,
+    fallback: simplePath,
+    fallbackTemplate: simpleTemplate,
   };
 };
 ---
 
-<div class="flex flex-wrap gap-3">
+<div class="flex flex-wrap gap-2 sm:gap-3">
   {stack.map((tech) => {
-    const { primary, fallback } = getIconSources(tech);
+    const { primary, fallback, fallbackTemplate } = getIconSources(tech);
     const monogram = getMonogram(tech);
 
     return (
       <div>
-        <div class="flex flex-col items-center gap-2 text-center">
-          <div class="w-12 h-12 rounded-lg border border-site-border bg-site-surface-hover flex items-center justify-center relative overflow-hidden">
+        <div class="flex flex-col items-center gap-1.5 text-center sm:gap-2">
+          <div class="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-lg border border-site-border bg-site-surface-hover sm:h-12 sm:w-12">
             {primary || fallback ? (
               <img
                 src={primary ?? fallback!}
                 data-fallback-src={fallback ?? ''}
+                data-theme-simple-icon-template={!primary ? (fallbackTemplate ?? undefined) : undefined}
                 alt={`${tech} logo`}
                 title={tech}
                 loading="lazy"
-                class="w-10 h-10 object-contain"
+                class="h-8 w-8 object-contain sm:h-10 sm:w-10"
                 onerror="if (this.dataset.fallbackSrc && this.src !== this.dataset.fallbackSrc) { this.src = this.dataset.fallbackSrc; return; } this.style.display='none'; const fallback = this.parentElement && this.parentElement.querySelector('[data-icon-fallback]'); if (fallback) fallback.style.display='flex';"
               />
             ) : null}
@@ -101,7 +127,7 @@ const getIconSources = (tech: string): { primary: string | null; fallback: strin
               {monogram}
             </span>
           </div>
-          <span class="text-xs text-site-dim leading-tight">{tech}</span>
+          <span class="text-[11px] leading-tight text-site-dim sm:text-xs hidden sm:block">{tech}</span>
         </div>
       </div>
     );

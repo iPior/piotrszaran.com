@@ -30,7 +30,7 @@ export default function ProjectFilter({ projects }: { projects: Project[] }) {
 
   return (
     <div>
-      <div class="flex flex-wrap items-baseline justify-between gap-3 border-b border-site-border pb-2.5">
+      <div class="flex flex-col gap-3 border-b border-site-border pb-2.5 sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-between">
         <ProjectFilterHeader itemCount={filtered.length} />
         <ProjectCategoryFilters active={active} onChange={setActive} />
       </div>
