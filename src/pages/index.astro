@@ -7,14 +7,16 @@ import { getCollection } from 'astro:content';
 
 const title = 'Piotr Szaran — Portfolio';
 const description = 'Software developer portfolio featuring profile details and selected projects.';
+const BLOG_SECTION_LIMIT = 5;
+const PROJECTS_SECTION_LIMIT = 10;
 
-const blogPosts = (await getCollection('blog', ({ data }) => !data.draft && !data.hidden))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 4);
+const allBlogPosts = (await getCollection('blog', ({ data }) => !data.draft && !data.hidden))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const blogPosts = allBlogPosts.slice(0, BLOG_SECTION_LIMIT);
 
-const projects = (await getCollection('projects', ({ data }) => !data.hidden))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 15);
+const allProjects = (await getCollection('projects', ({ data }) => !data.hidden))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const projects = allProjects.slice(0, PROJECTS_SECTION_LIMIT);
 ---
 
 <AppLayout
@@ -30,6 +32,6 @@ const projects = (await getCollection('projects', ({ data }) => !data.hidden))
     profileImageAlt="Piotr Szaran profile picture"
   />
 
-  <ProjectsSection projects={projects} />
-  <BlogSection posts={blogPosts} />
+  <ProjectsSection projects={projects} totalProjects={allProjects.length} />
+  <BlogSection posts={blogPosts} totalPosts={allBlogPosts.length} />
 </AppLayout>

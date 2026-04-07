@@ -4,9 +4,10 @@ import BlogCard from '../../blog/components/BlogCard.astro';
 
 interface Props {
   posts: CollectionEntry<'blog'>[];
+  totalPosts: number;
 }
 
-const { posts } = Astro.props;
+const { posts, totalPosts } = Astro.props;
 ---
 
 <section>
@@ -15,18 +16,29 @@ const { posts } = Astro.props;
       <h2 class="text-xl font-semibold text-site-text sm:text-2xl">
         <span class="font-normal text-site-mauve">const</span> <span class="text-site-yellow">blogPosts</span>
       </h2>
-      <span class="text-xs text-site-dim">// {posts.length} items</span>
+      <span class="text-xs text-site-dim">// {totalPosts} items</span>
     </div>
-    <a href="/blogs" class="hidden shrink-0 text-xs text-site-blue hover:underline sm:block">View all →</a>
   </div>
 
   {
     posts.length === 0 ? (
       <p class="py-6 text-site-dim">No posts yet.</p>
     ) : (
-      <div>
-        {posts.map((post, idx) => <BlogCard post={post} itemNumber={posts.length - idx} />)}
-      </div>
+      <>
+        <div>
+          {posts.map((post, idx) => <BlogCard post={post} itemNumber={totalPosts - idx} />)}
+        </div>
+
+        <div class="mt-4 flex items-center justify-between gap-3">
+          <span class="text-xs text-site-dim">showing last {posts.length} blogs ...</span>
+          <a
+            href="/blogs"
+            class="shrink-0 text-xs text-site-blue hover:underline"
+          >
+            View all →
+          </a>
+        </div>
+      </>
     )
   }
 </section>

@@ -4,42 +4,54 @@ import ProjectCard from '../../projects/components/ProjectCard';
 
 interface Props {
   projects: CollectionEntry<'projects'>[];
+  totalProjects: number;
 }
 
-const { projects } = Astro.props;
+const { projects, totalProjects } = Astro.props;
 ---
 
 <section>
   <div class="mt-10 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-2 border-b border-site-border pb-2.5 sm:mt-12">
     <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
       <h2 class="text-lg font-semibold text-site-text sm:text-2xl"><span class="font-normal text-site-mauve">const</span> <span class="text-site-yellow">projects</span></h2>
-      <span class="text-xs text-site-dim">// {projects.length} items</span>
+      <span class="text-xs text-site-dim">// {totalProjects} items</span>
     </div>
-    <a href="/projects" class="shrink-0 text-xs text-site-blue hover:underline hidden sm:block">View all →</a>
   </div>
 
   {
     projects.length === 0 ? (
       <p class="py-6 text-site-dim">No projects yet.</p>
     ) : (
-      <div>
-        {projects.map((project, idx) => (
-          <ProjectCard
-            itemNumber={projects.length - idx}
-            title={project.data.title}
-            description={project.data.description}
-            category={project.data.category}
-            href={`/projects/${project.slug}`}
-            dateLabel={project.data.date.toLocaleDateString('en-US', {
-              month: 'short',
-              year: 'numeric'
-            })}
-            tags={project.data.stack ?? []}
-            layout="home"
-            tagColorMode="uniform"
-          />
-        ))}
-      </div>
+      <>
+        <div>
+          {projects.map((project, idx) => (
+            <ProjectCard
+              itemNumber={totalProjects - idx}
+              title={project.data.title}
+              description={project.data.description}
+              category={project.data.category}
+              href={`/projects/${project.slug}`}
+              dateLabel={project.data.date.toLocaleDateString('en-US', {
+                month: 'short',
+                year: 'numeric'
+              })}
+              tags={project.data.stack ?? []}
+              layout="home"
+              tagColorMode="uniform"
+            />
+          ))}
+        </div>
+
+        <div class="mt-4 flex items-center justify-between gap-3">
+          <span class="text-xs text-site-dim">showing last {projects.length} projects ...</span>
+          <a
+            href="/projects"
+            class="shrink-0 text-xs text-site-blue hover:underline"
+          >
+            View all →
+          </a>
+        </div>
+      </>
     )
   }
 </section>
