@@ -1,4 +1,12 @@
 ---
+import BlogIcon from './icons/BlogIcon.astro';
+import CheckIcon from './icons/CheckIcon.astro';
+import ChevronDownIcon from './icons/ChevronDownIcon.astro';
+import HomeIcon from './icons/HomeIcon.astro';
+import MoonIcon from './icons/MoonIcon.astro';
+import ProjectsIcon from './icons/ProjectsIcon.astro';
+import SunIcon from './icons/SunIcon.astro';
+
 const currentPath = Astro.url.pathname;
 
 interface HeaderTab {
@@ -12,6 +20,12 @@ const tabs = [
   { label: 'Blogs', href: '/blog', icon: 'blog' },
   { label: 'Projects', href: '/projects', icon: 'projects' }
 ] satisfies HeaderTab[];
+
+const tabIcons = {
+  home: HomeIcon,
+  blog: BlogIcon,
+  projects: ProjectsIcon
+} as const;
 
 const themeFamilies = [
   { id: 'catppuccin', label: 'Catppuccin' },
@@ -32,47 +46,32 @@ function isActive(href: string): boolean {
     <div class="flex items-stretch justify-between text-xs">
       <nav class="flex min-w-0 items-stretch overflow-x-auto">
         {
-          tabs.map((tab) => (
-            <a
-              href={tab.href}
-              class:list={[
-                'flex items-center gap-1.5 whitespace-nowrap border-r border-site-border px-3 py-2 sm:gap-2 sm:px-4',
-                isActive(tab.href)
-                  ? '-mb-px border-b-2 border-site-blue bg-site-bg text-site-text'
-                  : 'text-site-dim hover:text-site-subtext'
-              ]}
-            >
-              <span aria-hidden="true" class="inline-flex h-3.5 w-3.5 items-center justify-center">
-                {tab.icon === 'home' && (
-                  <svg viewBox="0 0 16 16" class="h-3.5 w-3.5" fill="none">
-                    <path d="M2.5 7.2 8 2.8l5.5 4.4v6.3H9.8V10H6.2v3.5H2.5V7.2Z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round" />
-                  </svg>
-                )}
-                {tab.icon === 'blog' && (
-                  <svg viewBox="0 0 16 16" class="h-3.5 w-3.5" fill="none">
-                    <rect x="3" y="2.5" width="10" height="11" rx="1.4" stroke="currentColor" stroke-width="1.25" />
-                    <path d="M5.2 6h5.6M5.2 8.3h5.6M5.2 10.6h3.8" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" />
-                  </svg>
-                )}
-                {tab.icon === 'projects' && (
-                  <svg viewBox="0 0 16 16" class="h-3.5 w-3.5" fill="none">
-                    <path d="M1.8 5.3h5.7l1.1 1.6h5v5.8H1.8V5.3Z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round" />
-                    <path d="M1.8 6.9h11.8" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" />
-                  </svg>
-                )}
-              </span>
-              {tab.label}
-            </a>
-          ))
+          tabs.map((tab) => {
+            const Icon = tabIcons[tab.icon];
+            return (
+              <a
+                href={tab.href}
+                class:list={[
+                  'flex items-center gap-1.5 whitespace-nowrap border-r border-site-border px-3 py-2 sm:gap-2 sm:px-4',
+                  isActive(tab.href)
+                    ? '-mb-px border-b-2 border-site-blue bg-site-bg text-site-text'
+                    : 'text-site-dim hover:text-site-subtext'
+                ]}
+              >
+                <span aria-hidden="true" class="inline-flex h-3.5 w-3.5 items-center justify-center">
+                  <Icon class="h-3.5 w-3.5" />
+                </span>
+                {tab.label}
+              </a>
+            );
+          })
         }
       </nav>
       <div class="flex shrink-0 items-stretch">
         <details data-theme-menu class="theme-menu relative border-l border-r border-site-border">
           <summary class="flex h-full list-none cursor-pointer select-none items-center gap-1 px-2 py-2 text-site-dim leading-none transition-colors hover:bg-site-surface hover:text-site-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-site-blue/70 sm:gap-1.5 sm:px-3">
             <span class="hidden leading-none sm:inline">Theme</span>
-            <svg class="theme-menu-chevron h-3 w-3 transition-transform" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
+            <ChevronDownIcon class="theme-menu-chevron h-3 w-3 transition-transform" />
           </summary>
           <div class="absolute right-0 top-full z-30 mt-2 min-w-40 rounded border border-site-border bg-site-surface p-1 shadow-xl">
             <div class="px-2 py-1 text-[10px] uppercase tracking-wide text-site-overlay">Palette</div>
@@ -88,9 +87,7 @@ function isActive(href: string): boolean {
                 >
                   <span>{themeFamily.label}</span>
                   <span data-theme-family-check aria-hidden="true">
-                    <svg viewBox="0 0 16 16" class="h-3.5 w-3.5" fill="none">
-                      <path d="m3.5 8.4 2.7 2.8 6.3-6.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
+                    <CheckIcon class="h-3.5 w-3.5" />
                   </span>
                 </button>
               ))
@@ -105,13 +102,8 @@ function isActive(href: string): boolean {
           class="theme-toggle inline-flex items-center border-r border-site-border px-2 text-site-dim transition-colors hover:bg-site-surface hover:text-site-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-site-blue/70 sm:px-3"
         >
           <span class="relative inline-flex h-4 w-4 items-center justify-center" aria-hidden="true">
-            <svg class="theme-icon theme-icon--sun h-4 w-4" viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5" />
-              <path d="M12 2.5v2.75M12 18.75v2.75M4.22 4.22l1.95 1.95M17.83 17.83l1.95 1.95M2.5 12h2.75M18.75 12h2.75M4.22 19.78l1.95-1.95M17.83 6.17l1.95-1.95" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-            </svg>
-            <svg class="theme-icon theme-icon--moon h-4 w-4" viewBox="0 0 24 24" fill="none">
-              <path d="M15.9 3.9a8.9 8.9 0 1 0 4.2 16.7 9.2 9.2 0 0 1-4.2-16.7Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
-            </svg>
+            <SunIcon class="theme-icon theme-icon--sun h-4 w-4" />
+            <MoonIcon class="theme-icon theme-icon--moon h-4 w-4" />
           </span>
           <span class="sr-only">Toggle color theme</span>
         </button>
