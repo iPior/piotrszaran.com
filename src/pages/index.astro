@@ -1,11 +1,8 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import FooterBar from '../components/FooterBar.astro';
-import HeaderBar from '../components/HeaderBar.astro';
-import BlogSection from '../components/home/BlogSection.astro';
-import HeroPanel from '../components/home/HeroPanel.astro';
-import NoiseOverlay from '../components/NoiseOverlay.astro';
-import ProjectsSection from '../components/home/ProjectsSection.astro';
+import AppLayout from '../layouts/AppLayout.astro';
+import BlogSection from '../features/home/components/BlogSection.astro';
+import HeroPanel from '../features/home/components/HeroPanel.astro';
+import ProjectsSection from '../features/home/components/ProjectsSection.astro';
 import { getCollection } from 'astro:content';
 
 const title = 'Piotr Szaran — Portfolio';
@@ -20,32 +17,19 @@ const projects = (await getCollection('projects', ({ data }) => !data.hidden))
   .slice(0, 15);
 ---
 
-<!doctype html>
-<html lang="en" class="bg-site-bg">
-<head>
-  <BaseHead title={title} description={description} />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-</head>
-<body class="min-h-screen flex flex-col bg-site-bg text-site-text font-mono text-sm leading-relaxed antialiased">
-  <NoiseOverlay />
-  <HeaderBar />
+<AppLayout
+  title={title}
+  description={description}
+  mainClass="mx-auto flex-1 w-full max-w-5xl px-4 pb-16 sm:px-6 sm:pb-24 lg:px-8"
+>
+  <HeroPanel
+    firstName="Piotr"
+    lastName="Szaran"
+    role="full stack developer"
+    profileImageSrc="/images/pior.jpeg"
+    profileImageAlt="Piotr Szaran profile picture"
+  />
 
-  <main class="mx-auto flex-1 w-full max-w-5xl px-4 pb-16 sm:px-6 sm:pb-24 lg:px-8">
-    <HeroPanel
-      firstName="Piotr"
-      lastName="Szaran"
-      role="full stack developer"
-      profileImageSrc="/images/pior.jpeg"
-      profileImageAlt="Piotr Szaran profile picture"
-    />
-
-    <ProjectsSection projects={projects} />
-    <BlogSection posts={blogPosts} />
-
-  </main>
-
-  <FooterBar />
-</body>
-</html>
+  <ProjectsSection projects={projects} />
+  <BlogSection posts={blogPosts} />
+</AppLayout>

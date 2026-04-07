@@ -1,8 +1,8 @@
 ---
-import BaseLayout from "./BaseLayout.astro";
-import TableOfContents from "../components/blog/TableOfContents.astro";
-import BackLink from "../components/BackLink.astro";
-import { formatDate } from "../lib/utils";
+import AppLayout from "../../../layouts/AppLayout.astro";
+import TableOfContents from "../components/TableOfContents.astro";
+import BackLink from "../../../components/BackLink.astro";
+import { formatDate } from "../../../lib/utils";
 import type { CollectionEntry } from "astro:content";
 import type { MarkdownHeading } from "astro";
 
@@ -17,7 +17,7 @@ const { post, headings, readingTime, relatedProject } = Astro.props;
 const { title, description, date, tags, coverImage } = post.data;
 ---
 
-<BaseLayout title={`${title} — Piotr Szaran`} description={description}>
+<AppLayout title={`${title} — Piotr Szaran`} description={description}>
   <div class="lg:grid lg:grid-cols-[1fr_220px] lg:gap-12">
     <article>
       <BackLink href="/blogs" label="Back to blogs" />
@@ -89,4 +89,4 @@ const { title, description, date, tags, coverImage } = post.data;
       }
     </aside>
   </div>
-</BaseLayout>
+</AppLayout>

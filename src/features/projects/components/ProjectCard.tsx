@@ -2,7 +2,7 @@ import {
   PROJECT_CATEGORY_LABELS,
   PROJECT_CATEGORY_TONE_CLASSES,
   type ProjectCategory,
-} from '../../lib/projects';
+} from '../../../lib/projects';
 import ShieldBadges, { type ShieldBadgeColorMode } from './ShieldBadges';
 
 interface Props {

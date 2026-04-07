@@ -1,7 +1,7 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import BlogPageIntro from "../../components/blog/BlogPageIntro.astro";
-import BlogPostsList from "../../components/blog/BlogPostsList.astro";
+import AppLayout from "../../layouts/AppLayout.astro";
+import BlogPageIntro from "../../features/blog/components/BlogPageIntro.astro";
+import BlogPostsList from "../../features/blog/components/BlogPostsList.astro";
 import { getCollection } from "astro:content";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft && !data.hidden)).sort(
@@ -9,10 +9,10 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft && !data.hi
 );
 ---
 
-<BaseLayout
+<AppLayout
   title="Blogs — Piotr Szaran"
   description="Technical writing on software development."
 >
   <BlogPageIntro />
   <BlogPostsList posts={posts} />
-</BaseLayout>
+</AppLayout>

@@ -1,7 +1,7 @@
 import {
   PROJECT_CATEGORY_LABELS,
   type ProjectCategory,
-} from '../../lib/projects';
+} from '../../../lib/projects';
 
 export type FilterCategory = 'all' | ProjectCategory;
 

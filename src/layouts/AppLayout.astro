@@ -1,32 +1,38 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import FooterBar from '../components/FooterBar.astro';
-import HeaderBar from '../components/HeaderBar.astro';
-import NoiseOverlay from '../components/NoiseOverlay.astro';
+import AppHead from './partials/AppHead.astro';
+import Footer from './partials/Footer.astro';
+import Header from './partials/Header.astro';
+import NoiseOverlay from './partials/NoiseOverlay.astro';
 
 interface Props {
   title: string;
   description: string;
   image?: string;
+  mainClass?: string;
 }
 
-const { title, description, image } = Astro.props;
+const {
+  title,
+  description,
+  image,
+  mainClass = "mx-auto flex-1 w-full max-w-5xl px-4 pt-6 pb-16 sm:px-6 sm:pt-8 sm:pb-24 lg:px-8",
+} = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en" class="bg-site-bg">
   <head>
-    <BaseHead title={title} description={description} image={image} />
+    <AppHead title={title} description={description} image={image} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   </head>
   <body class="min-h-screen flex flex-col bg-site-bg text-site-text font-mono text-sm leading-relaxed antialiased">
     <NoiseOverlay />
-    <HeaderBar />
-    <main class="mx-auto flex-1 w-full max-w-5xl px-4 pt-6 pb-16 sm:px-6 sm:pt-8 sm:pb-24 lg:px-8">
+    <Header />
+    <main class={mainClass}>
       <slot />
     </main>
-    <FooterBar />
+    <Footer />
   </body>
 </html>

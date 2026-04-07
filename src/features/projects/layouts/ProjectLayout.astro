@@ -1,9 +1,9 @@
 ---
-import BaseLayout from "./BaseLayout.astro";
-import CategoryBadge from "../components/projects/CategoryBadge.astro";
-import StackPills from "../components/projects/StackPills.astro";
-import BackLink from "../components/BackLink.astro";
-import { formatDate } from "../lib/utils";
+import AppLayout from "../../../layouts/AppLayout.astro";
+import CategoryBadge from "../components/CategoryBadge.astro";
+import StackPills from "../components/StackPills.astro";
+import BackLink from "../../../components/BackLink.astro";
+import { formatDate } from "../../../lib/utils";
 import type { CollectionEntry } from "astro:content";
 
 interface Props {
@@ -16,7 +16,7 @@ const { title, description, date, category, stack, liveUrl, githubUrl } =
   project.data;
 ---
 
-<BaseLayout title={title} description={description}>
+<AppLayout title={title} description={description}>
   <BackLink href="/projects" label="Back to projects" />
   <article class="mt-5 sm:mt-6">
     <header class="mb-8">
@@ -77,4 +77,4 @@ const { title, description, date, category, stack, liveUrl, githubUrl } =
     </div>
     <BackLink href="/projects" label="Back to projects" />
   </article>
-</BaseLayout>
+</AppLayout>

@@ -1,8 +1,8 @@
 import { useState } from 'preact/hooks';
-import { formatDate } from '../../lib/utils';
+import { formatDate } from '../../../lib/utils';
 import {
   type ProjectCategory,
-} from '../../lib/projects';
+} from '../../../lib/projects';
 import ProjectCard from './ProjectCard';
 import ProjectFilterHeader from './ProjectFilterHeader';
 import ProjectCategoryFilters, {

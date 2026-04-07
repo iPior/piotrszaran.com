@@ -1,7 +1,7 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import ProjectFilter from "../../components/projects/ProjectFilter";
-import ProjectPageIntro from "../../components/projects/ProjectPageIntro.astro";
+import AppLayout from "../../layouts/AppLayout.astro";
+import ProjectFilter from "../../features/projects/components/ProjectFilter";
+import ProjectPageIntro from "../../features/projects/components/ProjectPageIntro.astro";
 import { getCollection } from "astro:content";
 
 const projects = (await getCollection("projects", ({ data }) => !data.hidden)).sort(
@@ -20,7 +20,7 @@ const filterProjects = projects.map((project) => ({
 }));
 ---
 
-<BaseLayout
+<AppLayout
   title="Projects — Piotr Szaran"
   description="selected software projects"
 >
@@ -35,4 +35,4 @@ const filterProjects = projects.map((project) => ({
       )
     }
   </section>
-</BaseLayout>
+</AppLayout>
