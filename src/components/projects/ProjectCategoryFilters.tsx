@@ -19,13 +19,13 @@ const categories: FilterCategory[] = ['all', 'freelance', 'work', 'personal'];
 
 export default function ProjectCategoryFilters({ active, onChange }: Props) {
   return (
-    <div class="flex flex-wrap justify-end gap-2">
+    <div class="flex flex-wrap items-center gap-2 sm:justify-end">
       {categories.map((cat) => (
         <button
           key={cat}
           type="button"
           onClick={() => onChange(cat)}
-          class={`text-sm border rounded-full px-3 py-1 transition-colors ${
+          class={`border rounded-full px-3 py-1 text-xs transition-colors sm:text-sm ${
             active === cat
               ? 'bg-site-blue text-site-bg border-site-blue'
               : 'border-site-border text-site-subtext hover:border-site-subtext'

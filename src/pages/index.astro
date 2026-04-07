@@ -7,22 +7,13 @@ import HeroPanel from '../components/home/HeroPanel.astro';
 import NoiseOverlay from '../components/NoiseOverlay.astro';
 import ProjectsSection from '../components/home/ProjectsSection.astro';
 import { getCollection } from 'astro:content';
-import { calculateReadingTime } from '../lib/utils';
 
 const title = 'Piotr Szaran — Portfolio';
 const description = 'Software developer portfolio featuring profile details and selected projects.';
 
 const blogPosts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 4)
-  .map((post) => ({
-    slug: post.slug,
-    title: post.data.title,
-    description: post.data.description,
-    date: post.data.date,
-    readingTime: post.data.readingTime ?? calculateReadingTime(post.body ?? ''),
-    tags: post.data.tags ?? []
-  }));
+  .slice(0, 4);
 
 const projects = (await getCollection('projects'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
@@ -41,7 +32,7 @@ const projects = (await getCollection('projects'))
   <NoiseOverlay />
   <HeaderBar />
 
-  <main class="mx-auto flex-1 w-full max-w-5xl px-8 pb-24">
+  <main class="mx-auto flex-1 w-full max-w-5xl px-4 pb-16 sm:px-6 sm:pb-24 lg:px-8">
     <HeroPanel
       firstName="Piotr"
       lastName="Szaran"

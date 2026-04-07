@@ -27,13 +27,13 @@ const totalRowsDesktop = Math.ceil(totalCells / 2);
 ---
 
 <div
-  class="mt-6 grid grid-cols-1 overflow-hidden rounded border border-site-border bg-site-surface sm:grid-cols-2"
+  class="mt-5 grid grid-cols-1 overflow-hidden rounded border border-site-border bg-site-surface md:mt-6 md:grid-cols-2"
 >
   <div
     class:list={[
-      "border-site-border px-4 py-3.5 sm:border-r",
+      "border-site-border px-3 py-3 md:border-r md:px-4 md:py-3.5",
       totalCells > 1 ? "border-b" : "",
-      totalRowsDesktop > 1 ? "sm:border-b" : "",
+      totalRowsDesktop > 1 ? "md:border-b" : "",
     ]}
   >
     <div class="mb-1 text-xs font-normal text-site-mauve">
@@ -48,10 +48,10 @@ const totalRowsDesktop = Math.ceil(totalCells / 2);
       return (
         <div
           class:list={[
-            "border-site-border px-4 py-3.5",
+            "border-site-border px-3 py-3 md:px-4 md:py-3.5",
             idx + 1 < totalCells ? "border-b" : "",
-            (idx + 1) % 2 === 0 ? "sm:border-r" : "",
-            Math.floor((idx + 1) / 2) < totalRowsDesktop - 1 ? "sm:border-b" : "",
+            (idx + 1) % 2 === 0 ? "md:border-r" : "",
+            Math.floor((idx + 1) / 2) < totalRowsDesktop - 1 ? "md:border-b" : "",
           ]}
         >
           <div class="mb-1 text-xs font-normal text-site-mauve">

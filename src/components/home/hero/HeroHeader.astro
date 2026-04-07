@@ -18,23 +18,23 @@ const { firstName, lastName, role, profileImageSrc, profileImageAlt } =
   <span class="text-site-overlay">{"{"}</span>
 </div>
 <div>
-  <div class="flex items-start gap-4 sm:gap-6 text-4xl leading-none sm:text-6xl md:text-7xl lg:text-8xl">
+  <div class="flex items-center gap-3 text-5xl leading-none sm:gap-6 sm:text-6xl md:text-7xl lg:text-8xl">
     {
       profileImageSrc && (
         <img
           src={profileImageSrc}
           alt={profileImageAlt}
-          class="mt-[0.05em] h-[1.9em] w-[1.9em] shrink-0 rounded-2xl border border-site-border object-cover"
+          class="h-[2.2em] w-[2.2em] shrink-0 rounded-2xl border border-site-border object-cover"
           loading="eager"
           decoding="async"
         />
       )
     }
-    <h1 class="font-bold tracking-tight text-site-text">
+    <h1 class="m-0 font-bold tracking-tight text-site-text">
       <span class="text-site-blue">{firstName}</span><br />
       <span class="font-normal text-site-yellow">{lastName}</span>
     </h1>
   </div>
-  <div class="mt-2.5 text-sm text-site-dim">
+  <div class="mt-2 text-xs text-site-dim sm:mt-2.5 sm:text-sm">
     <span class="italic text-site-dim">{"}"} // {role}</span>
   </div>

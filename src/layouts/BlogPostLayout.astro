@@ -1,16 +1,16 @@
 ---
-import BaseLayout from './BaseLayout.astro';
-import TableOfContents from '../components/blog/TableOfContents.astro';
-import BackLink from '../components/BackLink.astro';
-import { formatDate } from '../lib/utils';
-import type { CollectionEntry } from 'astro:content';
-import type { MarkdownHeading } from 'astro';
+import BaseLayout from "./BaseLayout.astro";
+import TableOfContents from "../components/blog/TableOfContents.astro";
+import BackLink from "../components/BackLink.astro";
+import { formatDate } from "../lib/utils";
+import type { CollectionEntry } from "astro:content";
+import type { MarkdownHeading } from "astro";
 
 interface Props {
-  post: CollectionEntry<'blog'>;
+  post: CollectionEntry<"blog">;
   headings: MarkdownHeading[];
   readingTime: number;
-  relatedProject?: CollectionEntry<'projects'> | null;
+  relatedProject?: CollectionEntry<"projects"> | null;
 }
 
 const { post, headings, readingTime, relatedProject } = Astro.props;
@@ -20,55 +20,73 @@ const { title, description, date, tags, coverImage } = post.data;
 <BaseLayout title={`${title} — Piotr Szaran`} description={description}>
   <div class="lg:grid lg:grid-cols-[1fr_220px] lg:gap-12">
     <article>
-      <BackLink href="/blog" label="Back to blog" />
-      <header class="mt-6 mb-8">
-        <div class="flex items-center gap-3 text-sm text-site-dim mb-3">
+      <BackLink href="/blog" label="Back to blogs" />
+      <header class="mb-8 mt-5 sm:mt-6">
+        <div
+          class="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-site-dim sm:text-sm"
+        >
           <time datetime={date.toISOString()}>{formatDate(date)}</time>
           <span aria-hidden="true">·</span>
-          <span>{readingTime} min read</span>
+          <span class="text-site-green">{readingTime} min read</span>
         </div>
-        <h1 class="text-3xl font-bold mb-3 text-site-text">{title}</h1>
-        <p class="text-site-subtext text-lg">{description}</p>
-        {tags && tags.length > 0 && (
-          <div class="flex flex-wrap gap-2 mt-4">
-            {tags.map((tag) => (
-              <span class="text-xs border border-site-border rounded-full px-2 py-0.5 text-site-subtext bg-site-surface">
-                #{tag}
-              </span>
-            ))}
-          </div>
-        )}
-        {relatedProject && (
-          <div class="mt-6 p-4 border border-site-border rounded-lg bg-site-surface">
-            <p class="text-xs text-site-dim mb-1 uppercase tracking-wide font-medium">Related project</p>
-            <a href={`/projects/${relatedProject.slug}`} class="text-site-blue hover:underline font-medium">
-              View project overview →
-            </a>
-          </div>
-        )}
-        {coverImage && (
-          <div class="mt-6">
-            <img
-              src={coverImage}
-              alt={`${title} cover image`}
-              loading="eager"
-              class="w-full rounded-lg border border-site-border bg-site-surface object-cover"
-            />
-          </div>
-        )}
+        <h1 class="mb-3 text-2xl font-bold text-site-text sm:text-3xl">
+          {title}
+        </h1>
+        <p class="text-base text-site-subtext sm:text-lg">{description}</p>
+        {
+          tags && tags.length > 0 && (
+            <div class="mt-4 flex flex-wrap gap-2">
+              {tags.map((tag) => (
+                <span class="text-xs border border-site-border rounded-full px-2 py-0.5 text-site-subtext bg-site-surface">
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )
+        }
+        {
+          relatedProject && (
+            <div class="mt-6 p-4 border border-site-border rounded-lg bg-site-surface">
+              <p class="text-xs text-site-dim mb-1 uppercase tracking-wide font-medium">
+                Related project
+              </p>
+              <a
+                href={`/projects/${relatedProject.slug}`}
+                class="text-site-blue hover:underline font-medium"
+              >
+                View project overview →
+              </a>
+            </div>
+          )
+        }
+        {
+          coverImage && (
+            <div class="mt-6">
+              <img
+                src={coverImage}
+                alt={`${title} cover image`}
+                loading="eager"
+                class="w-full rounded-lg border border-site-border bg-site-surface object-cover"
+              />
+            </div>
+          )
+        }
       </header>
-      <hr class="border-site-border mb-8" />
+      <hr class="mb-6 border-site-border sm:mb-8" />
       <div class="prose max-w-none">
         <slot />
       </div>
+      <BackLink href="/blog" label="Back to blogs" />
     </article>
 
     <aside class="hidden lg:block">
-      {headings.length > 0 && (
-        <div class="sticky top-8">
-          <TableOfContents headings={headings} />
-        </div>
-      )}
+      {
+        headings.length > 0 && (
+          <div class="sticky top-8">
+            <TableOfContents headings={headings} />
+          </div>
+        )
+      }
     </aside>
   </div>
 </BaseLayout>

@@ -36,38 +36,40 @@ export default function ProjectCard({
   const categoryToneClass = PROJECT_CATEGORY_TONE_CLASSES[category];
 
   return (
-    <article class="border-b border-site-border py-4 transition-colors duration-100 hover:-mx-3 hover:rounded hover:bg-site-surface-hover hover:px-3">
-      <div class="flex items-start gap-4">
-        <div class="w-9 text-lg font-medium leading-tight text-site-peach max-sm:w-7">
+    <article class="border-b border-site-border py-4 transition-colors duration-100 sm:hover:-mx-3 sm:hover:rounded sm:hover:bg-site-surface-hover sm:hover:px-3">
+      <div class="flex items-start gap-3 sm:gap-4">
+        <div class="w-7 text-base font-medium leading-tight text-site-peach sm:w-9 sm:text-lg">
           {String(itemNumber).padStart(2, '0')}
         </div>
 
         <div class="min-w-0 flex-1">
           {href ? (
-            <a href={href} class="group inline-flex items-center gap-2">
-              <h3 class="text-base font-semibold leading-snug text-site-blue">{title}</h3>
+            <a href={href} class="group inline-flex max-w-full items-start gap-2">
+              <h3 class="text-sm font-semibold leading-snug text-site-blue sm:text-base">{title}</h3>
               {layout === 'list' && (
                 <span class="text-site-dim transition-colors group-hover:text-site-blue">→</span>
               )}
             </a>
           ) : (
-            <h3 class="text-base font-semibold leading-snug text-site-blue">{title}</h3>
+            <h3 class="text-sm font-semibold leading-snug text-site-blue sm:text-base">{title}</h3>
+          )}
+
+          {description && (
+            <p class="mt-1 line-clamp-3 text-[11px] italic leading-relaxed text-site-dim sm:text-xs">
+              {description}
+            </p>
           )}
 
           <ShieldBadges tags={tags} tagColorMode={tagColorMode} />
 
-          {description && (
-            <p class="mt-1 text-xs italic leading-relaxed text-site-dim">{description}</p>
-          )}
-
           {layout === 'list' && (
             <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
               <span
-                class={`inline-block rounded px-2 py-0.5 font-medium tracking-wider sm:hidden ${categoryToneClass}`}
+                class={`inline-block rounded px-2 py-0.5 font-medium tracking-wider md:hidden ${categoryToneClass}`}
               >
                 {categoryLabel}
               </span>
-              <time class="text-site-dim sm:hidden">{dateLabel}</time>
+              <time class="text-site-dim md:hidden">{dateLabel}</time>
               {liveUrl && (
                 <a
                   href={liveUrl}
@@ -92,7 +94,7 @@ export default function ProjectCard({
           )}
         </div>
 
-        <div class="flex w-40 flex-col items-end gap-2 text-right max-sm:hidden">
+        <div class="hidden w-36 flex-col items-end gap-2 text-right md:flex lg:w-40">
           <span
             class={`inline-block rounded px-2 py-0.5 text-xs font-medium tracking-wider ${categoryToneClass}`}
           >
