@@ -34,10 +34,33 @@
 
 :root {
   color-scheme: dark;
+  background-color: var(--color-site-bg);
 }
 
 :root[data-theme='dark'] {
   color-scheme: dark;
+}
+
+html {
+  min-height: 100%;
+  background-color: var(--color-site-bg);
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--color-site-bg);
+  overscroll-behavior-y: none;
+}
+
+@supports (-webkit-touch-callout: none) {
+  html {
+    min-height: -webkit-fill-available;
+  }
+
+  body {
+    min-height: -webkit-fill-available;
+  }
 }
 
 :root[data-theme-family='catppuccin'][data-theme='light'],

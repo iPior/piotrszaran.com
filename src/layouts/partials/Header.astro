@@ -237,6 +237,7 @@ function isActive(href: string): boolean {
         syncToggleState(nextTheme);
         syncThemeShieldBadges();
         syncThemeSimpleIcons();
+        window.__syncThemeColor?.();
       });
     });
 
@@ -249,6 +250,7 @@ function isActive(href: string): boolean {
         syncThemeFamilyState(nextFamily);
         syncThemeShieldBadges();
         syncThemeSimpleIcons();
+        window.__syncThemeColor?.();
         const openMenu = option.closest('details');
         if (openMenu) {
           openMenu.removeAttribute('open');
