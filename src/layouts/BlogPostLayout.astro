@@ -20,7 +20,7 @@ const { title, description, date, tags, coverImage } = post.data;
 <BaseLayout title={`${title} — Piotr Szaran`} description={description}>
   <div class="lg:grid lg:grid-cols-[1fr_220px] lg:gap-12">
     <article>
-      <BackLink href="/blog" label="Back to blogs" />
+      <BackLink href="/blogs" label="Back to blogs" />
       <header class="mb-8 mt-5 sm:mt-6">
         <div
           class="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-site-dim sm:text-sm"
@@ -76,7 +76,7 @@ const { title, description, date, tags, coverImage } = post.data;
       <div class="prose max-w-none">
         <slot />
       </div>
-      <BackLink href="/blog" label="Back to blogs" />
+      <BackLink href="/blogs" label="Back to blogs" />
     </article>
 
     <aside class="hidden lg:block">
