@@ -192,6 +192,10 @@
     @apply mb-4 list-outside list-decimal space-y-1 pl-5 sm:pl-6;
   }
 
+  .prose li {
+    @apply text-[0.95rem] sm:text-base;
+  }
+
   .prose blockquote {
     @apply my-4 border-l-4 border-site-border pl-3 italic text-site-subtext sm:pl-4;
   }

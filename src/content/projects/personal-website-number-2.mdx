@@ -1,5 +1,5 @@
 ---
-title: "Portfolio Site v2"
+title: "Remaking my Personal Site"
 date: 2026-04-15
 category: "personal"
 description: "A rebuilt personal portfolio using Astro, MDX, and Tailwind."
@@ -13,18 +13,22 @@ hidden: false
 
 ## Overview
 
-This is a from-scratch rebuild of my personal portfolio. The previous version used Next.js with Payload CMS and Supabase — this version drops all of that in favor of Astro with MDX content stored directly in the repository.
+This is a from-scratch rebuild of my portfolio as a content-first Astro site. I replaced a heavier Next.js + CMS setup with a static architecture built around MDX files in the repository, which keeps the site fast, easier to maintain, and cheaper to run while still supporting project pages, blog posts, and lightweight interactivity.
 
-## Architecture
+## How It Works
 
-Fully static site generated at build time. All content authored in MDX with typed frontmatter schemas via Astro content collections. Zero JavaScript shipped to the browser except for one interactive filter component. No runtime database dependencies.
+- Pages are generated at build time from Astro content collections, with project and blog entries authored as MDX and validated against typed frontmatter schemas.
+- Site data is loaded directly from the content layer, sorted at build time, and rendered into static pages with no runtime database or API dependency.
+- The only hydrated client-side component is a small Preact project filter, so the rest of the site ships as static HTML and CSS by default.
 
-## Key Decisions
+## Technical Highlights
 
-- **Astro over Next.js**: The portfolio is a content site, not a web app. Astro's zero-JS-by-default approach is the right model.
-- **Files over CMS**: Content lives in the repo. No third-party dependency, no API calls at runtime, works offline, easy to version.
-- **Preact over React**: The one interactive component (project filter) is 3KB of Preact vs 40KB of React.
+- **Content modeled in code**: Astro content collections with Zod schemas validate frontmatter at build time, which keeps project and blog entries consistent without introducing a CMS or database.
+- **Minimal client JavaScript**: Interactivity is isolated to a single Preact island for project filtering, which preserves fast loads and avoids turning a content site into a client-rendered app.
+- **Progressive presentation details**: Stack badges pull from icon services with fallbacks, and the content-driven structure makes it easy to add or update projects without changing page logic.
 
-## What I Learned
+## What I Built
 
-Astro's content collections provide exactly the right level of structure — typed schemas without a database, automatic slug generation without configuration, and MDX support without a custom pipeline.
+- A reusable Astro-based portfolio system for home, project, and blog pages with a shared layout and content-driven routing.
+- The MDX content model, typed collection schemas, and the rendering flow that links related project and blog entries together.
+- The interactive project filtering UI and the component patterns used to keep the site mostly static while still feeling polished.
