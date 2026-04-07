@@ -37,8 +37,19 @@ export default function ProjectCard({
 
   return (
     <article class="border-b border-site-border py-4 transition-colors duration-100 sm:hover:-mx-3 sm:hover:rounded sm:hover:bg-site-surface-hover sm:hover:px-3">
+      {layout === 'list' && (
+        <div class="mb-1 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-xs md:hidden sm:ml-[3.25rem]">
+          <time class="text-site-dim">{dateLabel}</time>
+          <span
+            class={`inline-block rounded px-2 py-0.5 font-medium tracking-wider ${categoryToneClass}`}
+          >
+            {categoryLabel}
+          </span>
+        </div>
+      )}
+
       <div class="flex items-start gap-3 sm:gap-4">
-        <div class="w-7 text-base font-medium leading-tight text-site-peach sm:w-9 sm:text-lg">
+        <div class="mt-[1px] w-7 text-base font-medium leading-tight text-site-peach sm:w-9 sm:text-lg sm:leading-tight">
           {String(itemNumber).padStart(2, '0')}
         </div>
 
@@ -64,12 +75,6 @@ export default function ProjectCard({
 
           {layout === 'list' && (
             <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-              <span
-                class={`inline-block rounded px-2 py-0.5 font-medium tracking-wider md:hidden ${categoryToneClass}`}
-              >
-                {categoryLabel}
-              </span>
-              <time class="text-site-dim md:hidden">{dateLabel}</time>
               {liveUrl && (
                 <a
                   href={liveUrl}
