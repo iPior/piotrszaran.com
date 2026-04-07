@@ -4,7 +4,7 @@ import ProjectFilter from "../../components/projects/ProjectFilter";
 import ProjectPageIntro from "../../components/projects/ProjectPageIntro.astro";
 import { getCollection } from "astro:content";
 
-const projects = (await getCollection("projects")).sort(
+const projects = (await getCollection("projects", ({ data }) => !data.hidden)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
 

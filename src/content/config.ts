@@ -16,6 +16,7 @@ const projects = defineCollection({
     githubUrl: z.string().url().optional(),
     blogSlug: z.string().optional(),
     featured: z.boolean().default(false),
+    hidden: z.boolean().default(false),
   }),
 });
 
@@ -33,6 +34,7 @@ const blog = defineCollection({
     tags: z.array(z.string()).optional(),
     coverImage: z.string().optional(),
     draft: z.boolean().default(false),
+    hidden: z.boolean().default(false),
   }),
 });
 

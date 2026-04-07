@@ -4,7 +4,7 @@ import BlogPageIntro from "../../components/blog/BlogPageIntro.astro";
 import BlogPostsList from "../../components/blog/BlogPostsList.astro";
 import { getCollection } from "astro:content";
 
-const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+const posts = (await getCollection("blog", ({ data }) => !data.draft && !data.hidden)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
 ---

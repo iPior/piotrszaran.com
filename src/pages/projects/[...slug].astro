@@ -6,7 +6,7 @@ import Image from '../../components/mdx/Image.astro';
 import LinkCard from '../../components/mdx/LinkCard.astro';
 
 export async function getStaticPaths() {
-  const projects = await getCollection('projects');
+  const projects = await getCollection('projects', ({ data }) => !data.hidden);
   return projects.map((project) => ({
     params: { slug: project.slug },
     props: { project },
@@ -16,8 +16,12 @@ export async function getStaticPaths() {
 const { project } = Astro.props;
 const { Content } = await project.render();
 
-const relatedBlog = project.data.blogSlug
+const relatedBlogEntry = project.data.blogSlug
   ? await getEntry('blog', project.data.blogSlug)
+  : null;
+
+const relatedBlog = relatedBlogEntry && !relatedBlogEntry.data.draft && !relatedBlogEntry.data.hidden
+  ? relatedBlogEntry
   : null;
 ---
 

@@ -7,7 +7,7 @@ import LinkCard from '../../components/mdx/LinkCard.astro';
 import { calculateReadingTime } from '../../lib/utils';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const posts = await getCollection('blog', ({ data }) => !data.draft && !data.hidden);
   return posts.map((post) => ({
     params: { slug: post.slug },
     props: { post },
@@ -19,8 +19,12 @@ const { Content, headings } = await post.render();
 
 const readingTime = post.data.readingTime ?? calculateReadingTime(post.body ?? '');
 
-const relatedProject = post.data.projectSlug
+const relatedProjectEntry = post.data.projectSlug
   ? await getEntry('projects', post.data.projectSlug)
+  : null;
+
+const relatedProject = relatedProjectEntry && !relatedProjectEntry.data.hidden
+  ? relatedProjectEntry
   : null;
 ---
 
