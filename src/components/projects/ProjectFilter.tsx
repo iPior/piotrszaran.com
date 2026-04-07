@@ -39,7 +39,7 @@ export default function ProjectFilter({ projects }: { projects: Project[] }) {
       {filtered.length === 0 ? (
         <p class="pt-6 text-site-dim text-sm">No projects in this category.</p>
       ) : (
-        <div class="pt-3.5">
+        <div>
           {filtered.map((project, idx) => (
             <ProjectCard
               key={project.id}

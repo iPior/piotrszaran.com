@@ -15,9 +15,19 @@ const readingTime =
 <article
   class="border-b border-site-border py-4 transition-colors duration-100 sm:hover:-mx-3 sm:hover:rounded sm:hover:bg-site-surface-hover sm:hover:px-3"
 >
+  <div
+    class="mb-1 flex items-center justify-between gap-3 text-xs text-site-dim md:hidden sm:ml-[3.25rem]"
+  >
+    <time datetime={post.data.date.toISOString()}>
+      {formatDate(post.data.date)}
+    </time>
+    <span aria-hidden="true">·</span>
+    <span class="text-site-green">{readingTime} min read</span>
+  </div>
+
   <div class="flex items-start gap-3 sm:gap-4">
     <div
-      class="w-7 text-base font-medium leading-tight text-site-peach sm:w-9 sm:text-lg"
+      class="mt-[1px] w-7 text-base font-medium leading-tight text-site-peach sm:w-9 sm:text-lg"
     >
       {String(itemNumber).padStart(2, "0")}
     </div>
@@ -56,15 +66,6 @@ const readingTime =
         )
       }
 
-      <div
-        class="mt-2 flex items-center gap-3 text-xs text-site-dim md:hidden"
-      >
-        <time datetime={post.data.date.toISOString()}>
-          {formatDate(post.data.date)}
-        </time>
-        <span aria-hidden="true">·</span>
-        <span class="text-site-green" >{readingTime} min read</span>
-      </div>
     </div>
 
     <div
