@@ -61,6 +61,11 @@ body {
   body {
     min-height: -webkit-fill-available;
   }
+
+  /* iOS Safari can flicker when scrolling with fixed SVG-filter overlays. */
+  .noise-overlay {
+    display: none;
+  }
 }
 
 :root[data-theme-family='catppuccin'][data-theme='light'],
