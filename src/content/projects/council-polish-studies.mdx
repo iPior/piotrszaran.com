@@ -12,4 +12,22 @@ hidden: false
 
 ## Overview
 
-TBD.
+Council for Support of Polish Studies is a bilingual website and content workflow for the University of Toronto group that funds Polish language, literature, and community programming. I built the public-facing Next.js application and the connected Sanity Studio setup that lets staff manage professors, courses, events, news, donors, and gallery content without code changes.
+
+## How It Works
+
+- The frontend is a Next.js 15 App Router build with localized English and Polish routes via `next-intl`, server-rendered pages, and dynamic detail views for professors, events, and news sourced from Sanity with GROQ queries.
+- A separate Sanity Studio defines the document schemas and editorial structure for faculty profiles, course listings, council members, donor records, event entries, news articles, and image galleries.
+- Contact requests are validated with `react-hook-form` and Zod, then handled by a server action that sends formatted emails through Resend; SEO metadata, canonical URLs, `hreflang` alternates, and the sitemap are generated centrally.
+
+## Technical Highlights
+
+- **Bilingual routing and SEO**: I mapped localized pathnames for both languages and tied them into canonical metadata and sitemap generation, which keeps English and Polish pages crawlable without duplicate-content issues.
+- **CMS-driven academic content model**: Professor pages resolve related course records from Sanity at request time, so faculty profiles and course offerings stay synchronized instead of being duplicated across the codebase.
+- **Lean architecture**: The site reads directly from Sanity's hosted dataset and uses server-side fetches for dynamic content, avoiding a custom admin backend while still giving editors a structured publishing workflow.
+
+## What I Built
+
+- The responsive Next.js site architecture, including page templates and listing/detail flows for professors, courses, events, news, supporters, gallery content, and council members.
+- The Sanity schemas and desk structure that organize all editorial content into maintainable document types.
+- The contact workflow, validation layer, email template/send pipeline, and shared SEO utilities for metadata, localized canonicals, and sitemap generation.

@@ -1,5 +1,5 @@
 ---
-title: "Personal Website Number 1"
+title: "My First Personal Website"
 date: 2025-05-05
 category: "personal"
 description: "I built my personal website to be more than a static portfolio - a place to showcase projects, freelance work, and my growth as a developer."
@@ -13,4 +13,22 @@ hidden: false
 
 ## Overview
 
-TBD.
+This project is a custom portfolio platform for a developer and DJ, combining a marketing site, blog, project showcase, freelance case studies, and music/booking pages in one codebase. I owned the full build: the Next.js frontend, Payload CMS setup, content models, media handling, contact workflow, and cache-refresh logic that keeps published content current without rebuilding everything.
+
+## How It Works
+
+- The public site is built in Next.js App Router with server-rendered sections that query Payload collections directly for projects, freelance work, blog posts, and mixes.
+- Blog posts use slug-based routes, generated metadata, and a Lexical rich-text renderer so editorial content can be managed in the CMS but delivered through custom frontend components.
+- Payload runs inside the same application, backed by PostgreSQL for structured content, Vercel Blob for uploaded media, and Resend for transactional email from the contact form.
+
+## Technical Highlights
+
+- **Integrated CMS + frontend architecture**: Payload is embedded into the Next.js app rather than split into a separate service, which keeps auth, admin, APIs, and public rendering in one deployment.
+- **On-demand revalidation hooks**: Collection `afterChange` / `afterDelete` hooks call a protected revalidation endpoint so homepage, blog index, and post detail pages refresh immediately when content changes.
+- **Editorial and media pipeline**: I modeled separate collections for blog, projects, freelance work, mixes, users, and media, with generated image sizes, focal-point support, typed queries, and rich-text content rendering.
+
+## What I Built
+
+- A responsive multi-page frontend for portfolio, blog, and music/booking flows with reusable cards, section wrappers, theme switching, and motion-based reveals.
+- The Payload CMS schema and admin-backed content system powering all dynamic sections.
+- A validated contact workflow using React Hook Form, Zod, a server action, and Payload/Resend email delivery.

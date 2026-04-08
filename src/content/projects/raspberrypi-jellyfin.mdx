@@ -11,4 +11,26 @@ hidden: false
 
 ## Overview
 
-TBD.
+This project is a self-hosted media stack running on a Raspberry Pi, built to replace recurring streaming and audio-hosting subscriptions with services I control directly. I designed and operated the full setup: media streaming with Jellyfin, mix hosting with Navidrome, containerized service management, reverse proxying, domain routing, and the storage layout needed to make the system usable for both me and the people I shared it with.
+
+## How It Works
+
+- Jellyfin handles shows and movies, while Navidrome serves my DJ mixes; supporting services like the Arr stack and Portainer help manage media workflows and container operations.
+- The system runs as a Docker-based stack on a Raspberry Pi, with Nginx routing services behind clean subdomains instead of raw ports or local IP addresses.
+- Cloudflare Tunnel exposes selected services publicly through my own domain, which made the setup easier to share with family and friends without a more complicated networking setup.
+
+## Technical Highlights
+
+- **Multi-service homelab stack on constrained hardware**: Running a usable media platform on a Raspberry Pi meant balancing containerized services, storage limits, and always-on reliability on low-power hardware.
+- **Reverse proxy and domain-based access**: Nginx plus a custom domain turned several self-hosted tools into clean, shareable endpoints, which made the setup feel like a cohesive platform rather than a collection of local services.
+- **Storage and hardware reliability planning**: After SD card wear caused failures, I reworked the storage setup and split workloads across the Pi's SD card and a dedicated USB drive, which made the system more practical for continuous use.
+
+## What I Built
+
+- A Raspberry Pi-based self-hosted media environment for streaming video and hosting my personal mix archive.
+- The containerized service setup for Jellyfin, Navidrome, media-management tooling, and Portainer administration.
+- The access layer, including Nginx reverse proxying, Cloudflare Tunnel exposure, and domain configuration for cleaner public and private service URLs.
+
+## Optional Context
+
+This was intentionally a first-version infrastructure setup rather than a final homelab architecture. The Raspberry Pi kept costs and power usage low, while still giving me a practical environment to learn self-hosting, service exposure, storage planning, and day-to-day operational ownership.

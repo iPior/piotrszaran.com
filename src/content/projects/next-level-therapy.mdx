@@ -12,4 +12,26 @@ hidden: false
 
 ## Overview
 
-TBD.
+This is a production website for a Mississauga clinic offering chiropractic care, registered massage therapy, and orthotics. I handled the redesign and implementation end to end: the Next.js app structure, UI, booking experience, SEO foundation, and the integration layer for reviews and inquiries.
+
+## How It Works
+
+- The public site is organized around service pages, practitioner profiles, contact flows, and a hiring/rental page, built on the Next.js App Router with a shared layout and reusable section components.
+- A global booking modal routes users into the correct scheduling path, using Setmore for massage bookings and Square for chiropractic and orthotics, with dedicated service mappings and a separate `/book` route for embedded booking flows.
+- Server routes handle Google Places review retrieval and form submissions, while metadata, JSON-LD, `robots`, and `sitemap` generation support local search visibility and indexable content.
+
+## Technical Highlights
+
+- **Multi-provider booking orchestration**: The site presents one booking entry point while branching into different third-party schedulers by service type, keeping the UX consistent without forcing the clinic into a single platform.
+- **SEO-first App Router implementation**: Route-level metadata, canonical URLs, structured local-business schema, and generated crawler assets were built into the app rather than bolted on afterward.
+- **Lean integration layer**: Google reviews are normalized behind a Next.js API route and cached in the browser for seven days, while contact and rental forms validate input, escape HTML, and send branded emails through Resend.
+
+## What I Built
+
+- The full frontend build, including the homepage, practitioner pages, service pages, contact page, and join-the-team/rental flow.
+- The booking system UX, including the modal state flow, service catalogs, and Setmore/Square integration points.
+- The supporting backend layer for reviews, contact submissions, rental inquiries, and SEO infrastructure.
+
+## Optional Context
+
+The main constraint was unifying multiple practitioners and external tools into a single branded experience. The implementation had to feel simple on mobile while still preserving separate booking logic, pricing, and lead-capture workflows behind the scenes.

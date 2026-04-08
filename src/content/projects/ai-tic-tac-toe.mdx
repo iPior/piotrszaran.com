@@ -12,4 +12,22 @@ hidden: false
 
 ## Overview
 
-TBD.
+This project is a browser-based Tic Tac Toe game built in React where the player competes against Anthropic's Claude instead of a hard-coded rules engine. I hand-coded it as a deliberate step up from my first project, which only used HTML, CSS, and JavaScript, because I wanted direct practice working with React state and component-driven UI.
+
+## How It Works
+
+- The React frontend renders the board, tracks turn state, and updates the UI in real time as moves are played and win conditions are reached.
+- AI moves are generated through a backend endpoint that sends the current game state to Anthropic, then returns the model's move to the client for the next board update.
+- The app is deployed as a split system, with the frontend hosted on Netlify and the backend on Render so the API key stays server-side.
+
+## Technical Highlights
+
+- **State-driven game flow**: The board, active player, and game result are managed in React state, which keeps the UI predictable and makes each move trigger a clean rerender.
+- **Server-side AI proxy**: Instead of calling Anthropic directly from the browser, the integration is routed through a backend service, which protects secrets and makes the app production-safe.
+- **Responsive Tailwind UI**: The interface was styled for mobile and desktop play, with lightweight components and immediate feedback after each user or AI action.
+
+## What I Built
+
+- The React game interface, including the board layout, interaction handling, and game-state feedback.
+- The backend request flow that converts board state into prompts and returns Claude's move to the frontend.
+- The production deployment setup across Netlify and Render, including the client/server separation required for secure API usage.

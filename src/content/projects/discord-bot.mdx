@@ -10,4 +10,26 @@ hidden: false
 
 ## Overview
 
-TBD.
+A self-hosted Discord bot for organizing game meetups inside a server without sending users to an external app. I built the full TypeScript/Bun implementation: slash command routing, Discord interaction handling, SQLite persistence with Drizzle, timezone-aware scheduling, and the deploy/runtime workflow for a VPS-hosted bot.
+
+## How It Works
+
+- Slash commands let members create groups, manage membership, set a server-wide default timezone, and propose meetups.
+- Each meetup is stored in SQLite, posted back into Discord as an embed with Join, Maybe, and Can't buttons, and linked to its original channel/message ID so edits and cancellations can update the same post in place.
+- A background reminder loop runs every minute, finds meetups due for a one-hour reminder, pings only confirmed attendees, and marks reminders as sent to avoid duplicates.
+
+## Technical Highlights
+
+- **Group-scoped RSVP permissions**: RSVP actions are gated by stored group membership, and destructive actions like group deletion or meetup cancellation respect proposer ownership plus Discord Manage Server permissions.
+- **Timezone-safe scheduling**: The bot stores a canonical IANA timezone per guild, accepts natural date/time input like `today` and `7:15pm`, and resolves zoned times into Unix timestamps so Discord timestamps, expiry windows, and reminders stay consistent across DST boundaries.
+- **Local-first persistence and maintainability**: SQLite keeps the runtime simple to operate, while Drizzle provides typed queries, schema-managed migrations, unique constraints, and cascade deletes for groups, meetups, and RSVPs.
+
+## What I Built
+
+- End-to-end slash command surface for group management, meetup creation/edit/cancel/delete flows, status views, personal/upcoming meetup lists, and timezone setup.
+- The live embed + button interaction system that rewrites RSVP state in place and disables actions when a meetup expires or is canceled.
+- Guild onboarding, autocomplete for group names and date/time inputs, and a Bun-based deploy script that pulls, migrates, and restarts the bot under `systemd`.
+
+## Optional Context
+
+This architecture intentionally avoids a separate web backend: Discord is both the UI and delivery channel, and the bot persists only the state needed to coordinate groups, meetups, and reminder automation reliably.

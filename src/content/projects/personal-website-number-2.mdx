@@ -1,5 +1,5 @@
 ---
-title: "Remaking my Personal Site"
+title: "Remaking my Personal Site with Astro"
 date: 2026-04-15
 category: "personal"
 description: "A rebuilt personal portfolio using Astro, MDX, and Tailwind."
@@ -13,22 +13,26 @@ hidden: false
 
 ## Overview
 
-This is a from-scratch rebuild of my portfolio as a content-first Astro site. I replaced a heavier Next.js + CMS setup with a static architecture built around MDX files in the repository, which keeps the site fast, easier to maintain, and cheaper to run while still supporting project pages, blog posts, and lightweight interactivity.
+This repo is the second full rebuild of my portfolio, rewritten as a content-first Astro site with MDX files stored directly in the codebase. I replaced a heavier Next.js + CMS setup with a static architecture that is faster to ship, easier to maintain, and better aligned with the actual needs of the site: publishing projects, blog posts, and a small amount of client-side interactivity.
 
 ## How It Works
 
-- Pages are generated at build time from Astro content collections, with project and blog entries authored as MDX and validated against typed frontmatter schemas.
-- Site data is loaded directly from the content layer, sorted at build time, and rendered into static pages with no runtime database or API dependency.
-- The only hydrated client-side component is a small Preact project filter, so the rest of the site ships as static HTML and CSS by default.
+- Projects and blog posts are authored as MDX content collections, with Astro validating frontmatter through Zod schemas before build output is generated.
+- The homepage, projects index, blog index, and individual content pages are all rendered from repository content at build time, with no CMS, database, or runtime API dependency.
+- The only hydrated UI in the repo is a small Preact project filter on the projects listing, so the rest of the site ships as static HTML and CSS by default.
 
 ## Technical Highlights
 
-- **Content modeled in code**: Astro content collections with Zod schemas validate frontmatter at build time, which keeps project and blog entries consistent without introducing a CMS or database.
-- **Minimal client JavaScript**: Interactivity is isolated to a single Preact island for project filtering, which preserves fast loads and avoids turning a content site into a client-rendered app.
-- **Progressive presentation details**: Stack badges pull from icon services with fallbacks, and the content-driven structure makes it easy to add or update projects without changing page logic.
+- **Typed content collections**: Astro content collections with Zod schemas validate project and blog frontmatter at build time, which keeps entries consistent and catches content errors before deployment.
+- **Static-first architecture with one island**: The site renders almost entirely as static pages, with Preact used only for the category-based project filter so interactivity stays targeted instead of becoming a client-rendered dependency everywhere.
+- **MDX-driven publishing workflow**: New projects and blog posts are added as files in the repo, which keeps content version-controlled, editor-friendly, and easy to connect through shared fields like `blogSlug` and `projectSlug`.
 
 ## What I Built
 
-- A reusable Astro-based portfolio system for home, project, and blog pages with a shared layout and content-driven routing.
-- The MDX content model, typed collection schemas, and the rendering flow that links related project and blog entries together.
-- The interactive project filtering UI and the component patterns used to keep the site mostly static while still feeling polished.
+- The Astro site structure for the homepage, projects index, blog index, RSS output, and dynamic detail pages for both projects and blog posts.
+- The MDX content model, typed schemas, and rendering flow that powers related project/blog linking without a CMS or database.
+- The small Preact-based project filtering interface and the shared layout/component system that keeps the site polished while remaining mostly static.
+
+## Optional Context
+
+This rebuild was driven by scope discipline as much as technology preference. The previous stack was more dynamic than the site needed, so this version intentionally optimizes for low operational overhead, fast builds, and content living directly alongside the code that renders it.

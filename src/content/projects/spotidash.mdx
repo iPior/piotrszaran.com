@@ -12,4 +12,26 @@ hidden: false
 
 ## Overview
 
-TBD.
+SpotiDash is a personalized music dashboard that lets signed-in Spotify users view their top tracks, top artists, recent listening activity, and newly released music in one interface. I built the full application in Next.js and TypeScript as a deeper step into the React ecosystem, with ownership over the frontend, authentication flow, Spotify integration, and deployment.
+
+## How It Works
+
+- Users authenticate with their Spotify account, then land in a responsive dashboard that presents listening data through a polished UI built with Tailwind, Shadcn/ui, and motion-enhanced interactions.
+- Spotify data is fetched through application logic inside the Next.js app, which handles API communication and transforms the results into dashboard sections such as top songs, artists, and recent activity.
+- The app is deployed on Vercel, taking advantage of Next.js routing and server-side capabilities while keeping the implementation in a single full-stack codebase.
+
+## Technical Highlights
+
+- **Spotify-authenticated dashboard**: The app combines OAuth-based login with personalized API data, turning a generic music interface into a user-specific product experience.
+- **Custom token refresh handling**: Because the authentication setup did not fully handle Spotify token renewal out of the box, I implemented refresh-token logic to keep sessions working reliably.
+- **Caching around slow-changing data**: Dashboard sections like top artists, top tracks, and releases were fetched on a limited cadence to avoid unnecessary API traffic and reduce repeated requests for data that changes infrequently.
+
+## What I Built
+
+- The full Next.js application structure, including routing, UI composition, and responsive dashboard screens.
+- The authentication flow and Spotify API integration used to load and display user-specific music data.
+- Supporting logic for token refresh, recently played data handling, and deployment to Vercel as a production-ready app.
+
+## Optional Context
+
+Spotify app access was limited to approved test users rather than open public sign-in, so the project was built and shared within that constraint while still supporting real user accounts end to end.
