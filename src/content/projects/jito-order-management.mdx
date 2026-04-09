@@ -10,4 +10,26 @@ hidden: true
 
 ## Overview
 
-TBD.
+Order Management System is an internal web app used to track hardware assets from purchase request through receiving and deployment. It serves IT and procurement workflows where each physical unit needs an auditable lifecycle (`ordered` -> `received` -> `deployed`) tied to requisition and user context. I owned the full-stack implementation across the React frontend, Express API, MariaDB schema, and production deployment automation.
+
+## How It Works
+
+- The frontend is a React and TypeScript app with route guards and role-aware UX for login, dashboard KPIs, order placement, receiving, deployment, deployed inventory tracking, and admin user management; state-heavy pages use context providers to coordinate modals, optimistic updates, and cross-view refreshes.
+- The backend is an Express REST API with JWT auth, role gates (`Admin` / `Standard` / `Viewer`), and transactional order and item mutations in MariaDB. Order totals and status are recalculated from line items and item states to keep aggregates consistent after edits, confirmations, deletions, and deployments.
+- Docker Compose runs `db`, `backend`, and `frontend` services with health checks, while GitHub Actions deploys over SSH, writes runtime environment config, runs server-side deploy scripts, and verifies backend health before marking the rollout successful.
+
+## Technical Highlights
+
+- **Mixed inventory confirmation model**: Serialized hardware accepts explicit serial lists, while accessories auto-generate batch IDs, letting one API handle both strict traceability and bulk receiving.
+- **Authorization tied to live account state**: Tokens are validated per request and roles are refreshed from the database, so role changes and deactivations take effect immediately without waiting for token expiry.
+- **Data-integrity guardrails in write paths**: Transactional checks prevent destructive edits, such as deleting deployed assets or shrinking quantities below received counts, which reduces state drift and support overhead.
+
+## What I Built
+
+- End-to-end order lifecycle workflows for creating and editing orders, confirming line items with dates, deploying and returning items, and maintaining synchronized order summaries.
+- Admin and account security features including role changes, activation and deactivation controls, self-service password change, and admin password reset flows with safety constraints.
+- Production delivery tooling including a containerized stack, CI/CD deploy pipeline, health-checked rollout scripts, and scheduled backups covering database dumps, uploaded images, and environment snapshots with retention.
+
+## Optional Context
+
+This project operates in a constrained internal environment where reliability and auditability matter more than feature novelty. The architecture favors explicit state transitions and reversible operational workflows so inventory records stay trustworthy during day-to-day procurement and deployment activity.
