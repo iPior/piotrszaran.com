@@ -10,4 +10,26 @@ hidden: true
 
 ## Overview
 
-TBD.
+This repository is a Windows desktop support-ticket tool for judicial users, implemented in Windows PowerShell 5.1 with a WPF interface and Outlook COM automation. It captures structured issue details, adds optional file attachments, gathers endpoint diagnostics, and prepares an HTML support email draft. I owned the modular runtime in `IT_Support_Ticket`, including startup orchestration, UI flow, validation and state handling, diagnostics collection, and mail-request assembly.
+
+## How It Works
+
+- The WPF window (`UI/SupportRequestWindow.xaml` plus controller scripts) drives an event-based form with conditional fields for product and application "Other" paths, callback requirements for phone, submitter-type-specific inputs, and inline validation.
+- On submit, the request module resolves routing based on submitter type, builds a subject and body from form input plus diagnostics, and creates a draft via Outlook COM (`Mail/SupportTicket.Requests.psm1`, `Mail/SupportTicket.Outlook.psm1`).
+- Runtime safeguards include required-file checks, single-instance mutex locking per Windows user, Outlook preflight checks, background diagnostics warmup, and file logging to `C:\\temp\\it_support_ticket_logs`.
+
+## Technical Highlights
+
+- **Modular PowerShell architecture**: I split the app into `Config`, `Core`, `UI`, `Diagnostics`, and `Mail` modules, with a thin `App.ps1` entrypoint to reduce coupling and simplify maintenance.
+- **Responsive diagnostics pipeline**: I added async warmup with cached results and bounded wait and fallback behavior so submissions can proceed even when diagnostics are delayed or unavailable.
+- **Attachment UX with guardrails**: I implemented drag and drop plus file-picker intake with `HashSet` deduplication, removable chip UI, and file-only filtering to avoid invalid payloads.
+
+## What I Built
+
+- I refactored startup into a resilient bootstrap flow with module and script existence validation, deterministic loading, startup error messaging, and lock cleanup.
+- I implemented the WPF controller event system for dynamic field visibility, focus behavior, and rule-based validation before submission.
+- I built request orchestration logic for support-target resolution, subject generation, diagnostics embedding, and Outlook draft creation with attachments.
+
+## Optional Context
+
+The architecture is intentionally local-first: no external services, no backend dependency, and compatibility with PowerShell 5.1 plus Outlook COM on managed Windows environments. That constraint drove the module boundaries, defensive error handling, and operational logging strategy.
