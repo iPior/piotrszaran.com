@@ -10,4 +10,26 @@ hidden: true
 
 ## Overview
 
-TBD.
+NARF Form Handler is a WordPress plugin used by Ontario court organizations to process Network Access Request Forms from submission through audit-ready admin review. It serves judiciary and ministry teams with a conditional request flow that adapts to ministry, division, branch, and section. I owned the end-to-end implementation across form behavior, persistence, admin operations, and export and reporting paths.
+
+## How It Works
+
+- The public `[narf_form]` shortcode renders a dynamic, multi-step form with cascading org selections and division-specific access checklists for apps, groups, DLs, folders, and mailboxes, then posts to a hardened `admin-post.php` handler with nonce validation.
+- The backend sanitizes and normalizes input, merges variant checkbox payloads into canonical arrays, writes submissions to a dedicated MySQL schema (`submissions` plus normalized `submission_items`), and triggers HTML email notifications.
+- Admin users manage records in a custom "NARF Records" panel with searchable list and detail views, plus CSV and PDF exports handled early in `admin_init` to avoid output-buffer and header conflicts.
+
+## Technical Highlights
+
+- **Dedicated data layer outside WordPress tables**: I isolated request data in a separate `narf_form` database via a custom `wpdb` instance, which simplified schema control and reduced coupling to site-level WordPress data.
+- **Normalization and compatibility strategy**: I stored multi-select access items in a junction table while preserving UI flexibility through variant field merging, such as division-specific checkbox names, which balanced clean storage with practical form evolution.
+- **Operational reliability in WordPress constraints**: I added nonce checks, deterministic redirect states, failure diagnostics, and export routing that works with WordPress' hook and output lifecycle instead of fighting it.
+
+## What I Built
+
+- I implemented the full submission pipeline: validation, sanitization, conditional field resolution, database writes, and notification email delivery.
+- I built the admin records experience, including search, detail rendering, and secure CSV and PDF export flows.
+- I integrated Microsoft 365 MSAL-based submitter auto-fill and conditional asset loading, including Elementor-aware behavior, to reduce user friction and avoid unnecessary frontend overhead.
+
+## Optional Context
+
+This project had to fit strict WordPress plugin boundaries, including procedural PHP, a hook-driven lifecycle, and no Node or Composer dependency chain, while supporting a complex org hierarchy and access catalog. The architecture choice to normalize items and centralize request handling made ongoing schema and migration work significantly safer and easier to ship.
