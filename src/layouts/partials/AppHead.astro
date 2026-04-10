@@ -7,8 +7,9 @@ interface Props {
   image?: string;
 }
 
-const { title, description, image } = Astro.props;
+const { title, description, image = '/og-image.png' } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const socialImageURL = new URL(image, Astro.site);
 ---
 
 <script is:inline>
@@ -33,7 +34,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" href="/favicon.ico" sizes="48x48" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" href="/apple-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
 <meta name="generator" content={Astro.generator} />
 
 <!-- Primary Meta Tags -->
@@ -49,14 +53,18 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 <meta property="og:url" content={canonicalURL} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-{image && <meta property="og:image" content={new URL(image, Astro.site)} />}
+<meta property="og:image" content={socialImageURL} />
+<meta property="og:image:width" content="786" />
+<meta property="og:image:height" content="297" />
+<meta property="og:image:alt" content={title} />
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:url" content={canonicalURL} />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
-{image && <meta name="twitter:image" content={new URL(image, Astro.site)} />}
+<meta name="twitter:image" content={socialImageURL} />
+<meta name="twitter:image:alt" content={title} />
 
 <!-- RSS -->
 <link rel="alternate" type="application/rss+xml" title="Piotr Szaran — Blog" href="/rss.xml" />
