@@ -121,16 +121,16 @@ const getIconSources = (
         <div class="flex flex-col items-center gap-1.5 text-center sm:gap-2">
           <div class="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-lg border border-site-border bg-site-surface-hover sm:h-12 sm:w-12">
             {primary || fallback ? (
-              <object
-                data={primary ?? fallback!}
+              <img
+                src={primary ?? fallback!}
                 data-fallback-src={fallback ?? ''}
                 data-theme-simple-icon-template={!primary ? (fallbackTemplate ?? undefined) : undefined}
-                role="img"
-                aria-label={`${tech} logo`}
+                alt={`${tech} logo`}
                 title={tech}
+                loading="lazy"
                 class="h-8 w-8 object-contain sm:h-10 sm:w-10"
-                onerror="if (this.dataset.fallbackSrc && this.data !== this.dataset.fallbackSrc) { this.data = this.dataset.fallbackSrc; return; } this.style.display='none'; const fallback = this.parentElement && this.parentElement.querySelector('[data-icon-fallback]'); if (fallback) fallback.style.display='flex';"
-              ></object>
+                onerror="if (this.dataset.fallbackSrc && this.src !== this.dataset.fallbackSrc) { this.src = this.dataset.fallbackSrc; return; } this.style.display='none'; const fallback = this.parentElement && this.parentElement.querySelector('[data-icon-fallback]'); if (fallback) fallback.style.display='flex';"
+              />
             ) : null}
             <span
               data-icon-fallback

@@ -23,12 +23,14 @@ const { firstName, lastName, role, profileImageSrc, profileImageAlt } =
 <div>
   <div class="flex items-center gap-3 text-5xl leading-none sm:gap-6 sm:text-6xl md:text-7xl lg:text-8xl">
     {profileImageSrc && typeof profileImageSrc === 'string' && (
-      <div
-        role="img"
-        aria-label={profileImageAlt}
+      <img
+        src={profileImageSrc}
+        alt={profileImageAlt}
         class="h-[2.2em] w-[2.2em] shrink-0 rounded-2xl border border-site-border object-cover"
-        style={`background-image: url(${profileImageSrc}); background-size: cover; background-position: center;`}
-      ></div>
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
+      />
     )}
     {profileImageSrc && typeof profileImageSrc !== 'string' && (
       <Image
