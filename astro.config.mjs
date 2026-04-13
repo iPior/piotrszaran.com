@@ -6,7 +6,7 @@ import vercel from '@astrojs/vercel';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  site: 'https://piotrszaran.com',
+  site: 'https://www.piotrszaran.com',
   output: 'static',
   adapter: vercel(),
   integrations: [
