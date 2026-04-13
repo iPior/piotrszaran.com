@@ -72,7 +72,7 @@ const TAG_COLORS: Record<string, string> = {
   docker: '2496ed',
   'node.js': '339933',
   nodejs: '339933',
-  bun: 'fbf0df',
+  bun: '111827',
   php: '777bb4',
   mariadb: '003545',
   wordpress: '21759b',
@@ -109,18 +109,22 @@ const TAG_COLORS: Record<string, string> = {
 
 const THEME_COLOR_PLACEHOLDER = '__THEME_DEFAULT_BADGE_COLOR__';
 const DEFAULT_THEME_BADGE_COLOR = '585b70';
-const LOGO_COLOR = 'ffffff';
+const DEFAULT_LOGO_COLOR = 'ffffff';
+const TAG_LOGO_COLORS: Record<string, string> = {
+  bun: 'f9e2af',
+};
 
 function getShieldSrc(tag: string, color: string): string {
   const normalizedTag = tag.trim().toLowerCase();
   const encodedTag = encodeURIComponent(tag);
   const logo = TAG_LOGOS[normalizedTag];
+  const logoColor = TAG_LOGO_COLORS[normalizedTag] ?? DEFAULT_LOGO_COLOR;
 
   if (!logo) {
     return `https://img.shields.io/badge/${encodedTag}-${color}?style=flat-square`;
   }
 
-  return `https://img.shields.io/badge/${encodedTag}-${color}?style=flat-square&logo=${encodeURIComponent(logo)}&logoColor=${LOGO_COLOR}`;
+  return `https://img.shields.io/badge/${encodedTag}-${color}?style=flat-square&logo=${encodeURIComponent(logo)}&logoColor=${logoColor}`;
 }
 
 export default function ShieldBadges({
