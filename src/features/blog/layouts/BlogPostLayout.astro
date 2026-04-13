@@ -5,6 +5,7 @@ import BackLink from "../../../components/BackLink.astro";
 import { formatDate } from "../../../lib/utils";
 import type { CollectionEntry } from "astro:content";
 import type { MarkdownHeading } from "astro";
+import { Image } from "astro:assets";
 
 interface Props {
   post: CollectionEntry<"blog">;
@@ -62,10 +63,12 @@ const { title, description, date, tags, coverImage } = post.data;
         {
           coverImage && (
             <div class="mt-6">
-              <img
+              <Image
                 src={coverImage}
                 alt={`${title} cover image`}
                 loading="eager"
+                format="webp"
+                quality={80}
                 class="w-full rounded-lg border border-site-border bg-site-surface object-cover"
               />
             </div>

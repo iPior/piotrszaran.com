@@ -4,7 +4,7 @@ date: 2025-05-07
 description: "SpotiDash is a web application that provides users with a personalized dashboard for exploring their favorite music on Spotify. Leveraging the Spotify API, SpotiDash allows users to view their top tracks, artists, and new releases, all in one place."
 projectSlug: "spotidash"
 tags: ["nextjs", "typescript", "spotify-api", "tailwind", "auth"]
-coverImage: "/images/blog/spotidash.PNG"
+coverImage: "../../assets/images/blog/spotidash.PNG"
 draft: false
 hidden: false
 ---
@@ -64,3 +64,4 @@ As I started learning about TypeScript, Next.js, and generally dove deeper into 
 - Currently, with the way the application is designed, API calls for Recently Released, Top Artists, and Top Songs data are fetched once a day. This was done to avoid making too many calls since the data does not change frequently. Having not used a database, I instinctively stored this data in local storage. With my knowledge now, I should have used IndexedDB with a library such as Dexie.js.
 - As a less experienced coder, I would have chosen a different authentication library instead of Auth.js (formerly Next-auth.js). While using JWT (JSON Web Tokens) for authentication, I had to implement my own refresh token function because it does not come out of the box in Auth.js. Additionally, I could not refer to their documentation for assistance because it is very poorly written.
 - Lastly, I could have perhaps used a different streaming service's API. I noticed that many cool endpoints that could provide insightful information about a user's listening habits have been deprecated. I ended up having to write my own custom function to display recently played tracks.
+

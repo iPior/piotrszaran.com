@@ -22,7 +22,7 @@ const projects = defineCollection({
 
 const blog = defineCollection({
   type: 'content',
-  schema: z.object({
+  schema: ({ image }) => z.object({
     // === REQUIRED ===
     title: z.string(),
     date: z.coerce.date(),
@@ -32,7 +32,7 @@ const blog = defineCollection({
     readingTime: z.number().optional(),
     projectSlug: z.string().optional(),
     tags: z.array(z.string()).optional(),
-    coverImage: z.string().optional(),
+    coverImage: image().optional(),
     draft: z.boolean().default(false),
     hidden: z.boolean().default(false),
   }),

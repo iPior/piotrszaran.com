@@ -144,18 +144,17 @@ export default function ShieldBadges({
           : mappedColor;
 
         return (
-          <img
+          <object
             key={`${tag}-${idx}`}
-            src={getShieldSrc(tag, initialColor)}
+            data={getShieldSrc(tag, initialColor)}
             data-theme-shield-template={
               usesThemeDefault
                 ? getShieldSrc(tag, THEME_COLOR_PLACEHOLDER)
                 : undefined
             }
-            alt={`${tag} badge`}
+            role="img"
+            aria-label={`${tag} badge`}
             class="h-5"
-            loading="lazy"
-            decoding="async"
           />
         );
       })}
