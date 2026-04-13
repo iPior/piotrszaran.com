@@ -26,7 +26,7 @@ const { firstName, lastName, role, profileImageSrc, profileImageAlt } =
       <img
         src={profileImageSrc}
         alt={profileImageAlt}
-        class="h-[2.2em] w-[2.2em] shrink-0 rounded-2xl border border-site-border object-cover"
+        class="relative z-[60] h-[2.2em] w-[2.2em] shrink-0 rounded-2xl border border-site-border object-cover"
         loading="eager"
         decoding="async"
         fetchpriority="high"
@@ -36,7 +36,7 @@ const { firstName, lastName, role, profileImageSrc, profileImageAlt } =
       <Image
         src={profileImageSrc}
         alt={profileImageAlt}
-        class="h-[2.2em] w-[2.2em] shrink-0 rounded-2xl border border-site-border object-cover"
+        class="relative z-[60] h-[2.2em] w-[2.2em] shrink-0 rounded-2xl border border-site-border object-cover"
         width={212}
         height={212}
         densities={[1, 1.5, 2, 3, 4]}

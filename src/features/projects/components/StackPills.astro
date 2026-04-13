@@ -6,78 +6,77 @@ interface Props {
 const { stack } = Astro.props;
 
 const SKILL_ICON_MAP: Record<string, string> = {
-  'TypeScript': 'ts',
-  'JavaScript': 'js',
-  'Next.js': 'nextjs',
-  'Node.js': 'nodejs',
-  'React': 'react',
-  'Preact': 'react',
-  'Vite': 'vite',
-  'Tailwind': 'tailwind',
-  'Tailwind CSS': 'tailwind',
-  'Astro': 'astro',
-  'HTML': 'html',
-  'CSS': 'css',
-  'Docker': 'docker',
-  'Cloudflare': 'cloudflare',
-  'GitHub Actions': 'githubactions',
-  'PowerShell': 'powershell',
-  'Raspberry Pi': 'raspberrypi',
-  'PHP': 'php',
-  'WordPress': 'wordpress',
-  'Supabase': 'supabase',
-  'Vercel': 'vercel',
-  'Bun': 'bun',
-  'Sanity': 'sanity',
-  'Spotify API': 'spotify',
-  'Framer Motion': 'framermotion',
-  'WPF': 'dotnet',
-  'Linux VPS': 'linux',
+  TypeScript: "ts",
+  JavaScript: "js",
+  "Next.js": "nextjs",
+  "Node.js": "nodejs",
+  React: "react",
+  Preact: "react",
+  Vite: "vite",
+  Tailwind: "tailwind",
+  "Tailwind CSS": "tailwind",
+  Astro: "astro",
+  HTML: "html",
+  CSS: "css",
+  Docker: "docker",
+  Cloudflare: "cloudflare",
+  "GitHub Actions": "githubactions",
+  PowerShell: "powershell",
+  "Raspberry Pi": "raspberrypi",
+  PHP: "php",
+  WordPress: "wordpress",
+  Supabase: "supabase",
+  Vercel: "vercel",
+  Bun: "bun",
+  Sanity: "sanity",
+  "Spotify API": "spotify",
+  "Framer Motion": "framermotion",
+  WPF: "dotnet",
+  "Linux VPS": "linux",
 };
 
 const SIMPLE_ICON_MAP: Record<string, string> = {
-  'MDX': 'mdx',
-  'PM2': 'pm2',
-  'Render': 'render',
-  'Netlify': 'netlify',
-  'Anthropic API': 'anthropic',
-  'Payload': 'payloadcms',
-  'Shadcn/ui': 'shadcnui',
-  'NextAuth.js': 'authjs',
-  'MariaDB': 'mariadb',
-  'Resend': 'resend',
-  'Claude Code': 'anthropic',
-  'XAML': 'xaml',
-  'Sanity': 'sanity',
-  'Prisma': 'prisma',
-  'Sqlite': 'sqlite',
-  'Drizzle': 'drizzle',
-  'Discord.js': 'discord',
-  'DigitalOcean': 'digitalocean',
+  MDX: "mdx",
+  PM2: "pm2",
+  Render: "render",
+  Netlify: "netlify",
+  "Anthropic API": "anthropic",
+  Payload: "payloadcms",
+  "Shadcn/ui": "shadcnui",
+  "NextAuth.js": "authjs",
+  MariaDB: "mariadb",
+  Resend: "resend",
+  "Claude Code": "anthropic",
+  XAML: "xaml",
+  Sanity: "sanity",
+  Prisma: "prisma",
+  Sqlite: "sqlite",
+  Drizzle: "drizzle",
+  "Discord.js": "discord",
+  DigitalOcean: "digitalocean",
 };
 
 const CUSTOM_ICON_MAP: Record<string, string> = {
-  'i18n':
-    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e2e8f0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='8'/%3E%3Cpath d='M4 12h16'/%3E%3Cpath d='M12 4a12 12 0 0 1 0 16'/%3E%3Cpath d='M12 4a12 12 0 0 0 0 16'/%3E%3C/svg%3E",
+  i18n: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e2e8f0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='8'/%3E%3Cpath d='M4 12h16'/%3E%3Cpath d='M12 4a12 12 0 0 1 0 16'/%3E%3Cpath d='M12 4a12 12 0 0 0 0 16'/%3E%3C/svg%3E",
 };
 
-const THEME_SIMPLE_ICON_COLOR_PLACEHOLDER = '__THEME_SIMPLE_ICON_COLOR__';
-const DEFAULT_THEME_SIMPLE_ICON_COLOR = 'e2e8f0';
+const THEME_SIMPLE_ICON_COLOR_PLACEHOLDER = "__THEME_SIMPLE_ICON_COLOR__";
+const DEFAULT_THEME_SIMPLE_ICON_COLOR = "e2e8f0";
 const THEME_AWARE_SIMPLE_ICON_IDS = new Set([
-  'mdx',
-  'payloadcms',
-  'shadcnui',
-  'authjs',
-  'resend',
-  'xaml',
-  'prisma',
-  'drizzle',
-  'pm2',
+  "mdx",
+  "payloadcms",
+  "shadcnui",
+  "authjs",
+  "resend",
+  "xaml",
+  "prisma",
+  "drizzle",
+  "pm2",
 ]);
 
 const getMonogram = (tech: string): string => {
-  const cleaned = tech.replace(/[^a-zA-Z0-9+\s]/g, ' ').trim();
-  if (!cleaned) return '?';
+  const cleaned = tech.replace(/[^a-zA-Z0-9+\s]/g, " ").trim();
+  if (!cleaned) return "?";
 
   const words = cleaned.split(/\s+/).filter(Boolean);
   if (words.length >= 2) return `${words[0][0]}${words[1][0]}`.toUpperCase();
@@ -86,8 +85,12 @@ const getMonogram = (tech: string): string => {
 };
 
 const getIconSources = (
-  tech: string
-): { primary: string | null; fallback: string | null; fallbackTemplate: string | null } => {
+  tech: string,
+): {
+  primary: string | null;
+  fallback: string | null;
+  fallbackTemplate: string | null;
+} => {
   const skillId = SKILL_ICON_MAP[tech];
   const simpleId = SIMPLE_ICON_MAP[tech];
   const customIcon = CUSTOM_ICON_MAP[tech];
@@ -96,15 +99,18 @@ const getIconSources = (
     : false;
   const simplePath = simpleId
     ? `https://cdn.simpleicons.org/${simpleId}${
-        isThemeAwareSimpleIcon ? `/${DEFAULT_THEME_SIMPLE_ICON_COLOR}` : ''
+        isThemeAwareSimpleIcon ? `/${DEFAULT_THEME_SIMPLE_ICON_COLOR}` : ""
       }`
     : null;
-  const simpleTemplate = simpleId && isThemeAwareSimpleIcon
-    ? `https://cdn.simpleicons.org/${simpleId}/${THEME_SIMPLE_ICON_COLOR_PLACEHOLDER}`
-    : null;
+  const simpleTemplate =
+    simpleId && isThemeAwareSimpleIcon
+      ? `https://cdn.simpleicons.org/${simpleId}/${THEME_SIMPLE_ICON_COLOR_PLACEHOLDER}`
+      : null;
 
   return {
-    primary: customIcon ?? (skillId ? `https://skillicons.dev/icons?i=${skillId}` : null),
+    primary:
+      customIcon ??
+      (skillId ? `https://skillicons.dev/icons?i=${skillId}` : null),
     fallback: simplePath,
     fallbackTemplate: simpleTemplate,
   };
@@ -112,40 +118,46 @@ const getIconSources = (
 ---
 
 <div class="flex flex-wrap gap-2 sm:gap-3">
-  {stack.map((tech) => {
-    const { primary, fallback, fallbackTemplate } = getIconSources(tech);
-    const monogram = getMonogram(tech);
+  {
+    stack.map((tech) => {
+      const { primary, fallback, fallbackTemplate } = getIconSources(tech);
+      const monogram = getMonogram(tech);
 
-    return (
-      <div>
-        <div class="flex flex-col items-center gap-1.5 text-center sm:gap-2">
-          <div class="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-lg border border-site-border bg-site-surface-hover sm:h-12 sm:w-12">
-            {primary || fallback ? (
-              <img
-                src={primary ?? fallback!}
-                data-fallback-src={fallback ?? ''}
-                data-theme-simple-icon-template={!primary ? (fallbackTemplate ?? undefined) : undefined}
-                alt={`${tech} logo`}
-                title={tech}
-                loading="lazy"
-                class="h-8 w-8 object-contain sm:h-10 sm:w-10"
-                onerror="if (this.dataset.fallbackSrc && this.src !== this.dataset.fallbackSrc) { this.src = this.dataset.fallbackSrc; return; } this.style.display='none'; const fallback = this.parentElement && this.parentElement.querySelector('[data-icon-fallback]'); if (fallback) fallback.style.display='flex';"
-              />
-            ) : null}
-            <span
-              data-icon-fallback
-              class:list={[
-                'absolute inset-0 items-center justify-center text-[11px] font-semibold tracking-wide text-site-subtext',
-                primary || fallback ? 'hidden' : 'flex',
-              ]}
-              aria-hidden="true"
-            >
-              {monogram}
+      return (
+        <div>
+          <div class="flex flex-col items-center gap-1.5 text-center sm:gap-2">
+            <div class="relative flex h-10 w-10 items-center justify-center overflow-hidden  sm:h-12 sm:w-12 ">
+              {primary || fallback ? (
+                <img
+                  src={primary ?? fallback!}
+                  data-fallback-src={fallback ?? ""}
+                  data-theme-simple-icon-template={
+                    !primary ? (fallbackTemplate ?? undefined) : undefined
+                  }
+                  alt={`${tech} logo`}
+                  title={tech}
+                  loading="lazy"
+                  class="relative z-60 h-10 w-10 object-contain sm:h-12 sm:w-12 rounded-xl border-2 border-site-border bg-site-surface-hover"
+                  onerror="if (this.dataset.fallbackSrc && this.src !== this.dataset.fallbackSrc) { this.src = this.dataset.fallbackSrc; return; } this.style.display='none'; const fallback = this.parentElement && this.parentElement.querySelector('[data-icon-fallback]'); if (fallback) fallback.style.display='flex';"
+                />
+              ) : null}
+              <span
+                data-icon-fallback
+                class:list={[
+                  "absolute inset-0 items-center justify-center text-[11px] font-semibold tracking-wide text-site-subtext",
+                  primary || fallback ? "hidden" : "flex",
+                ]}
+                aria-hidden="true"
+              >
+                {monogram}
+              </span>
+            </div>
+            <span class="text-[11px] leading-tight text-site-dim sm:text-xs hidden sm:block">
+              {tech}
             </span>
           </div>
-          <span class="text-[11px] leading-tight text-site-dim sm:text-xs hidden sm:block">{tech}</span>
         </div>
-      </div>
-    );
-  })}
+      );
+    })
+  }
 </div>

@@ -62,7 +62,7 @@ const { title, description, date, tags, coverImage } = post.data;
         }
         {
           coverImage && (
-            <div class="mt-6">
+            <div class="blog-post-image mt-6">
               <Image
                 src={coverImage}
                 alt={`${title} cover image`}
@@ -76,7 +76,7 @@ const { title, description, date, tags, coverImage } = post.data;
         }
       </header>
       <hr class="mb-6 border-site-border sm:mb-8" />
-      <div class="prose max-w-none">
+      <div class="blog-post-content prose max-w-none">
         <slot />
       </div>
       <BackLink href="/blogs" label="Back to blogs" />
@@ -93,3 +93,11 @@ const { title, description, date, tags, coverImage } = post.data;
     </aside>
   </div>
 </AppLayout>
+
+<style is:global>
+  .blog-post-image :is(picture, img, object[role='img']),
+  .blog-post-content :is(picture, img, object[role='img']) {
+    position: relative;
+    z-index: 60;
+  }
+</style>

@@ -139,7 +139,7 @@ function isActive(href: string): boolean {
       "[data-theme-family-option]",
     );
     const menus = document.querySelectorAll("[data-theme-menu]");
-    const defaultThemeShieldColor = "313244";
+    const defaultThemeShieldColor = "585b70";
     const themeShieldColorPlaceholder = "__THEME_DEFAULT_BADGE_COLOR__";
     const defaultThemeSimpleIconColor = "e2e8f0";
     const themeSimpleIconColorPlaceholder = "__THEME_SIMPLE_ICON_COLOR__";
@@ -188,8 +188,11 @@ function isActive(href: string): boolean {
     };
     const getThemeShieldColor = () => {
       const rootStyles = getComputedStyle(root);
-      const borderColor = rootStyles.getPropertyValue("--color-site-border");
-      return toShieldHexColor(borderColor) ?? defaultThemeShieldColor;
+      const isDarkMode = getTheme() === "dark";
+      const preferredColor = rootStyles.getPropertyValue(
+        isDarkMode ? "--color-site-overlay" : "--color-site-border",
+      );
+      return toShieldHexColor(preferredColor) ?? defaultThemeShieldColor;
     };
     const getThemeSimpleIconColor = () => {
       const rootStyles = getComputedStyle(root);

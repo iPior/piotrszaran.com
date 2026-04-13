@@ -108,7 +108,7 @@ const TAG_COLORS: Record<string, string> = {
 };
 
 const THEME_COLOR_PLACEHOLDER = '__THEME_DEFAULT_BADGE_COLOR__';
-const DEFAULT_THEME_BADGE_COLOR = '313244';
+const DEFAULT_THEME_BADGE_COLOR = '585b70';
 const LOGO_COLOR = 'ffffff';
 
 function getShieldSrc(tag: string, color: string): string {
@@ -153,7 +153,7 @@ export default function ShieldBadges({
                 : undefined
             }
             alt={`${tag} badge`}
-            class="h-5"
+            class="relative z-[60] h-5"
             loading="lazy"
             decoding="async"
           />
