@@ -16,19 +16,21 @@ Order Management System is an internal web app used to track hardware assets fro
 
 - The frontend is a React and TypeScript app with route guards and role-aware UX for login, dashboard KPIs, order placement, receiving, deployment, deployed inventory tracking, and admin user management; state-heavy pages use context providers to coordinate modals, optimistic updates, and cross-view refreshes.
 - The backend is an Express REST API with JWT auth, role gates (`Admin` / `Standard` / `Viewer`), and transactional order and item mutations in MariaDB. Order totals and status are recalculated from line items and item states to keep aggregates consistent after edits, confirmations, deletions, and deployments.
-- Docker Compose runs `db`, `backend`, and `frontend` services with health checks, while GitHub Actions deploys over SSH, writes runtime environment config, runs server-side deploy scripts, and verifies backend health before marking the rollout successful.
+- The project initially shipped as a Docker Compose stack, but the current design uses a self-hosted GitHub Actions runner with PM2 — the workflow writes runtime environment config, syncs main, rebuilds both apps, reloads them under the process manager, and verifies a backend health endpoint before marking the rollout successful.
 
 ## Technical Highlights
 
 - **Mixed inventory confirmation model**: Serialized hardware accepts explicit serial lists, while accessories auto-generate batch IDs, letting one API handle both strict traceability and bulk receiving.
 - **Authorization tied to live account state**: Tokens are validated per request and roles are refreshed from the database, so role changes and deactivations take effect immediately without waiting for token expiry.
 - **Data-integrity guardrails in write paths**: Transactional checks prevent destructive edits, such as deleting deployed assets or shrinking quantities below received counts, which reduces state drift and support overhead.
+- **CI/CD migration aligned with team maintenance model**: The initial Docker Compose deploy path was rebuilt around a self-hosted runner and a process-managed runtime (PM2). The change served two goals — making automated deploys actually ship inside a locked-down internal network, and right-sizing the tooling surface to a team where long-term maintainers aren't full-time developers. Trade-off: less build-time flexibility in exchange for operational reliability and onboarding simplicity.
 
 ## What I Built
 
 - End-to-end order lifecycle workflows for creating and editing orders, confirming line items with dates, deploying and returning items, and maintaining synchronized order summaries.
 - Admin and account security features including role changes, activation and deactivation controls, self-service password change, and admin password reset flows with safety constraints.
-- Production delivery tooling including a containerized stack, CI/CD deploy pipeline, health-checked rollout scripts, and scheduled backups covering database dumps, uploaded images, and environment snapshots with retention.
+- CI/CD with a self-hosted GitHub Actions runner and PM2-based deploys, landing a fully automated, health-checked rollout pipeline.
+- Scheduled backups covering database dumps, uploaded images, and environment snapshots with retention.
 
 ## Optional Context
 
