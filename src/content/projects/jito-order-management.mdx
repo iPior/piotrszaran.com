@@ -10,7 +10,15 @@ hidden: false
 
 ## Overview
 
-Order Management System is an internal web app used to track hardware assets from purchase request through receiving and deployment. It serves IT and procurement workflows where each physical unit needs an auditable lifecycle (`ordered` -> `received` -> `deployed`) tied to requisition and user context. I owned the full-stack implementation across the React frontend, Express API, MariaDB schema, and production deployment automation.
+Internal web app used to track hardware assets from purchase request through receiving and deployment. It serves IT and procurement workflows where each physical unit needs an auditable lifecycle (`ordered` -> `received` -> `deployed`) tied to requisition and user context. 
+
+I owned the full-stack implementation across the React frontend, Express API, MariaDB schema, and production deployment automation.
+
+## What I Built
+
+- End-to-end order lifecycle workflows for creating and editing orders, confirming line items with dates, deploying and returning items, and maintaining synchronized order summaries.
+- Admin and account security features including role changes, activation and deactivation controls, self-service password change, and admin password reset flows with safety constraints.
+- Production delivery tooling including a containerized stack, CI/CD deploy pipeline, health-checked rollout scripts, and scheduled backups covering database dumps, uploaded images, and environment snapshots with retention.
 
 ## How It Works
 
@@ -23,15 +31,3 @@ Order Management System is an internal web app used to track hardware assets fro
 - **Mixed inventory confirmation model**: Serialized hardware accepts explicit serial lists, while accessories auto-generate batch IDs, letting one API handle both strict traceability and bulk receiving.
 - **Authorization tied to live account state**: Tokens are validated per request and roles are refreshed from the database, so role changes and deactivations take effect immediately without waiting for token expiry.
 - **Data-integrity guardrails in write paths**: Transactional checks prevent destructive edits, such as deleting deployed assets or shrinking quantities below received counts, which reduces state drift and support overhead.
-- **CI/CD migration aligned with team maintenance model**: The initial Docker Compose deploy path was rebuilt around a self-hosted runner and a process-managed runtime (PM2). The change served two goals — making automated deploys actually ship inside a locked-down internal network, and right-sizing the tooling surface to a team where long-term maintainers aren't full-time developers. Trade-off: less build-time flexibility in exchange for operational reliability and onboarding simplicity.
-
-## What I Built
-
-- End-to-end order lifecycle workflows for creating and editing orders, confirming line items with dates, deploying and returning items, and maintaining synchronized order summaries.
-- Admin and account security features including role changes, activation and deactivation controls, self-service password change, and admin password reset flows with safety constraints.
-- CI/CD with a self-hosted GitHub Actions runner and PM2-based deploys, landing a fully automated, health-checked rollout pipeline.
-- Scheduled backups covering database dumps, uploaded images, and environment snapshots with retention.
-
-## Optional Context
-
-This project operates in a constrained internal environment where reliability and auditability matter more than feature novelty. The architecture favors explicit state transitions and reversible operational workflows so inventory records stay trustworthy during day-to-day procurement and deployment activity.

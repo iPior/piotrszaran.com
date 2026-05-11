@@ -15,6 +15,14 @@ hidden: false
 
 This repo is the second full rebuild of my portfolio, rewritten as a content-first Astro site with MDX files stored directly in the codebase. I replaced a heavier Next.js + CMS setup with a static architecture that is faster to ship, easier to maintain, and better aligned with the actual needs of the site: publishing projects, blog posts, and a small amount of client-side interactivity.
 
+This rebuild was driven by scope discipline as much as technology preference. The previous stack was more dynamic than the site needed, so this version intentionally optimizes for low operational overhead, fast builds, and content living directly alongside the code that renders it.
+
+## What I Built
+
+- The Astro site structure for the homepage, projects index, blog index, RSS output, and dynamic detail pages for both projects and blog posts.
+- The MDX content model, typed schemas, and rendering flow that powers related project/blog linking without a CMS or database.
+- The small Preact-based project filtering interface and the shared layout/component system that keeps the site polished while remaining mostly static.
+
 ## How It Works
 
 - Projects and blog posts are authored as MDX content collections, with Astro validating frontmatter through Zod schemas before build output is generated.
@@ -26,13 +34,3 @@ This repo is the second full rebuild of my portfolio, rewritten as a content-fir
 - **Typed content collections**: Astro content collections with Zod schemas validate project and blog frontmatter at build time, which keeps entries consistent and catches content errors before deployment.
 - **Static-first architecture with one island**: The site renders almost entirely as static pages, with Preact used only for the category-based project filter so interactivity stays targeted instead of becoming a client-rendered dependency everywhere.
 - **MDX-driven publishing workflow**: New projects and blog posts are added as files in the repo, which keeps content version-controlled, editor-friendly, and easy to connect through shared fields like `blogSlug` and `projectSlug`.
-
-## What I Built
-
-- The Astro site structure for the homepage, projects index, blog index, RSS output, and dynamic detail pages for both projects and blog posts.
-- The MDX content model, typed schemas, and rendering flow that powers related project/blog linking without a CMS or database.
-- The small Preact-based project filtering interface and the shared layout/component system that keeps the site polished while remaining mostly static.
-
-## Optional Context
-
-This rebuild was driven by scope discipline as much as technology preference. The previous stack was more dynamic than the site needed, so this version intentionally optimizes for low operational overhead, fast builds, and content living directly alongside the code that renders it.

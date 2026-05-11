@@ -166,7 +166,7 @@ export default function ShieldBadges({
                 : undefined
             }
             alt={`${tag} badge`}
-            class="relative z-[60] h-5"
+            class="relative z-60 h-5"
             loading="lazy"
             decoding="async"
           />

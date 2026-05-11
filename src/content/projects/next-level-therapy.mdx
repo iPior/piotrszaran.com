@@ -12,7 +12,13 @@ hidden: false
 
 ## Overview
 
-This is a production website for a Mississauga clinic offering chiropractic care, registered massage therapy, and orthotics. I handled the redesign and implementation end to end: the Next.js app structure, UI, booking experience, SEO foundation, and the integration layer for reviews and inquiries.
+This is a production website for a Mississauga clinic offering chiropractic care, registered massage therapy, and orthotics. I handled the redesign and implementation end to end: the Next.js app structure, UI, booking experience, SEO, and the integration layer for reviews and inquiries.
+
+## What I Built
+
+- The full frontend build, including the homepage, practitioner pages, service pages, contact page, and join-the-team/rental flow.
+- The booking system UX, including the modal state flow, service catalogs, and Setmore/Square integration points.
+- The supporting backend layer for reviews, contact submissions, rental inquiries, and SEO infrastructure.
 
 ## How It Works
 
@@ -22,16 +28,6 @@ This is a production website for a Mississauga clinic offering chiropractic care
 
 ## Technical Highlights
 
+- **Squarespace migration to a code-owned stack:** Rebuilt the site outside of Squarespace to reduce recurring platform costs while giving the client more control over performance, layout, SEO structure, and future extensibility.
+- **AI-assisted design exploration with Anthropic Skills:** After the core layout and site content were already in place, I used Anthropic’s frontend design skill to generate 10 distinct visual design directions. This gave the client a much broader range of design options than a single mockup pass.
 - **Multi-provider booking orchestration**: The site presents one booking entry point while branching into different third-party schedulers by service type, keeping the UX consistent without forcing the clinic into a single platform.
-- **SEO-first App Router implementation**: Route-level metadata, canonical URLs, structured local-business schema, and generated crawler assets were built into the app rather than bolted on afterward.
-- **Lean integration layer**: Google reviews are normalized behind a Next.js API route and cached in the browser for seven days, while contact and rental forms validate input, escape HTML, and send branded emails through Resend.
-
-## What I Built
-
-- The full frontend build, including the homepage, practitioner pages, service pages, contact page, and join-the-team/rental flow.
-- The booking system UX, including the modal state flow, service catalogs, and Setmore/Square integration points.
-- The supporting backend layer for reviews, contact submissions, rental inquiries, and SEO infrastructure.
-
-## Optional Context
-
-The main constraint was unifying multiple practitioners and external tools into a single branded experience. The implementation had to feel simple on mobile while still preserving separate booking logic, pricing, and lead-capture workflows behind the scenes.

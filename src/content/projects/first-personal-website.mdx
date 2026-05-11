@@ -15,6 +15,12 @@ hidden: false
 
 This project is a custom portfolio platform for a developer and DJ, combining a marketing site, blog, project showcase, freelance case studies, and music/booking pages in one codebase. I owned the full build: the Next.js frontend, Payload CMS setup, content models, media handling, contact workflow, and cache-refresh logic that keeps published content current without rebuilding everything.
 
+## What I Built
+
+- A responsive multi-page frontend for portfolio, blog, and music/booking flows with reusable cards, section wrappers, theme switching, and motion-based reveals.
+- The Payload CMS schema and admin-backed content system powering all dynamic sections.
+- A validated contact workflow using React Hook Form, Zod, a server action, and Payload/Resend email delivery.
+
 ## How It Works
 
 - The public site is built in Next.js App Router with server-rendered sections that query Payload collections directly for projects, freelance work, blog posts, and mixes.
@@ -27,8 +33,3 @@ This project is a custom portfolio platform for a developer and DJ, combining a 
 - **On-demand revalidation hooks**: Collection `afterChange` / `afterDelete` hooks call a protected revalidation endpoint so homepage, blog index, and post detail pages refresh immediately when content changes.
 - **Editorial and media pipeline**: I modeled separate collections for blog, projects, freelance work, mixes, users, and media, with generated image sizes, focal-point support, typed queries, and rich-text content rendering.
 
-## What I Built
-
-- A responsive multi-page frontend for portfolio, blog, and music/booking flows with reusable cards, section wrappers, theme switching, and motion-based reveals.
-- The Payload CMS schema and admin-backed content system powering all dynamic sections.
-- A validated contact workflow using React Hook Form, Zod, a server action, and Payload/Resend email delivery.
