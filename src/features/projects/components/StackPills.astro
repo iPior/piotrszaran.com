@@ -47,7 +47,6 @@ const SIMPLE_ICON_MAP: Record<string, string> = {
   MariaDB: "mariadb",
   Resend: "resend",
   "Claude Code": "anthropic",
-  XAML: "xaml",
   Sanity: "sanity",
   Prisma: "prisma",
   Sqlite: "sqlite",
@@ -58,6 +57,11 @@ const SIMPLE_ICON_MAP: Record<string, string> = {
 
 const CUSTOM_ICON_MAP: Record<string, string> = {
   i18n: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e2e8f0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='8'/%3E%3Cpath d='M4 12h16'/%3E%3Cpath d='M12 4a12 12 0 0 1 0 16'/%3E%3Cpath d='M12 4a12 12 0 0 0 0 16'/%3E%3C/svg%3E",
+  XAML: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ctext x='12' y='14' fill='%23ffffff' font-family='Arial, Helvetica, sans-serif' font-size='6.5' font-weight='700' text-anchor='middle'%3EXAML%3C/text%3E%3C/svg%3E",
+};
+
+const ICON_BG_CLASS_MAP: Record<string, string> = {
+  XAML: "bg-[#0c54c2]",
 };
 
 const THEME_SIMPLE_ICON_COLOR_PLACEHOLDER = "__THEME_SIMPLE_ICON_COLOR__";
@@ -68,7 +72,6 @@ const THEME_AWARE_SIMPLE_ICON_IDS = new Set([
   "shadcnui",
   "authjs",
   "resend",
-  "xaml",
   "prisma",
   "drizzle",
   "pm2",
@@ -122,6 +125,7 @@ const getIconSources = (
     stack.map((tech) => {
       const { primary, fallback, fallbackTemplate } = getIconSources(tech);
       const monogram = getMonogram(tech);
+      const iconBgClass = ICON_BG_CLASS_MAP[tech] ?? "bg-site-surface-hover";
 
       return (
         <div>
@@ -137,7 +141,10 @@ const getIconSources = (
                   alt={`${tech} logo`}
                   title={tech}
                   loading="lazy"
-                  class="relative z-60 h-10 w-10 object-contain sm:h-12 sm:w-12 rounded-xl border-2 border-site-border bg-site-surface-hover"
+                  class:list={[
+                    "relative z-60 h-10 w-10 object-contain sm:h-12 sm:w-12 rounded-xl border-2 border-site-border",
+                    iconBgClass,
+                  ]}
                   onerror="if (this.dataset.fallbackSrc && this.src !== this.dataset.fallbackSrc) { this.src = this.dataset.fallbackSrc; return; } this.style.display='none'; const fallback = this.parentElement && this.parentElement.querySelector('[data-icon-fallback]'); if (fallback) fallback.style.display='flex';"
                 />
               ) : null}
