@@ -38,6 +38,8 @@ const SKILL_ICON_MAP: Record<string, string> = {
 const SIMPLE_ICON_MAP: Record<string, string> = {
   MDX: "mdx",
   PM2: "pm2",
+  Nginx: "nginx",
+  Tailscale: "tailscale",
   Render: "render",
   Netlify: "netlify",
   "Anthropic API": "anthropic",
@@ -75,6 +77,7 @@ const THEME_AWARE_SIMPLE_ICON_IDS = new Set([
   "prisma",
   "drizzle",
   "pm2",
+  "tailscale",
 ]);
 
 const getMonogram = (tech: string): string => {

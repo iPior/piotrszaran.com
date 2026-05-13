@@ -3,7 +3,7 @@ title: "Self-Hosted Media Server on a Raspberry Pi"
 date: 2025-12-14
 category: "personal"
 description: "What began as a cost-saving hobby turned into one of my most practical and rewarding infrastructure projects."
-stack: ["Raspberry Pi", "Docker", "Cloudflare"]
+stack: ["Raspberry Pi", "Docker", "Cloudflare", "Nginx", "Tailscale"]
 blogSlug: "jellyfin"
 featured: true
 hidden: false
@@ -26,6 +26,7 @@ This was intentionally a first-version infrastructure setup rather than a final 
 - Jellyfin handles shows and movies, while Navidrome serves my DJ mixes; supporting services like the Arr stack and Portainer help manage media workflows and container operations.
 - The system runs as a Docker-based stack on a Raspberry Pi, with Nginx routing services behind clean subdomains instead of raw ports or local IP addresses.
 - Cloudflare Tunnel exposes selected services publicly through my own domain, which made the setup easier to share with family and friends without a more complicated networking setup.
+- Tailscale provides a private mesh VPN between my devices, so I can securely access and administer the stack remotely without opening additional ports on my home network.
 
 ## Technical Highlights
 
