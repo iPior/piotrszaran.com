@@ -13,7 +13,9 @@ hidden: false
 
 ## Overview
 
-This project is a custom portfolio platform for a developer and DJ, combining a marketing site, blog, project showcase, freelance case studies, and music/booking pages in one codebase. I owned the full build: the Next.js frontend, Payload CMS setup, content models, media handling, contact workflow, and cache-refresh logic that keeps published content current without rebuilding everything.
+This was my first website that felt truly public and persistent, not a short-lived test project. I built it as a personal site about who I am and what I am building, then shaped the structure around what I wanted to share: projects, blog posts, and music.
+
+The design direction came from a Tailwind site style I liked, which I adapted into my own version. I added a projects section to showcase my work, then introduced blogs because many of my early projects were simple and I wanted a space to explain my thinking, decisions, and growth behind the code. I also added a music section to keep the site more personal and fun.
 
 ## What I Built
 
@@ -29,7 +31,7 @@ This project is a custom portfolio platform for a developer and DJ, combining a 
 
 ## Technical Highlights
 
-- **Integrated CMS + frontend architecture**: Payload is embedded into the Next.js app rather than split into a separate service, which keeps auth, admin, APIs, and public rendering in one deployment.
-- **On-demand revalidation hooks**: Collection `afterChange` / `afterDelete` hooks call a protected revalidation endpoint so homepage, blog index, and post detail pages refresh immediately when content changes.
-- **Editorial and media pipeline**: I modeled separate collections for blog, projects, freelance work, mixes, users, and media, with generated image sizes, focal-point support, typed queries, and rich-text content rendering.
-
+- **Single deployment with embedded CMS**: I chose Payload over a separate-hosted CMS so the admin, content APIs, and frontend could ship together in one deployment instead of managing multiple services.
+- **Next.js architecture and component-first React patterns**: I used this project to practice App Router structure, server/client boundaries, and reusable React components so new sections could be added without rewriting large parts of the UI.
+- **Tailwind-driven visual direction**: The UI style started from Tailwind patterns I liked and was adapted into reusable layouts/components to keep the site cohesive while still feeling personal.
+- **Blog pipeline with Lexical rendering**: Posts are managed in Payload and rendered through a custom Lexical rich-text flow, which let me publish project writeups with more depth than short portfolio summaries.

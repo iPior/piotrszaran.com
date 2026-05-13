@@ -12,7 +12,7 @@ hidden: false
 
 ## Overview
 
-Council for Support of Polish Studies is a bilingual website and content workflow for the University of Toronto group that funds Polish language, literature, and community programming. I built the public-facing Next.js application and the connected Sanity Studio setup that lets staff manage professors, courses, events, news, donors, and gallery content without code changes.
+Council for Support of Polish Studies is a bilingual website and content workflow for the University of Toronto backed group that funds Polish language, literature, and community programming. I built the public-facing Next.js application and the connected Sanity Studio setup that lets staff manage professors, courses, events, news, donors, and gallery content without code changes.
 
 ## What I Built
 
@@ -28,6 +28,7 @@ Council for Support of Polish Studies is a bilingual website and content workflo
 
 ## Technical Highlights
 
-- **Bilingual routing and SEO**: I mapped localized pathnames for both languages and tied them into canonical metadata and sitemap generation, which keeps English and Polish pages crawlable without duplicate-content issues.
-- **CMS-driven academic content model**: Professor pages resolve related course records from Sanity at request time, so faculty profiles and course offerings stay synchronized instead of being duplicated across the codebase.
-- **Lean architecture**: The site reads directly from Sanity's hosted dataset and uses server-side fetches for dynamic content, avoiding a custom admin backend while still giving editors a structured publishing workflow.
+- **Internationalization with localized routing**: I implemented English and Polish route variants with `next-intl`, including localized slugs and navigation flows so users can move through the full site experience in either language.
+- **SEO architecture for multilingual content**: Canonical URLs, `hreflang` alternates, metadata helpers, and sitemap generation are centralized so localized pages remain indexable and avoid duplicate-content conflicts.
+- **CMS-driven publishing workflow**: Sanity Studio schemas and desk structure let non-technical editors manage professors, courses, events, news, donors, and galleries through structured content models instead of code edits.
+- **Responsive design across content-heavy pages**: Page templates and listing/detail layouts were built mobile-first so long-form academic content, image galleries, and navigation remain readable and usable from phone to desktop.
