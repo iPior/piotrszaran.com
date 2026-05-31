@@ -1,0 +1,37 @@
+---
+title: "OptiPlex Home Server"
+date: 2026-05-29
+category: "personal"
+description: "Converting a decade-old Dell OptiPlex into a headless home server for self-hosting on hardware I already owned."
+stack: ["Debian", "Caddy", "xcaddy", "Cloudflare", "Tailscale", "Docker", "Portainer", "Uptime Kuma", "UFW"]
+blogSlug: "optiplex-home-server"
+featured: false
+hidden: false
+---
+
+## Overview
+
+This project converted a decade-old Dell OptiPlex 7010 into a headless home server for self-hosting personal services on hardware I already owned. The work spans the base OS install, a reverse proxy with automated TLS, a split LAN/remote network access structure, container management, monitoring, and the security hardening needed to run it safely. Rather than buying newer hardware with more RAM and an NVMe drive, I repurposed a free machine that already had more storage and power than the Raspberry Pi running as my media server.
+
+The point isn't convenience — Vercel already makes hosting easy. It's owning my own data and getting hands-on with the parts managed platforms abstract away: self-hosting, Docker, reverse proxies, TLS, and CI/CD.
+
+## What I Built
+
+- A headless Debian install administered entirely over SSH, kept GUI-less and lightweight to suit the older hardware.
+- Caddy configured as a reverse proxy fronting internal services on custom subdomains, with automated TLS certificate issuance and renewal.
+- A split-access DNS structure using separate LAN and Tailscale subdomains, so services route predictably whether I'm on the home network or accessing remotely.
+- Tailscale for secure access to the server from outside the home network, without exposing it to the public internet.
+- A container and monitoring layer — Portainer to manage Docker and Uptime Kuma to track service availability — ready for the applications I plan to host.
+- Server hardening: a UFW firewall scoped to trusted LAN and Tailscale interfaces exposing only required ports, plus SSH key-only authentication with password and root login disabled.
+
+## How It Works
+
+- When I hit a service subdomain from a device on my LAN or over Tailscale, the request resolves through the split DNS structure to the OptiPlex and lands on Caddy.
+- Caddy reverse-proxies the request to the correct internal service over trusted HTTPS, using certificates it issues and renews automatically — without ever opening HTTP/HTTPS ports to the public internet.
+- Underneath, Caddy obtains those certificates through Cloudflare's DNS-01 challenge (using the Cloudflare DNS module compiled in via `xcaddy`, since Caddy ships lean by default), while Tailscale handles encrypted remote access and UFW plus SSH key-only auth lock down the box.
+
+## Technical Highlights
+
+- **Automated trusted TLS without public exposure**: I integrated Cloudflare's DNS-01 validation with Caddy to issue and renew real certificates for LAN- and Tailscale-only services, so everything runs on trusted HTTPS with no ports opened to the internet.
+- **Split-access DNS routing**: Separate LAN and Tailscale subdomains give the same services predictable routing whether I'm home or remote — the piece that took the most troubleshooting across DNS, TLS issuance, and reverse proxy config to get right.
+- **Hardened by default**: Least-privilege access throughout — firewall limited to trusted interfaces, SSH locked to keys only, root and password login disabled — the baseline anyone self-hosting should be running.

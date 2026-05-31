@@ -1,0 +1,51 @@
+---
+title: "You Can't Beat a Free PC"
+date: 2026-05-29
+description: "Converting a decade-old Dell OptiPlex into a headless home server for self-hosting on hardware I already owned."
+projectSlug: "optiplex-home-server"
+tags: ["debian", "caddy", "tailscale", "docker", "self-hosting", "homelab"]
+coverImage: "../../assets/images/blog/optiplex-home-server.png"
+draft: false
+hidden: true
+---
+
+### Overview
+
+This project turned an old Dell OptiPlex 7010 into a headless home server for self-hosting my own services. It runs Debian with no desktop environment, sits behind Caddy as a reverse proxy with automated HTTPS, and is reachable both on my LAN and remotely through Tailscale — without ever opening a port to the public internet. It's purely a personal home-lab box, but it's become the place where I get to actually run the infrastructure that hosted platforms usually hide from you.
+
+### Goals of the Project
+
+- Take some load off my Raspberry Pi. It's been a great media server, but it was full, and I wanted room to self-host other things without fighting it for resources.
+- Own my own data. Platforms like Vercel make hosting trivial, but they abstract all of it away. I wanted to be on the other side of that abstraction for once.
+- Get hands-on with the real stack of self-hosting: Docker, reverse proxies, TLS, firewalls, and eventually CI/CD.
+- Do it for free. I was tempted by something newer with an NVMe drive and DDR4, but the OptiPlex was sitting right there with 8GB of RAM and a 256GB SSD — already more than the Pi. You can't beat a free PC.
+
+### Technologies Used
+
+- **Debian:** Installed GUI-less and administered entirely over SSH to keep it light on the older hardware.
+- **Caddy:** A reverse proxy fronting my internal services on custom subdomains, with automatic certificate issuance and renewal.
+- **xcaddy:** The build tool used to compile Caddy with the Cloudflare DNS module, which isn't included in the default binary.
+- **Cloudflare DNS:** My custom domain's DNS, used for DNS-01 challenge validation so Caddy can issue trusted certificates without exposing any ports.
+- **Tailscale:** A mesh VPN that lets me reach the server from outside my home network securely.
+- **Docker + Portainer:** The container runtime plus a UI to manage the containers I'll be hosting.
+- **Uptime Kuma:** Monitoring to track availability of the services once they're live.
+- **UFW:** The firewall, scoped to trusted LAN and Tailscale interfaces and exposing only the ports I actually need.
+
+### Backstory
+
+The whole thing started because my Raspberry Pi was full. It's been a solid little media server, but the moment I wanted to self-host anything else, there was no room left. I started looking at buying something newer — an NVMe drive, DDR4, more RAM — and then remembered I had an old OptiPlex 7010 from around 2012 just sitting there. 8GB of RAM and a 256GB SSD isn't much, but it was more than the Pi had, and it was free. That was an easy call.
+
+I installed Debian without a desktop environment and set everything up over SSH to keep it lightweight. Caddy went on as my web server, Tailscale so I could reach it from outside the house, and Portainer plus Uptime Kuma so I'd be ready for the containers I plan to move over.
+
+The part that actually fought me was getting local HTTPS working with my Cloudflare domain. I wanted trusted certificates on my internal services without opening anything to the public internet, which means using a DNS-01 challenge through Cloudflare. I kept hitting a wall, and for a while I couldn't even reach my own sites. What I didn't know going in is that Caddy ships lean — it doesn't bundle DNS provider modules. You have to compile the Cloudflare DNS module into Caddy yourself using a tool called xcaddy. I only got there through trial, error, and a lot of reading. Once that clicked, everything fell into place and I could finally pull up my services over HTTPS.
+
+### What I Learned
+
+- The big one was learning what should and shouldn't be exposed to the internet — and how to keep it safe when it is. This was my main concern the whole way through, because eventually I want to let people connect to apps running on my home network, and there will be bad apples. I'd rather design around that from the start than bolt it on later.
+- Caddy is intentionally minimal. DNS provider integrations aren't in the default build; you compile them in with xcaddy. I learned that the hard way, but it's the kind of thing I won't forget now.
+- Splitting access into separate LAN and Tailscale subdomains keeps routing predictable whether I'm home or remote, instead of trying to make one address do both jobs.
+
+### What I Would Do Differently
+
+- Honestly, not much — I'm happy with how it turned out. The one thing I'd change is documenting the setup as I go. Right now a lot of it lives in my head, and if I ever move to another device I'd be re-deriving the same trial-and-error.
+- Longer term, I'd like to figure out a way to standardize the whole provisioning process so spinning up a new box isn't a from-scratch effort every time.
