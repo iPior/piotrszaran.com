@@ -21,6 +21,7 @@ The point isn't convenience — Vercel already makes hosting easy. It's owning m
 - Caddy configured as a reverse proxy fronting internal services on custom subdomains, with automated TLS certificate issuance and renewal.
 - A split-access DNS structure using separate LAN and Tailscale subdomains, so services route predictably whether I'm on the home network or accessing remotely.
 - Tailscale for secure access to the server from outside the home network, without exposing it to the public internet.
+- A shared PostgreSQL instance with pgAdmin and Adminer for database management, so the apps I plan to host can use one central database rather than each bundling its own SQLite file.
 - A container and monitoring layer — Portainer to manage Docker and Uptime Kuma to track service availability — ready for the applications I plan to host.
 - Server hardening: a UFW firewall scoped to trusted LAN and Tailscale interfaces exposing only required ports, plus SSH key-only authentication with password and root login disabled.
 
