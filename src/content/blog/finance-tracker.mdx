@@ -1,0 +1,69 @@
+---
+title: "Keeping Things In Check"
+date: 2026-07-02
+description: "FinLens is a self-hosted personal finance tracker I built as a better alternative to managing household finances in Excel."
+projectSlug: "finance-tracker"
+tags: ["react", "typescript", "tailwind", "hono", "postgres", "mcp"]
+draft: yes
+hidden: yes
+---
+
+> **Source Code:** <https://github.com/iPior/finance-tracker>
+
+### Overview
+
+FinLens is a self-hosted personal finance tracker for two users. It gives me a nicer, more focused way to track expenses, categories, statements, and household spending without relying on a spreadsheet forever.
+
+The project started as something practical: I wanted a better alternative to storing my financial data in Excel. My fiancee and I are getting married soon, and shortly after that we will be moving in together. I wanted our finances to be in check before that became a bigger part of daily life.
+
+### Goals of the Project
+
+- Build a finance tracker that felt better to use than Excel.
+- Keep the app private and self-hosted, since the data is personal.
+- Make the UI simple enough that tracking money does not feel like a chore.
+- Support two users, because this is meant for our future household finances, not just my own.
+- Keep categorization accurate, even if that meant doing more of it manually.
+- Add an MCP server so the finance data can eventually connect to a private chatbot web app on my home network.
+
+### Technologies Used
+
+- **React 19:** Used for the web app and the main finance tracking interface.
+- **Vite:** Used as the frontend build tool.
+- **Tailwind CSS v4:** Used for styling the application.
+- **TypeScript:** Used across the workspace to keep the app easier to maintain as it grows.
+- **Hono:** Used for the API backend.
+- **Drizzle:** Used for the database schema and queries.
+- **Postgres:** Used as the main database for finance data.
+- **Better Auth:** Used for authentication.
+- **MCP SDK:** Used to build the read-only MCP server for future conversational finance queries.
+
+### Backstory
+
+For a while, my finance tracking lived in Excel. It worked, technically, but it never felt like the right long-term solution. Spreadsheets are flexible, but they also put a lot of the experience on you. You have to build the structure, maintain it, keep it clean, and then still look at something that feels more like accounting homework than a tool you actually want to use.
+
+With my fiancee and I getting married soon, and moving in together shortly after, finances started to feel like something I wanted to be more intentional about. Not in a dramatic way, just in the regular adult-life way where groceries, bills, shared expenses, and long-term planning all start becoming part of the same conversation.
+
+So I built FinLens as a better home for that data. I wanted something private, self-hosted, and designed around how we would actually use it. A nice UI mattered here because if the app feels clunky, I know I will eventually stop using it and drift back into the spreadsheet. The whole point was to make the responsible thing feel easier to keep up with.
+
+One of the bigger ideas I had early on was using an LLM to categorize expenses automatically. It sounded useful at first. Upload a statement, let the model read the merchants, and have it sort everything into categories for me.
+
+But the more I thought about it, the less I trusted that approach for this kind of data. A Walmart payment will not tell me if it was food, toothpaste, cleaning supplies, or some random thing I picked up while I was there. I would personally know that, but an LLM would mostly be guessing. For finance tracking, a confident guess is not really good enough.
+
+That pushed me toward manual categorization instead. It is less flashy, but it is 100% accurate because I am the one deciding what each transaction actually was. That tradeoff felt worth it. I would rather spend a little more time categorizing expenses than build a tracker that looks automated but quietly gets the details wrong.
+
+The MCP server came from a different part of the same idea. I already self-host private tools on my network, and I eventually want to connect this finance data to a chatbot-style web app. Not to expose it publicly, and not to make the app depend on AI for everything, but to let me ask questions conversationally later: how spending changed, what categories are trending, where money went in a given month. Building the MCP server now gives the project a path toward that without forcing the whole app to become a chatbot.
+
+### What I Learned
+
+- I learned that finance tools need accuracy more than cleverness. Automatic categorization sounded nice, but manual categorization made more sense once I thought about real transactions.
+- I got a better feel for building a project as a private household tool instead of a public product. The priorities are different: privacy, trust, and usefulness matter more than making it impressive from the outside.
+- I learned more about structuring a TypeScript monorepo, with separate packages for the web app, API, shared contracts, database logic, and MCP server.
+- I got more comfortable designing around future integrations. The MCP server is not the main app, but it gives the data a clean way to become useful somewhere else later.
+- I was reminded that a good UI is not just decoration. For something like finance tracking, the interface is part of whether the habit sticks.
+
+### What I Would Do Differently
+
+- I would decide earlier that manual categorization was the right choice. The LLM idea was tempting, but for this project it added uncertainty where I actually wanted confidence.
+- I would probably separate the "finance tracker" and "future chatbot" ideas in my head sooner. They are connected, but the core app still needs to stand on its own as a reliable finance tool.
+- I would spend even more time thinking about the boring workflows: correcting categories, reviewing old transactions, and keeping statement imports clean. Those details are not exciting, but they are what make the app useful long-term.
+- I would keep asking whether each feature helps us actually manage our household finances better. Since this is for me and my fiancee, the goal is not to build every finance feature possible. The goal is to make something we will actually trust and keep using.
