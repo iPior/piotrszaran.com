@@ -1,20 +1,21 @@
 ---
 title: "Keeping Things In Check"
 date: 2026-07-02
-description: "FinLens is a self-hosted personal finance tracker I built as a better alternative to managing household finances in Excel."
+description: "FinLens is a deployed, self-hosted personal finance tracker I built as a better alternative to managing household finances in Excel. This post covers the decisions and infrastructure changes that turned it into part of my wider Pior Labs platform."
 projectSlug: "finance-tracker"
-tags: ["react", "typescript", "tailwind", "hono", "postgres", "mcp"]
-draft: yes
-hidden: yes
+tags: ["react", "typescript", "postgres", "oauth", "mcp", "self-hosting"]
+coverImage: "../../assets/images/blog/finance-tracker.png"
+draft: false
+hidden: false
 ---
 
-> **Source Code:** <https://github.com/iPior/finance-tracker>
+> **Source Code:** [GitHub - pior-labs/app-finance-tracker](https://github.com/pior-labs/app-finance-tracker)
 
 ### Overview
 
-FinLens is a self-hosted personal finance tracker for two users. It gives me a nicer, more focused way to track expenses, categories, statements, and household spending without relying on a spreadsheet forever.
+FinLens is a deployed, self-hosted personal finance tracker built for household use. It gives me a nicer, more focused way to upload statements, review transactions, manage categories, and understand our spending without relying on a spreadsheet forever.
 
-The project started as something practical: I wanted a better alternative to storing my financial data in Excel. My fiancee and I are getting married soon, and shortly after that we will be moving in together. I wanted our finances to be in check before that became a bigger part of daily life.
+The project started as something practical: I wanted a better alternative to storing my financial data in Excel. My fiancee and I are getting married soon, and shortly after that we will be moving in together. I wanted our finances to be in check before that became a bigger part of daily life. Since then, the project has grown into a React application, a Postgres-backed API, and a private MCP server running as part of my wider Pior Labs platform.
 
 ### Goals of the Project
 
@@ -23,19 +24,20 @@ The project started as something practical: I wanted a better alternative to sto
 - Make the UI simple enough that tracking money does not feel like a chore.
 - Support two users, because this is meant for our future household finances, not just my own.
 - Keep categorization accurate, even if that meant doing more of it manually.
-- Add an MCP server so the finance data can eventually connect to a private chatbot web app on my home network.
+- Add a private, read-only MCP server so I can ask conversational questions about the same finance data without turning the main application into a chatbot.
+- Deploy the application as a dependable part of my self-hosted Pior Labs platform, with centralized authentication and private access from my local network and Tailscale.
 
 ### Technologies Used
 
 - **React 19:** Used for the web app and the main finance tracking interface.
 - **Vite:** Used as the frontend build tool.
-- **Tailwind CSS v4:** Used for styling the application.
-- **TypeScript:** Used across the workspace to keep the app easier to maintain as it grows.
+- **Tailwind CSS v4 and the Pior Labs design system:** Used to build the responsive interface while keeping it consistent with my other self-hosted applications.
+- **TypeScript and pnpm:** Used across the monorepo for the web app, API, shared contracts, database package, and MCP server.
 - **Hono:** Used for the API backend.
-- **Drizzle:** Used for the database schema and queries.
-- **Postgres:** Used as the main database for finance data.
-- **Better Auth:** Used for authentication.
-- **MCP SDK:** Used to build the read-only MCP server for future conversational finance queries.
+- **Drizzle and PostgreSQL:** Used for the shared schema, migrations, transaction data, and bounded finance queries.
+- **Better Auth and Pior Labs Auth:** Used for local session handling and centralized OAuth 2.1/OpenID Connect sign-in.
+- **MCP TypeScript SDK:** Used to expose seven read-only finance tools with validated inputs and structured outputs over stdio.
+- **Docker, Caddy, and Tailscale:** Used to run the services, route HTTPS traffic, and keep remote access private.
 
 ### Backstory
 
@@ -51,19 +53,29 @@ But the more I thought about it, the less I trusted that approach for this kind 
 
 That pushed me toward manual categorization instead. It is less flashy, but it is 100% accurate because I am the one deciding what each transaction actually was. That tradeoff felt worth it. I would rather spend a little more time categorizing expenses than build a tracker that looks automated but quietly gets the details wrong.
 
-The MCP server came from a different part of the same idea. I already self-host private tools on my network, and I eventually want to connect this finance data to a chatbot-style web app. Not to expose it publicly, and not to make the app depend on AI for everything, but to let me ask questions conversationally later: how spending changed, what categories are trending, where money went in a given month. Building the MCP server now gives the project a path toward that without forcing the whole app to become a chatbot.
+The next frustration was the database. As FinLens became a real application instead of an experiment, I had to rethink how the data should be stored and where the database should run. That led me to run PostgreSQL in its own container instead of treating persistence as something local to the application.
+
+Solving the production database exposed another gap: I did not have a proper development environment where I could test database changes safely. I had a deployed application and real household data, but no isolated place to verify migrations, imports, or API changes before they reached that setup. I had to stop and build that environment so local development had its own Postgres database and configuration.
+
+That work eventually became part of a larger platform change. I moved FinLens onto the shared Pior Labs foundation, connected it to centralized OAuth/OpenID Connect authentication, adopted the shared design system, and routed it through the platform's Caddy edge. The same hostname works on my local network and over Tailscale, while the finance application and its data remain private.
+
+The MCP server came from a different part of the same idea. I wanted to ask questions conversationally—how spending changed, which categories were trending, or where money went in a given month—without making the finance tracker itself depend on AI for everything. The finished server now exposes seven read-only tools over stdio, shares the same Drizzle schema as the API, and publishes no network port.
 
 ### What I Learned
 
 - I learned that finance tools need accuracy more than cleverness. Automatic categorization sounded nice, but manual categorization made more sense once I thought about real transactions.
 - I got a better feel for building a project as a private household tool instead of a public product. The priorities are different: privacy, trust, and usefulness matter more than making it impressive from the outside.
+- I learned that choosing PostgreSQL was only part of the database decision. I also had to decide how it would run, how services would reach it, how migrations would be applied, and how real data would stay separate from development work.
+- I learned that a production environment without a matching development environment leaves too much room for guesswork. I needed a safe place to test database and application changes before they touched the deployed setup.
 - I learned more about structuring a TypeScript monorepo, with separate packages for the web app, API, shared contracts, database logic, and MCP server.
-- I got more comfortable designing around future integrations. The MCP server is not the main app, but it gives the data a clean way to become useful somewhere else later.
+- I got more comfortable integrating one application into a wider self-hosted platform, including shared authentication, Docker networking, Caddy routing, and private Tailscale access.
 - I was reminded that a good UI is not just decoration. For something like finance tracking, the interface is part of whether the habit sticks.
 
 ### What I Would Do Differently
 
 - I would decide earlier that manual categorization was the right choice. The LLM idea was tempting, but for this project it added uncertainty where I actually wanted confidence.
+- I would design the database and deployment setup earlier instead of waiting until the application had grown enough to force the decision.
+- I would create the development environment alongside the production setup. Testing migrations and API changes should never depend on the database holding real household data.
 - I would probably separate the "finance tracker" and "future chatbot" ideas in my head sooner. They are connected, but the core app still needs to stand on its own as a reliable finance tool.
 - I would spend even more time thinking about the boring workflows: correcting categories, reviewing old transactions, and keeping statement imports clean. Those details are not exciting, but they are what make the app useful long-term.
 - I would keep asking whether each feature helps us actually manage our household finances better. Since this is for me and my fiancee, the goal is not to build every finance feature possible. The goal is to make something we will actually trust and keep using.

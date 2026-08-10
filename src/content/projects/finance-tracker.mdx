@@ -1,23 +1,35 @@
+---
+title: "FinLens"
+date: 2026-07-02
+category: "personal"
+description: "A deployed, self-hosted household finance tracker with PDF statement imports, manual transaction review, spending dashboards, central SSO, and a read-only MCP server."
+stack: ["TypeScript", "React 19", "Vite", "Tailwind CSS", "Hono", "PostgreSQL", "Drizzle ORM", "Better Auth", "OAuth 2.1 / OpenID Connect", "MCP", "Docker", "Caddy"]
+githubUrl: "https://github.com/pior-labs/app-finance-tracker"
+blogSlug: "finance-tracker"
+featured: false
+hidden: false
+---
+
 ## Overview
 
-FinLens is a self-hosted personal finance tracker built for two household users. I built it as a private alternative to managing financial data in Excel, with a React dashboard, statement upload flow, manual transaction review, category management, a Postgres-backed API, and a read-only MCP server for future conversational finance queries.
+FinLens is a deployed, self-hosted personal finance tracker built for household use as a private alternative to managing financial data in Excel. It combines a React dashboard, PDF statement imports, manual transaction review, category management, a Postgres-backed API, central Pior Labs authentication, and an internal read-only MCP server for conversational finance queries.
 
 ## What I Built
 
-- I built the React web application for reviewing household finances, including dashboard summaries, monthly filters, spending by category, top merchants, transaction lists, statement history, and empty/error/loading states.
+- I built the React 19 and Vite web application for reviewing household finances, including monthly dashboard summaries, category breakdowns, top merchants, transaction filtering, a review queue, statement history, responsive navigation, and purpose-built empty, error, and loading states.
 - I implemented PDF statement uploads that extract transaction data, persist uploaded files privately, create statement records, and insert transactions into a review queue.
 - I built the manual categorization workflow for transactions, including category creation, editing, favorites, colors, fallback handling, and review status updates.
-- I implemented the Hono API, Better Auth integration, Drizzle schema, and Postgres persistence layer for users, sessions, statements, transactions, and categories.
-- I added a read-only MCP server with finance tools for spending summaries, month comparisons, transaction search, category breakdowns, and merchant-level queries.
+- I implemented the Hono API, Drizzle schema, and PostgreSQL persistence layer, then integrated Better Auth with the central Pior Labs OAuth 2.1/OpenID Connect service while preserving local sessions and linked user records.
+- I built a seven-tool read-only MCP server for spending summaries, month comparisons, transaction listing and search, category breakdowns, top merchants, and merchant-level spending queries, with validated inputs and structured outputs over stdio.
 
 ## How It Works
 
-- Users sign in to a private finance dashboard, upload PDF statements, review extracted transactions, and manually categorize spending so household data stays accurate.
-- The API validates requests, stores uploaded statements, parses transactions, and exposes dashboard, transaction, statement, and category endpoints backed by Drizzle and Postgres.
-- Shared TypeScript packages centralize contracts, date/money helpers, database schema, and finance query logic so the web app, API, and MCP server use the same data model.
+- Users reach the same private hostname over the trusted local network or Tailscale, authenticate through the central Pior Labs identity service, and enter a responsive dashboard built with the shared Pior Labs design system.
+- Statement PDFs pass through the authenticated Hono API, which stores uploads privately, parses transactions into PostgreSQL, and serves the review, categorization, statement, and dashboard workflows used by the React application.
+- The pnpm monorepo centralizes contracts, date and money helpers, the Drizzle schema, and finance queries; Docker runs the web, API, and MCP services, Caddy routes browser traffic, and the MCP server remains internal on stdio with no published network port.
 
 ## Technical Highlights
 
 - **Manual review over guessed categorization**: I intentionally kept categorization human-controlled because merchant names alone are not accurate enough for household finance decisions, especially for mixed purchases like grocery and household items from the same store.
-- **Private finance stack with real data boundaries**: The app keeps personal financial data self-hosted, authenticated, and stored in Postgres, with uploaded statements separated from the public web surface.
-- **MCP-ready finance query layer**: The MCP server exposes structured read-only tools over the same finance queries used by the app, giving the project a path toward a private chatbot interface without exposing the database directly.
+- **Central authentication without losing local history**: Better Auth delegates sign-in to the Pior Labs OAuth 2.1/OpenID Connect service and links verified identities to existing local users so historical finance records remain attached to the same accounts.
+- **Shared data model, seven conversational tools**: The database package gives the API and MCP server one Drizzle schema, while its bounded analytics query layer powers seven read-only MCP tools that return text and structured data over private stdio transport without publishing another service port.
