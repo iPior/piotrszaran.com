@@ -53,6 +53,10 @@ const SIMPLE_ICON_MAP: Record<string, string> = {
   Prisma: "prisma",
   Sqlite: "sqlite",
   Drizzle: "drizzle",
+  Hono: "hono",
+  PostgreSQL: "postgresql",
+  "Better Auth": "betterauth",
+  MCP: "modelcontextprotocol",
   "Discord.js": "discord",
   DigitalOcean: "digitalocean",
 };
@@ -80,6 +84,8 @@ const THEME_AWARE_SIMPLE_ICON_IDS = new Set([
   "drizzle",
   "pm2",
   "tailscale",
+  "betterauth",
+  "modelcontextprotocol",
 ]);
 
 const getMonogram = (tech: string): string => {
