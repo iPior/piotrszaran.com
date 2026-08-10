@@ -1,0 +1,78 @@
+---
+title: "When One App Became a Platform"
+date: 2026-08-09
+description: "Pior Labs is the private, self-hosted platform that grew around my household productivity tools. This is the story of how one finance tracker led to shared authentication, a design system, and a complete deployment foundation."
+projectSlug: "pior-labs"
+tags: ["self-hosting", "docker", "caddy", "postgresql", "oauth", "infrastructure", "llm"]
+coverImage: "../../assets/images/blog/pior-labs.png"
+draft: false
+hidden: true
+---
+
+> **Source Code:** [GitHub - Pior Labs](https://github.com/pior-labs)
+
+### Overview
+
+Pior Labs is a private, self-hosted platform for the productivity tools used by me and my wife. It brings independently deployed applications together through central authentication, a shared design system, common data and networking infrastructure, and one deployment foundation running on my home server.
+
+I never planned to build a platform. I started with a finance tracker, kept finding shared problems that needed solutions, and eventually realized that the collection of repositories had become something much larger and more coherent than the original application.
+
+### Goals of the Project
+
+- Organize the repositories behind my self-hosted productivity tools and give them a clear home.
+- Keep our applications and household data private and under my control.
+- Give every application consistent authentication, design, networking, and deployment patterns.
+- Make each application independently developable and deployable without rebuilding the same foundation every time.
+- Create a platform that can keep growing with new household applications without turning into a public or multi-tenant product.
+- Learn the infrastructure that managed hosting normally hides from me.
+
+### Technologies Used
+
+- **TypeScript, React, Vite, and Hono:** The shared application stack behind the platform's web interfaces and APIs.
+- **Better Auth and OAuth 2.1/OpenID Connect:** Used to provide central SSO for trusted household users and applications.
+- **Pior Labs Design System:** A shared theme and component foundation published as an npm package through GitHub Packages.
+- **PostgreSQL and Drizzle:** Used for application data, schemas, and migrations, with separate databases and restricted roles for each service.
+- **Docker and Docker Compose:** Used to run the applications, shared services, database, and edge infrastructure as containers.
+- **Caddy:** Used both as the platform's HTTPS edge and as the static web server inside application containers.
+- **Tailscale and split-horizon DNS:** Used to keep remote access private while preserving the same application hostnames on my local network and over Tailscale.
+- **GitHub Actions and pnpm:** Used for package publishing, validation, and independent application and platform deployments.
+
+### Backstory
+
+Pior Labs started as a way to organize the repositories for my self-hosted productivity tools. At first, there was only FinLens, my finance tracker. It was one application with a practical purpose, and I was not thinking about microservices, shared packages, or a platform around it.
+
+As FinLens grew, it started exposing problems outside the application itself. If I was going to build more tools, I did not want every one of them to invent its own login system. That led me to build a standalone SSO service with OAuth 2.1 and OpenID Connect. Once multiple applications shared authentication, I wanted them to look and behave consistently too, so the themes and common UI work became a design-system package published through GitHub Packages.
+
+Then I had enough repositories that organizing them under an account no longer made sense. I created the Pior Labs organization to give everything a clearer structure. That decision spiraled into the repository model I have today: applications, services, packages, public platform documentation, a reusable application template, and a private deployment repository.
+
+The deployment repository was easily the hardest part. I was new to infrastructure, and there were enough connected pieces that I started getting lost. The SSO service had to work with the applications. The network had to stay private and secure. PostgreSQL and Caddy had to work as containers alongside the applications that depended on them. DNS, TLS, secrets, health checks, and deployment workflows all had to agree with each other.
+
+There was no single trick that solved it. I broke the work into small chunks and chipped away at it. That became one of the most important lessons from the entire platform: large projects take time, but small steps and consistency will get you where you need to be.
+
+The platform also changed repeatedly as I learned. I would implement something, discover a better way to do it, and then migrate the existing applications. One example was the web-server setup. An LLM introduced Nginx inside the application repositories, which is a common choice for serving static apps, while I was already using Caddy at the platform edge. I did not want two web servers solving parts of the same problem, so I standardized on Caddy at both levels and removed Nginx from the application pattern.
+
+That example also describes how I used LLMs throughout the build. They helped take ideas I had and bring them to life much faster than I could have alone. I could reason through a problem with them, compare approaches, and use them to implement the direction I chose.
+
+But they did not always understand the wider system I had in mind. Sometimes they solved the immediate task by introducing a new service instead of using the platform capability that already existed. I still had to steer the ship, catch those mistakes, and make the technical decisions that kept the repositories coherent. The LLMs enabled me, but they could not decide what Pior Labs should become.
+
+Today, the result is much more functional than I expected when I started. It has deployed applications, a microservice, a published npm package, shared database infrastructure, private networking, and repeatable deployment patterns. I have not had to move it to another server yet, but the platform is documented and automated enough that I am confident I could.
+
+The scope is intentionally small. Pior Labs is for me and my wife, and I do not plan to turn it into a public product. I do plan to keep adding applications and making the platform more useful. Now, instead of starting from nothing each time, every new idea has a foundation waiting for it.
+
+### What I Learned
+
+- I learned how to deploy and connect multiple containers that depend on one another, including application services, central authentication, PostgreSQL, and the Caddy edge.
+- I learned what it takes to introduce a real microservice. Building SSO was not only about creating another API; it also meant working through OAuth clients, callbacks, tokens, sessions, networking, and deployment boundaries.
+- I learned how to turn shared frontend work into a versioned npm package and publish it for multiple repositories to consume.
+- I learned that infrastructure becomes manageable when ownership is clear. Application repositories, shared services, reusable packages, and production deployment each need a defined responsibility.
+- I learned to break a system down when the whole thing starts feeling too large. Taking small steps consistently was more useful than trying to understand and implement the entire platform at once.
+- I learned that LLM-assisted development still requires active technical direction. The implementation can move quickly, but I have to understand how each decision fits the wider system and recognize when a locally reasonable solution creates platform-level inconsistency.
+- I learned a lot because the platform grew organically. The migrations were frustrating at times, but discovering each need through a real application made the lessons stick.
+
+### What I Would Do Differently
+
+- I would think about shared packages and central SSO earlier. Knowing they were coming would have reduced some of the migrations and duplicated work across the first applications.
+- I would establish the repository model and infrastructure boundaries sooner, especially the separation between application responsibilities and the private deployment layer.
+- I would create the reusable application template earlier so new repositories started with the same networking, database, design-system, and deployment conventions.
+- I would be quicker to question solutions that introduce another service or technology. A tool can produce a perfectly normal implementation, like adding Nginx to serve a frontend, without recognizing that the existing platform already has a better convention.
+- I would still keep much of the organic progression. Designing everything upfront would have been cleaner, but learning each piece when I had a real reason to need it was probably the best way for me to understand the platform rather than just assemble it.
