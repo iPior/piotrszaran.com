@@ -1,0 +1,33 @@
+---
+title: "Pior Labs"
+date: 2026-08-09
+category: "personal"
+description: "A private, self-hosted household platform with shared authentication, design, data, networking, and deployment infrastructure for independently deployed productivity tools."
+stack: ["TypeScript", "React", "Hono", "PostgreSQL", "Drizzle", "Better Auth", "Docker", "Caddy", "Tailscale"]
+githubUrl: "https://github.com/pior-labs"
+featured: false
+hidden: true
+---
+
+## Overview
+
+Pior Labs is a private, self-hosted platform for the productivity tools used by me and my wife. What began as a finance tracker now combines independently deployed applications with central SSO, a shared design system, standardized data and networking infrastructure, and a repeatable deployment foundation on my home server.
+
+## What I Built
+
+- I built and deployed the platform's user-facing applications, including FinLens and a runtime-configurable dashboard, as independent repositories with clear application and infrastructure boundaries.
+- I implemented a central OAuth 2.1/OpenID Connect service for household SSO and published a shared design system through GitHub Packages to keep authentication and interface conventions consistent across applications.
+- I built the containerized deployment foundation around Caddy, PostgreSQL, Docker networks, application-specific databases and roles, platform-managed secrets, canonical routing, and split-horizon DNS for secure access over the local network and Tailscale.
+- I standardized how new applications join the platform through repository conventions, a reusable web application template, shared CI/CD patterns, and independently deployable application services.
+
+## How It Works
+
+- My wife and I access applications through canonical private hostnames that resolve through split-horizon DNS on the trusted local network or over Tailscale, with Caddy handling TLS and routing at the platform edge.
+- Each application runs and deploys independently while consuming shared platform capabilities such as central SSO, the published design-system package, stable Docker networks, and isolated PostgreSQL credentials.
+- The private deployment repository provisions the shared edge, database foundation, DNS configuration, secrets, and validation workflows, while each application repository remains responsible for its containers, schema migrations, and release process.
+
+## Technical Highlights
+
+- **A coherent platform from independent components**: Central SSO, a published npm design-system package, shared infrastructure contracts, and repository conventions give independently deployed applications one consistent foundation.
+- **Reproducible self-hosted infrastructure**: The deployment layer codifies the Caddy edge, PostgreSQL provisioning, Docker networking, secrets, DNS, and validation needed to rebuild or move the platform without treating the server as an undocumented one-off.
+- **Private access with canonical routing**: Split-horizon DNS and Tailscale let trusted clients use the same application hostnames on the local network and remotely while keeping household services within the platform's intentionally private scope.
