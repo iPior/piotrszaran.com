@@ -66,7 +66,6 @@ The MCP server came from a different part of the same idea. I wanted to ask ques
 - I learned that finance tools need accuracy more than cleverness. Automatic categorization sounded nice, but manual categorization made more sense once I thought about real transactions.
 - I got a better feel for building a project as a private household tool instead of a public product. The priorities are different: privacy, trust, and usefulness matter more than making it impressive from the outside.
 - I learned that choosing PostgreSQL was only part of the database decision. I also had to decide how it would run, how services would reach it, how migrations would be applied, and how real data would stay separate from development work.
-- I learned that a production environment without a matching development environment leaves too much room for guesswork. I needed a safe place to test database and application changes before they touched the deployed setup.
 - I learned more about structuring a TypeScript monorepo, with separate packages for the web app, API, shared contracts, database logic, and MCP server.
 - I got more comfortable integrating one application into a wider self-hosted platform, including shared authentication, Docker networking, Caddy routing, and private Tailscale access.
 - I was reminded that a good UI is not just decoration. For something like finance tracking, the interface is part of whether the habit sticks.
@@ -76,6 +75,5 @@ The MCP server came from a different part of the same idea. I wanted to ask ques
 - I would decide earlier that manual categorization was the right choice. The LLM idea was tempting, but for this project it added uncertainty where I actually wanted confidence.
 - I would design the database and deployment setup earlier instead of waiting until the application had grown enough to force the decision.
 - I would create the development environment alongside the production setup. Testing migrations and API changes should never depend on the database holding real household data.
-- I would probably separate the "finance tracker" and "future chatbot" ideas in my head sooner. They are connected, but the core app still needs to stand on its own as a reliable finance tool.
 - I would spend even more time thinking about the boring workflows: correcting categories, reviewing old transactions, and keeping statement imports clean. Those details are not exciting, but they are what make the app useful long-term.
 - I would keep asking whether each feature helps us actually manage our household finances better. Since this is for me and my fiancee, the goal is not to build every finance feature possible. The goal is to make something we will actually trust and keep using.
