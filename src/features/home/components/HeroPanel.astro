@@ -2,7 +2,7 @@
 import HeroGrid from './hero/HeroGrid.astro';
 import HeroHeader from './hero/HeroHeader.astro';
 import HeroSocials from './hero/HeroSocials.astro';
-import type { ProfileField, SocialLink } from './hero/types';
+import type { LearningTopic, ProfileField, SocialLink } from './hero/types';
 import type { ImageMetadata } from 'astro';
 
 export interface Props {
@@ -12,7 +12,10 @@ export interface Props {
   profileImageSrc?: string | ImageMetadata;
   profileImageAlt?: string;
   profileFields?: ProfileField[];
-  coreStack?: string[];
+  frontend?: string[];
+  backend?: string[];
+  platformInfrastructure?: string[];
+  learningTopics?: LearningTopic[];
   socialLinks?: SocialLink[];
   resumeHref?: string;
   resumeLabel?: string;
@@ -28,7 +31,42 @@ const defaultProfileFields: ProfileField[] = [
     },
 ];
 
-const defaultCoreStack = ["TypeScript", "Node.js", "React", "Next.js", "Tailwind", "Bun"];
+const defaultFrontend = [
+  "TypeScript",
+  "React",
+  "Next.js",
+  "Astro",
+  "Tailwind CSS",
+];
+
+const defaultBackend = ["Node.js", "Hono", "Drizzle"];
+
+const defaultPlatformInfrastructure = [
+  "Docker",
+  "PostgreSQL",
+  "Linux",
+  "GitHub Actions",
+  "Caddy",
+];
+
+const defaultLearningTopics: LearningTopic[] = [
+  {
+    name: "Go",
+    description:
+      "Building small services and platform tooling while learning idiomatic Go.",
+  },
+  {
+    name: "Rust",
+    description:
+      "Exploring systems programming and strongly typed backend development.",
+  },
+  {
+    name: "Data Structures & Algorithms",
+    description:
+      "Practicing common interview patterns such as two pointers, sliding windows, binary search, linked lists, BFS, and DFS.",
+    glyph: "algorithm",
+  },
+];
 
 const defaultSocialLinks: SocialLink[] = [
   { label: "GitHub", href: "https://github.com/ipior", icon: "github" },
@@ -43,7 +81,10 @@ const {
   profileImageSrc,
   profileImageAlt = `${firstName} ${lastName} profile photo`,
   profileFields = defaultProfileFields,
-  coreStack = defaultCoreStack,
+  frontend = defaultFrontend,
+  backend = defaultBackend,
+  platformInfrastructure = defaultPlatformInfrastructure,
+  learningTopics = defaultLearningTopics,
   socialLinks = defaultSocialLinks,
   resumeHref = '/resume.pdf',
   resumeLabel = 'Resume',
@@ -59,5 +100,11 @@ const {
     profileImageAlt={profileImageAlt}
   />
   <HeroSocials socialLinks={socialLinks} resumeHref={resumeHref} resumeLabel={resumeLabel} />
-  <HeroGrid profileFields={profileFields} coreStack={coreStack} />
+  <HeroGrid
+    frontend={frontend}
+    backend={backend}
+    platformInfrastructure={platformInfrastructure}
+    learningTopics={learningTopics}
+    profileFields={profileFields}
+  />
 </section>

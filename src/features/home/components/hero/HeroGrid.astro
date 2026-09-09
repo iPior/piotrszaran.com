@@ -1,68 +1,160 @@
 ---
-import type { ProfileField } from "./types";
+import LearningTopics from "./LearningTopics.astro";
 import StackPills from "../../../projects/components/StackPills.astro";
+import type { LearningTopic, ProfileField } from "./types";
 
 interface Props {
+  frontend: string[];
+  backend: string[];
+  platformInfrastructure: string[];
+  learningTopics: LearningTopic[];
   profileFields: ProfileField[];
-  coreStack: string[];
 }
 
-const { profileFields, coreStack } = Astro.props;
+const {
+  frontend,
+  backend,
+  platformInfrastructure,
+  learningTopics,
+  profileFields,
+} = Astro.props;
 
 const normalizeKey = (key: string) => key.trim().toLowerCase();
-const preferredOrder = ["education", "location", "experience"];
 const profileFieldsByKey = new Map(
   profileFields.map((field) => [normalizeKey(field.key), field]),
 );
-const orderedProfileFields = [
-  ...preferredOrder
-    .map((key) => profileFieldsByKey.get(key))
-    .filter((field): field is ProfileField => Boolean(field)),
-  ...profileFields.filter(
-    (field) => !preferredOrder.includes(normalizeKey(field.key)),
-  ),
+const getProfileField = (key: string): ProfileField =>
+  profileFieldsByKey.get(key) ?? { key, value: "" };
+
+const education = getProfileField("education");
+const location = getProfileField("location");
+const experience = getProfileField("experience");
+
+type CellContent =
+  | { kind: "stack"; stack: string[] }
+  | { kind: "learning"; topics: LearningTopic[] }
+  | { kind: "text"; value: string };
+
+interface Cell {
+  label: string;
+  content: CellContent;
+  /** Desktop position, used to work out which edges need a divider. */
+  row: 1 | 2 | 3 | 4;
+  col: 1 | 2;
+  colSpan: 1 | 2;
+  /** Must stay a literal string so Tailwind's class scanner picks it up. */
+  placement: string;
+}
+
+const TOTAL_ROWS = 4;
+
+/*
+  Array order is the mobile single-column order. From `md` up, each cell is
+  placed explicitly, which is what lets the stacked order (experience before
+  education) differ from the desktop reading order.
+
+      md+     .frontend               | .backend
+              .platformInfrastructure | .education
+              .currentlyLearning ....................... (spans both columns)
+              .location               | .experience
+
+  Splitting the old .applications cell keeps every stack cell to a single row
+  of icons, so no row is left padding out a taller neighbour.
+*/
+const cells: Cell[] = [
+  {
+    label: "frontend",
+    content: { kind: "stack", stack: frontend },
+    row: 1,
+    col: 1,
+    colSpan: 1,
+    placement: "md:col-start-1 md:row-start-1",
+  },
+  {
+    label: "backend",
+    content: { kind: "stack", stack: backend },
+    row: 1,
+    col: 2,
+    colSpan: 1,
+    placement: "md:col-start-2 md:row-start-1",
+  },
+  {
+    label: "platformInfrastructure",
+    content: { kind: "stack", stack: platformInfrastructure },
+    row: 2,
+    col: 1,
+    colSpan: 1,
+    placement: "md:col-start-1 md:row-start-2",
+  },
+  {
+    label: "currentlyLearning",
+    content: { kind: "learning", topics: learningTopics },
+    row: 3,
+    col: 1,
+    colSpan: 2,
+    placement: "md:col-start-1 md:row-start-3 md:col-span-2",
+  },
+  {
+    label: experience.key,
+    content: { kind: "text", value: experience.value },
+    row: 4,
+    col: 2,
+    colSpan: 1,
+    placement: "md:col-start-2 md:row-start-4",
+  },
+  {
+    label: education.key,
+    content: { kind: "text", value: education.value },
+    row: 2,
+    col: 2,
+    colSpan: 1,
+    placement: "md:col-start-2 md:row-start-2",
+  },
+  {
+    label: location.key,
+    content: { kind: "text", value: location.value },
+    row: 4,
+    col: 1,
+    colSpan: 1,
+    placement: "md:col-start-1 md:row-start-4",
+  },
 ];
-const totalCells = 1 + orderedProfileFields.length;
-const totalRowsDesktop = Math.ceil(totalCells / 2);
 ---
 
 <div
   class="mt-5 grid grid-cols-1 overflow-hidden rounded border border-site-border bg-site-surface md:mt-6 md:grid-cols-2"
 >
-  <div
-    class:list={[
-      "border-site-border px-3 py-3 md:border-r md:px-4 md:py-3.5",
-      totalCells > 1 ? "border-b" : "",
-      totalRowsDesktop > 1 ? "md:border-b" : "",
-    ]}
-  >
-    <div class="mb-1 text-xs font-normal text-site-mauve">
-      <span class="text-site-overlay">. </span>coreStack
-    </div>
-    <div class="mt-2">
-      <StackPills stack={coreStack} />
-    </div>
-  </div>
   {
-    orderedProfileFields.map((field, idx) => {
-      return (
-        <div
-          class:list={[
-            "border-site-border px-3 py-3 md:px-4 md:py-3.5",
-            idx + 1 < totalCells ? "border-b" : "",
-            (idx + 1) % 2 === 0 ? "md:border-r" : "",
-            Math.floor((idx + 1) / 2) < totalRowsDesktop - 1 ? "md:border-b" : "",
-          ]}
-        >
-          <div class="mb-1 text-xs font-normal text-site-mauve">
-            <span class="text-site-overlay">.</span>
-            {field.key}
-          </div>
-          <div class="text-sm text-site-text pl-4">
-            <Fragment set:html={field.value} />
-          </div>
+    cells.map((cell, idx) => (
+      <div
+        class:list={[
+          "border-site-border px-3 py-3 md:px-4 md:py-3.5",
+          cell.placement,
+          idx < cells.length - 1 ? "border-b" : "",
+          cell.col === 1 && cell.colSpan === 1 ? "md:border-r" : "",
+          cell.row < TOTAL_ROWS ? "md:border-b" : "md:border-b-0",
+        ]}
+      >
+        <div class="mb-1 text-xs font-normal text-site-mauve">
+          <span class="text-site-overlay">.</span>
+          {cell.label}
         </div>
-      );
-    })
+        {cell.content.kind === "stack" && (
+          <div class="mt-2">
+            <StackPills stack={cell.content.stack} mobileLayout="pills" />
+          </div>
+        )}
+        {cell.content.kind === "learning" && (
+          <div class="mt-2">
+            <LearningTopics topics={cell.content.topics} />
+          </div>
+        )}
+        {cell.content.kind === "text" && (
+          <div class="text-sm text-site-text pl-4">
+            <Fragment set:html={cell.content.value} />
+          </div>
+        )}
+      </div>
+    ))
   }
 </div>
