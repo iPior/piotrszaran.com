@@ -101,6 +101,50 @@
   --color-site-yellow: #d08770;
 }
 
+/*
+  Kanagawa - warm ink and paper, after Hokusai's Great Wave woodblock. Both
+  other families are cool (Catppuccin pastel, Nord arctic), so this one is
+  picked to be recognisable at a glance in the palette menu.
+*/
+:root[data-theme-family='kanagawa'][data-theme='dark'] {
+  --color-site-bg: #1f1f28;
+  --color-site-surface: #16161d;
+  --color-site-surface-hover: #2a2a37;
+  --color-site-tab: #12121a;
+  --color-site-border: #3d3d52;
+  --color-site-text: #dcd7ba;
+  --color-site-subtext: #c8c093;
+  --color-site-dim: #727169;
+  --color-site-overlay: #5c5c78;
+  --color-site-blue: #7e9cd8;
+  --color-site-green: #98bb6c;
+  --color-site-peach: #ffa066;
+  --color-site-mauve: #957fb8;
+  --color-site-yellow: #e6c384;
+}
+
+/*
+  Ink tones are darkened from stock Lotus: on this much warmer paper the
+  original greys dropped secondary text under 3:1 against the panels.
+*/
+:root[data-theme-family='kanagawa'][data-theme='light'] {
+  color-scheme: light;
+  --color-site-bg: #f2ecbc;
+  --color-site-surface: #eae3b2;
+  --color-site-surface-hover: #e2daa6;
+  --color-site-tab: #dcd5a4;
+  --color-site-border: #c9c091;
+  --color-site-text: #43436c;
+  --color-site-subtext: #56544a;
+  --color-site-dim: #6e6b5c;
+  --color-site-overlay: #8a8676;
+  --color-site-blue: #425c8a;
+  --color-site-green: #5f7743;
+  --color-site-peach: #b35f00;
+  --color-site-mauve: #584376;
+  --color-site-yellow: #6d6636;
+}
+
 .theme-icon {
   position: absolute;
   inset: 0;
