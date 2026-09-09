@@ -30,6 +30,7 @@ const tabIcons = {
 const themeFamilies = [
   { id: "catppuccin", label: "Catppuccin" },
   { id: "nord", label: "Nord" },
+  { id: "kanagawa", label: "Kanagawa" },
 ] as const;
 
 function isActive(href: string): boolean {
@@ -143,7 +144,7 @@ function isActive(href: string): boolean {
     const themeShieldColorPlaceholder = "__THEME_DEFAULT_BADGE_COLOR__";
     const defaultThemeSimpleIconColor = "e2e8f0";
     const themeSimpleIconColorPlaceholder = "__THEME_SIMPLE_ICON_COLOR__";
-    const validFamilies = ["catppuccin", "nord"];
+    const validFamilies = ["catppuccin", "nord", "kanagawa"];
     if (!toggles.length && !familyOptions.length) return;
 
     const getTheme = () => (root.dataset.theme === "light" ? "light" : "dark");

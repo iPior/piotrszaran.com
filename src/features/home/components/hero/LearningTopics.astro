@@ -1,0 +1,74 @@
+---
+import AlgorithmIcon from "../../../../components/icons/AlgorithmIcon.astro";
+import {
+  TECH_ICON_ONERROR,
+  getIconSources,
+  getMonogram,
+} from "../../../../lib/techIcons";
+import type { LearningTopic } from "./types";
+
+interface Props {
+  topics: LearningTopic[];
+}
+
+const { topics } = Astro.props;
+---
+
+{/*
+  Intentionally borderless: the grid already has two visual treatments (icon
+  slots for stacks, indented text for profile fields), so these lean on the
+  text one. A small monochrome mark plus a description reads as "in progress"
+  without borrowing the stack cells' icon slots.
+*/}
+<div class="grid grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-3">
+  {
+    topics.map((topic) => {
+      const { primary, fallback, fallbackTemplate } = topic.glyph
+        ? { primary: null, fallback: null, fallbackTemplate: null }
+        : getIconSources(topic.name);
+
+      return (
+        <div class="flex gap-2">
+          <span class="relative mt-1 flex h-3.5 w-3.5 shrink-0 items-center justify-center text-site-subtext">
+            {topic.glyph ? (
+              <AlgorithmIcon class="h-3.5 w-3.5" />
+            ) : (
+              <>
+                {primary || fallback ? (
+                  <img
+                    src={primary ?? fallback!}
+                    data-fallback-src={fallback ?? ""}
+                    data-theme-simple-icon-template={
+                      !primary ? (fallbackTemplate ?? undefined) : undefined
+                    }
+                    alt=""
+                    loading="lazy"
+                    class="h-3.5 w-3.5 object-contain"
+                    onerror={TECH_ICON_ONERROR}
+                  />
+                ) : null}
+                <span
+                  data-icon-fallback
+                  class:list={[
+                    "absolute inset-0 items-center justify-center text-[9px] font-semibold tracking-wide text-site-dim",
+                    primary || fallback ? "hidden" : "flex",
+                  ]}
+                  aria-hidden="true"
+                >
+                  {getMonogram(topic.name)}
+                </span>
+              </>
+            )}
+          </span>
+
+          <div class="min-w-0">
+            <div class="text-sm leading-tight text-site-text">{topic.name}</div>
+            <p class="mt-1 text-xs leading-snug text-site-dim">
+              {topic.description}
+            </p>
+          </div>
+        </div>
+      );
+    })
+  }
+</div>
