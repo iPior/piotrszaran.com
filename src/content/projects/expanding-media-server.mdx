@@ -1,0 +1,34 @@
+---
+title: "Expanding My Self-Hosted Media Server"
+date: 2026-10-02
+category: "personal"
+description: "Migrating my Raspberry Pi media stack to an upgradeable OptiPlex, adding photo storage and a central dashboard, and using the same service addresses at home and remotely."
+stack: ["Debian", "Docker", "Nginx", "Tailscale", "Cloudflare"]
+githubUrl: "https://github.com/iPior/media-stack"
+featured: false
+hidden: false
+---
+
+## Overview
+
+I expanded my [Raspberry Pi media server](/projects/raspberrypi-jellyfin/) into a home server for video, DJ mixes, and personal photos. I migrated the Docker stack to a Dell OptiPlex with a sixth-generation Intel Core i5, 32 GB of DDR4 RAM, and a 1 TB SSD, then added photo management, a central dashboard, and consistent service addresses at home and remotely.
+
+## What I Built
+
+- I migrated Jellyfin, Navidrome, the supporting media-management tools, and Portainer from the Raspberry Pi to the OptiPlex, giving the stack more resources and room for future hardware upgrades.
+- I added Immich for storing and organizing personal photos, supporting my goal of using the library for TV slideshows.
+- I set up Homepage as a single starting point for the applications, replacing remembered URLs and scattered bookmarks with a central dashboard.
+- I configured AdGuard Home DNS rewrites, Tailscale split DNS, and Nginx Proxy Manager so services use the same subdomains under `pior.ca` locally and remotely.
+- I organized the deployment configuration in a [GitHub repository](https://github.com/iPior/media-stack), with per-service Docker Compose files, environment templates, dashboard configuration, and setup instructions to track changes and support future migrations.
+
+## How It Works
+
+- I open Homepage to choose a service: Jellyfin for video, Navidrome for my DJ mixes, or Immich for photos. The services run on the OptiPlex in independently managed Compose projects, with deployment files tracked in Git and Portainer providing container administration.
+- AdGuard Home resolves service subdomains to the server's local address for clients using it as their DNS server. Remote devices connect through Tailscale, whose split DNS configuration sends queries for `pior.ca` to the configured DNS server so the same links work away from home.
+- Once a request reaches the server, Nginx Proxy Manager uses the requested hostname to route it to the correct application, removing the need to remember a separate port for each service.
+
+## Technical Highlights
+
+- **One set of URLs at home and remotely**: AdGuard Home DNS rewrites and Tailscale split DNS let me use the same `pior.ca` service names across networks instead of maintaining separate addresses with a `.tail` component.
+- **Version-controlled deployment configuration**: The repository tracks Compose files, environment templates, and dashboard configuration through an explicit allowlist, while local credentials, media, databases, and application state stay outside Git and require separate backups for a full migration.
+- **A broader stack on upgradeable hardware**: Moving from the Raspberry Pi to an OptiPlex with 32 GB of RAM and a 1 TB SSD gave me room to add photo management alongside video and audio, with further hardware upgrades available as the stack grows.
