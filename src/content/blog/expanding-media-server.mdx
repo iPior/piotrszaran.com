@@ -1,0 +1,60 @@
+---
+title: "Upgrades, People, Upgrades"
+date: 2026-10-02
+description: "Moving my Raspberry Pi media stack to a Marketplace OptiPlex with a 1 TB SSD and 32 GB of RAM, then adding photos, a dashboard, and consistent service URLs."
+projectSlug: "expanding-media-server"
+tags: ["docker", "self-hosting", "homelab", "immich", "tailscale"]
+coverImage: "../../assets/images/blog/optiplex.png"
+draft: false
+hidden: false
+---
+
+> **Source Code:** [github.com/iPior/media-stack](https://github.com/iPior/media-stack)
+
+### Overview
+
+My [Raspberry Pi media server](/projects/raspberrypi-jellyfin/) was already doing what I needed for shows, movies, and my DJ mixes. Storage was another story. This upgrade moved the stack to a Dell OptiPlex with a sixth-generation Intel Core i5, 32 GB of DDR4 RAM, and a 1 TB SSD. I also added Immich for photos, Homepage for navigating the services, and one set of URLs that works both at home and remotely.
+
+### Goals of the Project
+
+- Move away from relying on an SD card for a server running 24/7 and get the stack onto an SSD.
+- Have enough storage to keep media instead of deleting an episode just to download another one.
+- Expand the server with a personal photo library that could support TV slideshows.
+- Make the growing stack easier to use through a dashboard and consistent service addresses.
+- Keep the configuration in Git so future changes and migrations have a documented starting point.
+
+### Technologies Used
+
+- **Docker Compose and Portainer:** Run the services as independently managed stacks and provide an interface for container administration.
+- **Jellyfin and Navidrome:** Handle video streaming and my DJ mix archive, carrying forward the main uses of the Raspberry Pi setup.
+- **Immich:** Stores and organizes personal photos, with TV slideshows as a goal for the library.
+- **Homepage:** Brings the application links together in one dashboard.
+- **AdGuard Home and Tailscale:** Provide DNS rewrites, private remote connectivity, and split DNS so the same service names resolve at home and away.
+- **Nginx Proxy Manager:** Routes requests from service subdomains to the right application.
+
+### Backstory
+
+The biggest upgrade for me was storage. I had been running the Raspberry Pi off an SD card, and I didn't want to keep relying on that for something running 24/7. Getting an SSD was already an improvement. Getting 1 TB of it meant I could actually keep data on the server without constantly deciding what to delete next.
+
+There is only so much convenience in having your own media server if you have to delete an episode just to download another one. More space was a practical reason to move, even before adding any new services.
+
+The OptiPlex was a great Marketplace deal. Hardware is expensive, so finding a machine with the storage I wanted and 32 GB of RAM was hard to pass up. The RAM was the cherry on top. It also gave me an upgradeable machine with room to grow as I add more to the stack.
+
+Honestly, the migration itself wasn't frustrating. I had it up and running within about 30 minutes, in time to watch my show that same Friday night. There wasn't a long troubleshooting story behind the move; it went smoothly, and I got back to using the server.
+
+The expanded setup also gave me somewhere to put my photos. Immich adds photo storage and organization alongside the video and music services, and I'd like to use that library for slideshows on the TV. Homepage gives me one place to open everything as the number of applications grows.
+
+I also changed how I reach the services. AdGuard Home DNS rewrites and Tailscale split DNS let me use the same subdomains under `pior.ca` at home and remotely. I no longer need a separate set of addresses with a `.tail` component. DNS gets the request to the server, and Nginx Proxy Manager routes it to the right container.
+
+Another part of this phase was putting the deployment configuration into a GitHub repository. It contains separate Compose projects, environment templates, the Homepage configuration, and instructions for setting up another server or deploying changes. That gives me something to work from next time rather than relying on what I remember about the setup. It preserves the deployment files, though; the actual media, databases, and settings stored by the applications still need separate backups.
+
+### What I Learned
+
+- Storage capacity makes a real difference to how useful the server is day to day. The SSD upgrade wasn't just about changing hardware; it meant I could keep media instead of constantly clearing space.
+- My understanding of Docker has changed since the first setup. Back then, I didn't really know what Docker was and was following a video. Now I understand much more of how the pieces work and can look at the configuration with my own requirements in mind.
+- A working tutorial setup isn't necessarily the setup I would choose for myself now. There are containers I have never used, even though they came along with the original stack.
+
+### What I Would Do Differently
+
+- I would write the Compose YAML around what I actually wanted to run rather than carry forward the whole tutorial configuration. I was in a rush to get the original server working, so I prioritized getting it running over tailoring every service.
+- I'd take more time to review which containers I need. The next cleanup may be trimming out the ones I've never used, now that I understand the stack well enough to make those decisions myself.
