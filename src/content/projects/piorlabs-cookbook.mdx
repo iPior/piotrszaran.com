@@ -18,11 +18,8 @@ The project was also a test of how well my Pior Labs platform works. Cookbook di
 ## What I Built
 
 - The core cookbook: recipes, search, favorites, ratings, recently viewed, and recoverable deletion. Ingredients are structured, and quantities are stored as exact fractions, so scaling a serving never changes the saved recipe.
-
-- Meal planning, with one grocery list per plan. Ingredients from every recipe in the plan are combined into a single list that the household shares, so either of us can finish the shopping.
-AI-assisted meal planning. A guided "Help me choose" flow takes a few inputs: how many meals, servings, a time limit, a minimum rating, category and tags, whether to prefer favorites or skip recently planned meals, plus a free-text note like "mostly chicken". GPT-6 Luna picks a set of meals from the household's own recipes and briefly explains why.
-Grocery list generation for each plan. One action combines the ingredients from every planned recipe into a single shared list. The AI groups equivalent ingredients, and code does the unit conversion and totals, so either of us can finish the shopping.
-
+- AI-assisted meal planning. A guided "Help me choose" flow takes a few inputs: how many meals, servings, a time limit, a minimum rating, category and tags, whether to prefer favorites or skip recently planned meals, plus a free-text note like "mostly chicken". GPT-6 Luna picks a set of meals from the household's own recipes and briefly explains why.
+- Grocery list generation for each meal plan. One action combines the ingredients from every planned recipe into a single shared list. The AI groups equivalent ingredients, and code does the unit conversion and totals, so either of us can finish the shopping.
 - AI recipe import from a public link or a screenshot. It produces a draft the cook reviews and edits before saving through the normal recipe validation.
 - An MCP server that gives agents access through the same application services as the web app. It covers recipe lookup, scaling, planning, and preferences. Creating a recipe requires explicit approval.
 - The deployment and operations layer: Docker Compose services with health checks, GitHub Actions CI, and a Playwright end-to-end suite.
