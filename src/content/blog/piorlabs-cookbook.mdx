@@ -1,0 +1,67 @@
+---
+title: "A Family Recipe Book, Rewritten"
+date: 2026-10-05
+description: "Pior Labs Cookbook is a self-hosted household recipe manager with serving scaling, AI-assisted meal planning, generated grocery lists, and AI recipe import, built on top of the Pior Labs platform."
+projectSlug: "piorlabs-cookbook"
+tags: ["typescript", "react", "hono", "postgresql", "drizzle", "openai", "mcp", "ai", "agentic-coding"]
+coverImage: "../../assets/images/blog/piorlabs-cookbook.png"
+draft: false
+hidden: false
+---
+
+> **Source Code:** <https://github.com/pior-labs/app-cookbook>
+
+### Overview
+
+Pior Labs Cookbook is a private recipe app for my household. My wife and I use it to save the recipes we've proven we like, scale them up or down while we cook, and pull up the grocery list while we shop. It can also plan meals for us from a few preferences and build a single grocery list from the plan, and it can import a recipe from a link or a screenshot so we don't have to type everything in by hand.
+
+It was also a test of my own Pior Labs platform, and in a lot of ways that was the real experiment.
+
+### Goals of the Project
+
+- Get all of our recipes into one place. They were scattered everywhere, and good recipes kept getting lost.
+- Keep exact measurements. I love freestyling in the kitchen, but when something turns out great I want to be able to make it the same way again.
+- Make it a shared household recipe book. My wife can add her desserts, we can both add our cocktails, and either of us can cook or shop from it.
+- Plan a week of meals and get a grocery list on the spot, so a trip to Walmart means buying only what we need instead of guessing.
+- Test the Pior Labs platform. FinLens was a lot of learning on the fly and tweaking. This time I wanted to see how quickly I could ship a new app when the design system, auth, deployment, and database provisioning already existed.
+- Use agents for the parts of the work I enjoy less, so I could spend my time tying everything together instead of sitting in the weeds.
+
+### Technologies Used
+
+- **TypeScript:** Used across the whole monorepo, from the shared domain rules to the API, web app, and MCP server.
+- **React + Vite:** The frontend, built mobile-first because we mostly use it on our phones in the kitchen and at the store.
+- **@pior-labs/design-system:** My shared design system, which made the app look right from the first screen.
+- **Hono:** A lightweight API framework that holds all the business rules.
+- **PostgreSQL + Drizzle:** The database and ORM. Quantities are stored as exact fractions, so a third of a cup stays a third of a cup when you scale a recipe.
+- **service-auth + Better Auth:** Single sign-on through my central auth service, with local sessions in the app.
+- **OpenAI (GPT-6 Luna):** Picks meals for a plan, groups similar ingredients on the grocery list, and extracts recipes from links and screenshots.
+- **Model Context Protocol (MCP):** Lets an AI assistant search recipes, scale them, and build meal plans through the same services the app uses.
+- **Playwright:** End-to-end tests for the critical paths.
+- **Docker Compose, GitHub Actions, and Caddy:** Containers, CI and deployment, and the platform's routing and TLS.
+
+### Backstory
+
+My recipes were all over the place. Some were bookmarks, some were screenshots, and some only existed in my head. I'd come up with something really good, make it once, and then completely forget about it. I do love cooking without measuring, but I also appreciate exact measurements, because that's the only way a dish comes out the same twice.
+
+That mattered a lot more once my wife and I moved in together. We cook every day now, and "what should we make?" gets old fast. What I wanted was somewhere to look for ideas from food we've already proven we like to eat. Something we both add to: her desserts, our cocktails, the dinners we keep coming back to.
+
+Family recipe books have always been a thing, and traditionally they're handwritten. I'm pretty tech savvy and part of a newer generation, so this is my version of one. The feature I'm most looking forward to, once we have enough recipes saved, is planning a week of meals and having the grocery list generate on the spot. You pick a few preferences, add a note like "mostly chicken," and the app picks meals from our own recipes and adds up everything we need. No more standing in Walmart guessing whether we still have onions.
+
+The other half of the story is the platform. When I built FinLens, everything was new and I was figuring it out as I went. For Cookbook I had a baseline. The design system made the app look good instantly. The database was provisioned and the app was deployed automatically, with no real issues I can remember. And I didn't have to reinvent auth: I plugged into my auth service and it just worked right away. All the time I would normally spend on setup went into the actual product, including the stuff I really wanted, like the AI features and the MCP server.
+
+Most of the code was written by AI agents. I've been coding with agents for a while, so that wasn't the experiment. It was about handing off the parts of the work I enjoy less. With limited time after work for personal projects, I'd pick one small feature at a time and see it through. Context stayed manageable, and I never ran out of tokens.
+
+### What I Learned
+
+- A good platform makes a new app cheap. Once the design system, auth, deployment, and database provisioning exist, you're just building the product.
+- Leftover docs steer agents the wrong way. I used to keep implementation specs and status files in the repo, but the project kept evolving and the docs didn't. Agents would believe the stale doc over the code. On this project I stopped keeping them and treated the codebase and the tests as the source of truth. Now the only docs left are the ones code can't replace: why decisions were made, what was deliberately left out, and how to operate the thing.
+- Small features keep agent work manageable. One focused feature per session kept the context clean and the results easy to check.
+- AI is good at judgment and bad at arithmetic you have to trust. The model picks meals and decides which ingredients are the same thing, but regular code does the math and checks every suggestion against our real recipes. If the AI is down, the app falls back to something simpler and says so.
+- Exact fractions beat decimals for recipes. Scaling a third of a cup with floating-point numbers drifts, and that drift shows up in the grocery totals.
+
+### What I Would Do Differently
+
+Honestly, not much yet. I was eager to get the app working, so for me hindsight is really the present: tweaking features and adding new ones that maybe could have come earlier. Code is so cheap now that I don't regret how I built this.
+
+- I'd pay a bit more attention to what was going on in the code. Delegating to agents is great, but some details slip by. While writing this post I found that recipe import and meal planning read their AI model from two different settings, and only one of them had a default. It's a small config fix, but I'd have caught it sooner by reading more closely.
+- Next up is my own chatbot, built on top of the MCP server, for the kind of free-form planning that doesn't fit a form, like "five dinners for two, mostly under 45 minutes, chicken at most twice."
