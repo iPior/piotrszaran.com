@@ -1,0 +1,37 @@
+---
+title: "Pior Labs Cookbook"
+date: 2026-10-04
+category: "personal"
+description: "A self-hosted household recipe manager with serving scaling, meal planning, grocery lists, AI recipe import, and MCP access, built quickly on top of the Pior Labs platform."
+stack: ["TypeScript", "React", "Vite", "Hono", "PostgreSQL", "Drizzle", "Better Auth", "OpenAI", "MCP", "Playwright", "Docker", "GitHub Actions", "Caddy"]
+githubUrl: "https://github.com/pior-labs/app-cookbook"
+featured: false
+hidden: false
+---
+
+## Overview
+
+Pior Labs Cookbook is a private, self-hosted recipe manager for my household. It's a mobile-first place to save recipes, scale them while cooking, plan meals with optional AI help, and shop from a generated grocery list. It also has AI recipe import and an MCP server so assistants can use the same data.
+
+The project was also a test of how well my Pior Labs platform works. Cookbook didn't start from scratch: it reused the shared design system, central auth, platform deploy, and automatic database provisioning. Coding agents did most of the low-level implementation, so I could focus on tying the pieces together.
+
+## What I Built
+
+- The core cookbook: recipes, search, favorites, ratings, recently viewed, and recoverable deletion. Ingredients are structured, and quantities are stored as exact fractions, so scaling a serving never changes the saved recipe.
+- AI-assisted meal planning. A guided "Help me choose" flow takes a few inputs: how many meals, servings, a time limit, a minimum rating, category and tags, whether to prefer favorites or skip recently planned meals, plus a free-text note like "mostly chicken". GPT-6 Luna picks a set of meals from the household's own recipes and briefly explains why.
+- Grocery list generation for each meal plan. One action combines the ingredients from every planned recipe into a single shared list. The AI groups equivalent ingredients, and code does the unit conversion and totals, so either of us can finish the shopping.
+- AI recipe import from a public link or a screenshot. It produces a draft the cook reviews and edits before saving through the normal recipe validation.
+- An MCP server that gives agents access through the same application services as the web app. It covers recipe lookup, scaling, planning, and preferences. Creating a recipe requires explicit approval.
+- The deployment and operations layer: Docker Compose services with health checks, GitHub Actions CI, and a Playwright end-to-end suite.
+
+## How It Works
+
+- The household uses the React app mostly on phones: reading and scaling recipes while cooking, working through the grocery list while shopping, and adding new recipes we try and like.
+- Behind it, a Hono API owns all business rules through shared services, and the MCP server calls those same services. OpenAI structured output handles two bounded jobs: grouping ingredients semantically for grocery lists, and extracting recipes for import. Quantity math and anything written to the database stay in application code.
+- The app plugs into the Pior Labs paved road: `@pior-labs/design-system` for UI, `service-auth` single sign-on with local Better Auth sessions, PostgreSQL with Drizzle, and platform Caddy routing traffic to separate web and API containers.
+
+## Technical Highlights
+
+- **Built on the platform, not from scratch**: The design system, central auth, deployment, and database provisioning already existed, so the work went into product features instead of infrastructure, and a full new app shipped in a few weeks.
+- **From a few prompts to a shopping list**: A handful of preferences and a free-text note become a meal plan chosen from the household's own recipes, then a combined grocery list, without picking each meal or adding up ingredients by hand.
+- **Reviewed AI recipe import**: Extraction never writes a recipe or feeds a grocery list. It produces a draft that keeps the original ingredient wording, leaves missing amounts empty instead of guessing, and saves only after the cook reviews it.
