@@ -1,3 +1,6 @@
+import openaiLogo from '../../../../public/images/tech/openai.svg?raw';
+import playwrightLogo from '../../../../public/images/tech/playwright.svg?raw';
+
 export type ShieldBadgeColorMode = 'uniform' | 'mapped';
 
 interface Props {
@@ -32,6 +35,8 @@ const TAG_LOGOS: Record<string, string> = {
   hono: 'hono',
   postgresql: 'postgresql',
   'better auth': 'betterauth',
+  openai: `data:image/svg+xml;base64,${btoa(openaiLogo)}`,
+  playwright: `data:image/svg+xml;base64,${btoa(playwrightLogo)}`,
   mcp: 'modelcontextprotocol',
   'github actions': 'githubactions',
   cloudflare: 'cloudflare',
@@ -90,6 +95,8 @@ const TAG_COLORS: Record<string, string> = {
   hono: 'e36002',
   postgresql: '4169e1',
   'better auth': '000000',
+  openai: '000000',
+  playwright: '2ead33',
   mcp: '000000',
   'github actions': '2088ff',
   cloudflare: 'f38020',
