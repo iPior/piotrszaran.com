@@ -1,7 +1,10 @@
-import openaiLogo from '../../../../public/images/tech/openai.svg?raw';
-import playwrightLogo from '../../../../public/images/tech/playwright.svg?raw';
-
-export type ShieldBadgeColorMode = 'uniform' | 'mapped';
+import { getTechnology } from "../../../lib/technologies";
+import {
+  DEFAULT_THEME_BADGE_COLOR,
+  THEME_COLOR_PLACEHOLDER,
+  getShieldSrc,
+  type ShieldBadgeColorMode,
+} from "../../../lib/techBadges";
 
 interface Props {
   tags?: string[];
@@ -9,157 +12,10 @@ interface Props {
   class?: string;
 }
 
-const TAG_LOGOS: Record<string, string> = {
-  'next.js': 'nextdotjs',
-  nextjs: 'nextdotjs',
-  astro: 'astro',
-  typescript: 'typescript',
-  javascript: 'javascript',
-  html: 'html5',
-  css: 'css',
-  react: 'react',
-  preact: 'preact',
-  'tailwind css': 'tailwindcss',
-  tailwind: 'tailwindcss',
-  vercel: 'vercel',
-  docker: 'docker',
-  'node.js': 'nodedotjs',
-  nodejs: 'nodedotjs',
-  bun: 'bun',
-  php: 'php',
-  mariadb: 'mariadb',
-  wordpress: 'wordpress',
-  supabase: 'supabase',
-  powershell: 'powershell',
-  vite: 'vite',
-  hono: 'hono',
-  postgresql: 'postgresql',
-  'better auth': 'betterauth',
-  openai: `data:image/svg+xml;base64,${btoa(openaiLogo)}`,
-  playwright: `data:image/svg+xml;base64,${btoa(playwrightLogo)}`,
-  mcp: 'modelcontextprotocol',
-  'github actions': 'githubactions',
-  cloudflare: 'cloudflare',
-  debian: 'debian',
-  caddy: 'caddy',
-  nginx: 'nginx',
-  tailscale: 'tailscale',
-  'raspberry pi': 'raspberrypi',
-  raspberrypi: 'raspberrypi',
-  'spotify api': 'spotify',
-  netlify: 'netlify',
-  render: 'render',
-  'anthropic api': 'anthropic',
-  sanity: 'sanity',
-  resend: 'resend',
-  'claude code': 'anthropic',
-  pm2: 'pm2',
-  payload: 'payloadcms',
-  'shadcn/ui': 'shadcnui',
-  mdx: 'mdx',
-  wpf: 'dotnet',
-  xaml: 'xaml',
-  prisma: 'prisma',
-  sqlite: 'sqlite',
-  drizzle: 'drizzle',
-  'discord.js': 'discord',
-  'linux vps': 'linux',
-  digitalocean: 'digitalocean',
-  'framer motion': 'framer',
-  'nextauth.js': 'authjs',
-};
-
-const TAG_COLORS: Record<string, string> = {
-  'next.js': '000000',
-  nextjs: '000000',
-  astro: 'ff5d01',
-  typescript: '3178c6',
-  javascript: 'f7df1e',
-  html: 'e34f26',
-  css: '1572b6',
-  react: '61dafb',
-  preact: '673ab8',
-  'tailwind css': '06b6d4',
-  tailwind: '06b6d4',
-  vercel: '000000',
-  docker: '2496ed',
-  'node.js': '339933',
-  nodejs: '339933',
-  bun: '111827',
-  php: '777bb4',
-  mariadb: '003545',
-  wordpress: '21759b',
-  supabase: '3ecf8e',
-  powershell: '5391fe',
-  vite: '646cff',
-  hono: 'e36002',
-  postgresql: '4169e1',
-  'better auth': '000000',
-  openai: '000000',
-  playwright: '2ead33',
-  mcp: '000000',
-  'github actions': '2088ff',
-  cloudflare: 'f38020',
-  debian: 'a81d33',
-  caddy: '1f88c0',
-  nginx: '009639',
-  tailscale: '0054ff',
-  'raspberry pi': 'c51a4a',
-  raspberrypi: 'c51a4a',
-  'spotify api': '1db954',
-  netlify: '00c7b7',
-  render: '46e3b7',
-  'anthropic api': 'd97757',
-  sanity: 'f03e2f',
-  resend: '000000',
-  'claude code': 'd97757',
-  pm2: '2b037a',
-  payload: '000000',
-  'shadcn/ui': '000000',
-  mdx: '1b1f24',
-  wpf: '512bd4',
-  xaml: '0c54c2',
-  prisma: '2d3748',
-  sqlite: '003b57',
-  drizzle: 'c5f74f',
-  'discord.js': '5865f2',
-  'linux vps': '333333',
-  digitalocean: '0080ff',
-  i18n: '2563eb',
-  'framer motion': '0055ff',
-  'nextauth.js': '000000',
-};
-
-const THEME_COLOR_PLACEHOLDER = '__THEME_DEFAULT_BADGE_COLOR__';
-const DEFAULT_THEME_BADGE_COLOR = '585b70';
-const DEFAULT_LOGO_COLOR = 'ffffff';
-
-function getShieldSrc(
-  tag: string,
-  color: string,
-  logoColorMode: ShieldBadgeColorMode,
-): string {
-  const normalizedTag = tag.trim().toLowerCase();
-  const encodedTag = encodeURIComponent(tag);
-  const logo = TAG_LOGOS[normalizedTag];
-  const logoColor =
-    normalizedTag === 'bun' && logoColorMode === 'mapped'
-      ? undefined
-      : DEFAULT_LOGO_COLOR;
-
-  if (!logo) {
-    return `https://img.shields.io/badge/${encodedTag}-${color}?style=flat-square`;
-  }
-
-  return `https://img.shields.io/badge/${encodedTag}-${color}?style=flat-square&logo=${encodeURIComponent(logo)}${
-    logoColor ? `&logoColor=${logoColor}` : ''
-  }`;
-}
-
 export default function ShieldBadges({
   tags = [],
-  tagColorMode = 'mapped',
-  class: className = 'mt-2 mb-4 flex flex-wrap gap-1',
+  tagColorMode = "mapped",
+  class: className = "mt-2 mb-4 flex flex-wrap gap-1",
 }: Props) {
   if (tags.length === 0) {
     return null;
@@ -168,16 +24,15 @@ export default function ShieldBadges({
   return (
     <div class={className}>
       {tags.map((tag, idx) => {
-        const normalizedTag = tag.trim().toLowerCase();
-        const mappedColor = TAG_COLORS[normalizedTag];
+        const mappedColor = getTechnology(tag)?.badgeColor;
         const usesThemeDefault =
-          tagColorMode === 'uniform' || mappedColor === undefined;
+          tagColorMode === "uniform" || mappedColor === undefined;
         const initialColor = usesThemeDefault
           ? DEFAULT_THEME_BADGE_COLOR
           : mappedColor;
         const logoColorMode: ShieldBadgeColorMode = usesThemeDefault
-          ? 'uniform'
-          : 'mapped';
+          ? "uniform"
+          : "mapped";
 
         return (
           <img
@@ -185,7 +40,7 @@ export default function ShieldBadges({
             src={getShieldSrc(tag, initialColor, logoColorMode)}
             data-theme-shield-template={
               usesThemeDefault
-                ? getShieldSrc(tag, THEME_COLOR_PLACEHOLDER, 'uniform')
+                ? getShieldSrc(tag, THEME_COLOR_PLACEHOLDER, "uniform")
                 : undefined
             }
             alt={`${tag} badge`}

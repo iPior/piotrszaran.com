@@ -3,7 +3,8 @@ import {
   PROJECT_CATEGORY_TONE_CLASSES,
   type ProjectCategory,
 } from '../../../lib/projects';
-import ShieldBadges, { type ShieldBadgeColorMode } from './ShieldBadges';
+import ShieldBadges from './ShieldBadges';
+import type { ShieldBadgeColorMode } from '../../../lib/techBadges';
 
 interface Props {
   itemNumber: number;
