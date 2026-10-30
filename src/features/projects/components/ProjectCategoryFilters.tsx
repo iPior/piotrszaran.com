@@ -25,6 +25,7 @@ export default function ProjectCategoryFilters({ active, onChange }: Props) {
           key={cat}
           type="button"
           onClick={() => onChange(cat)}
+          aria-pressed={active === cat}
           class={`border rounded-full px-3 py-1 text-xs transition-colors sm:text-sm ${
             active === cat
               ? 'bg-site-blue text-site-bg border-site-blue'

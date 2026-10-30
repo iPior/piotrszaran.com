@@ -11,6 +11,7 @@ import ProjectCategoryFilters, {
 
 interface Project {
   id: string;
+  itemNumber: number;
   title: string;
   date: string;
   category: ProjectCategory;
@@ -20,6 +21,7 @@ interface Project {
   liveUrl?: string;
   githubUrl?: string;
   blogSlug?: string;
+  depth?: 'short' | 'full';
 }
 
 export default function ProjectFilter({ projects }: { projects: Project[] }) {
@@ -40,10 +42,10 @@ export default function ProjectFilter({ projects }: { projects: Project[] }) {
         <p class="pt-6 text-site-dim text-sm">No projects in this category.</p>
       ) : (
         <div>
-          {filtered.map((project, idx) => (
+          {filtered.map((project) => (
             <ProjectCard
               key={project.id}
-              itemNumber={filtered.length - idx}
+              itemNumber={project.itemNumber}
               title={project.title}
               description={project.description}
               category={project.category}
@@ -52,6 +54,7 @@ export default function ProjectFilter({ projects }: { projects: Project[] }) {
               href={`/projects/${project.id}`}
               liveUrl={project.liveUrl}
               githubUrl={project.githubUrl}
+              depth={project.depth}
               layout="list"
               tagColorMode="mapped"
             />

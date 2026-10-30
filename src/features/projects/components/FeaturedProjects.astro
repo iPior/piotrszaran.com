@@ -1,0 +1,39 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ProjectCard from './ProjectCard';
+import { formatDate } from '../../../lib/utils';
+
+interface Props {
+  projects: (CollectionEntry<'projects'> & { itemNumber: number })[];
+}
+
+const { projects } = Astro.props;
+---
+
+{projects.length > 0 && (
+  <section class="mt-10" aria-labelledby="featured-projects-heading">
+    <div class="mb-4 border-b border-site-border pb-2.5">
+      <h2 id="featured-projects-heading" class="text-base font-semibold text-site-text sm:text-lg">
+        Featured Projects
+      </h2>
+      <p class="mt-1 text-xs text-site-dim">Selected work. The complete archive follows below.</p>
+    </div>
+    <div class="grid gap-4 md:grid-cols-2">
+      {projects.map((project) => (
+        <ProjectCard
+          itemNumber={project.itemNumber}
+          title={project.data.title}
+          description={project.data.description}
+          category={project.data.category}
+          dateLabel={formatDate(project.data.date)}
+          tags={project.data.stack ?? []}
+          href={`/projects/${project.slug}`}
+          liveUrl={project.data.liveUrl}
+          githubUrl={project.data.githubUrl}
+          depth={project.data.depth}
+          layout="spotlight"
+        />
+      ))}
+    </div>
+  </section>
+)}

@@ -16,6 +16,7 @@ const projects = defineCollection({
     githubUrl: z.string().url().optional(),
     blogSlug: z.string().optional(),
     featured: z.boolean().default(false),
+    depth: z.enum(['short', 'full']).default('full'),
     hidden: z.boolean().default(false),
   }),
 });

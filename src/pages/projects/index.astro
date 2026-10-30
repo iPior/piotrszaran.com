@@ -2,14 +2,19 @@
 import AppLayout from "../../layouts/AppLayout.astro";
 import ProjectFilter from "../../features/projects/components/ProjectFilter";
 import ProjectPageIntro from "../../features/projects/components/ProjectPageIntro.astro";
+import FeaturedProjects from "../../features/projects/components/FeaturedProjects.astro";
 import { getCollection } from "astro:content";
+import { numberProjects } from "../../lib/projects";
 
-const projects = (await getCollection("projects", ({ data }) => !data.hidden)).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+const projects = numberProjects(
+  (await getCollection("projects", ({ data }) => !data.hidden)).sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+  ),
 );
 
 const filterProjects = projects.map((project) => ({
   id: project.slug,
+  itemNumber: project.itemNumber,
   title: project.data.title,
   description: project.data.description,
   category: project.data.category,
@@ -17,6 +22,7 @@ const filterProjects = projects.map((project) => ({
   stack: project.data.stack ?? [],
   liveUrl: project.data.liveUrl,
   githubUrl: project.data.githubUrl,
+  depth: project.data.depth,
 }));
 ---
 
@@ -26,7 +32,9 @@ const filterProjects = projects.map((project) => ({
 >
   <ProjectPageIntro />
 
-  <section class="mt-10">
+  <FeaturedProjects projects={projects.filter((project) => project.data.featured)} />
+
+  <section class="mt-10" aria-label="All projects">
     {
       projects.length === 0 ? (
         <p class="py-6 text-site-dim">No projects yet.</p>
