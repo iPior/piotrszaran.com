@@ -170,6 +170,20 @@ export const TECHNOLOGIES: readonly Technology[] = [
     themeAware: true,
     badgeColor: "0054ff",
   },
+  {
+    name: "KVM/QEMU",
+    aliases: ["QEMU", "KVM"],
+    simpleIcon: "qemu",
+    badgeColor: "ff6600",
+  },
+  // No libvirt or ttyd logo exists on Simple Icons or skillicons: badge colour only, monogram tile.
+  { name: "libvirt", badgeColor: "3e5f8a" },
+  { name: "ttyd", badgeColor: "2e3436" },
+  // code-server is built by Coder, whose mark is the closest official logo.
+  { name: "code-server", simpleIcon: "coder", themeAware: true, badgeColor: "000000" },
+  { name: "Bash", skillIcon: "bash", badgeLogo: "gnubash", badgeColor: "4eaa25" },
+  { name: "Terraform", skillIcon: "terraform", badgeLogo: "terraform", badgeColor: "844fba" },
+  { name: "Ansible", skillIcon: "ansible", badgeLogo: "ansible", badgeColor: "ee0000" },
   { name: "Render", simpleIcon: "render", badgeColor: "46e3b7" },
   { name: "Netlify", simpleIcon: "netlify", badgeColor: "00c7b7" },
   { name: "Anthropic API", simpleIcon: "anthropic", badgeColor: "d97757" },

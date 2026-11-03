@@ -22,9 +22,30 @@ const projects = defineCollection({
     featuredSize: z.enum(['large', 'small']).optional(),
     depth: z.enum(['short', 'full']).default('full'),
     hidden: z.boolean().default(false),
+
+    // === IN PROGRESS ===
+    // For in-progress projects, `date` is the start date.
+    status: z.enum(['shipped', 'in-progress']).default('shipped'),
+    // Required while in progress. Left in place after shipping, it is ignored.
+    progress: z.object({
+      // One sentence on what is being worked on right now.
+      focus: z.string(),
+      updated: z.coerce.date(),
+      // In order. The first milestone not marked done is the current one.
+      milestones: z.array(z.object({
+        label: z.string(),
+        done: z.boolean().default(false),
+      })).min(1),
+    }).optional(),
   }).refine(
     (data) => data.featured || (data.featuredOrder === undefined && data.featuredSize === undefined),
     { message: 'featuredOrder and featuredSize only apply when featured: true', path: ['featured'] },
+  ).refine(
+    (data) => data.status !== 'in-progress' || data.progress !== undefined,
+    { message: 'status: in-progress needs a progress block', path: ['progress'] },
+  ).refine(
+    (data) => data.status !== 'in-progress' || !data.featured,
+    { message: 'in-progress projects show in Currently building, not Featured work', path: ['featured'] },
   ),
 });
 

@@ -1,7 +1,15 @@
 import assert from 'node:assert/strict';
 import { registerHooks } from 'node:module';
 import { test } from 'node:test';
-import { numberProjects, orderFeatured, splitFeatured } from '../src/lib/projects.ts';
+import {
+  formatAgo,
+  inProgressProjects,
+  isPaused,
+  milestoneStates,
+  numberProjects,
+  orderFeatured,
+  splitFeatured,
+} from '../src/lib/projects.ts';
 
 test('archive numbers survive featured and category filtering without mutating entries', () => {
   const entries = [
@@ -123,4 +131,56 @@ test('existing optional links and all project categories remain supported', () =
     assert.equal(data.category, category);
     assert.equal(data.blogSlug, 'related-post');
   }
+});
+
+const progress = {
+  focus: 'Wiring up alerts.',
+  updated: '2026-10-30',
+  milestones: [{ label: 'Metrics', done: true }, { label: 'Alerts' }],
+};
+
+test('projects default to shipped and in-progress needs a progress block', () => {
+  assert.equal(schema.parse(minimal).status, 'shipped');
+  assert.equal(schema.safeParse({ ...minimal, status: 'in-progress' }).success, false);
+  const data = schema.parse({ ...minimal, status: 'in-progress', progress });
+  assert.ok(data.progress.updated instanceof Date);
+  assert.equal(data.progress.milestones[1].done, false);
+  assert.equal(schema.safeParse({ ...minimal, status: 'paused' }).success, false);
+  assert.equal(schema.safeParse({ ...minimal, status: 'in-progress', progress: { ...progress, milestones: [] } }).success, false);
+  // Kept after shipping without error.
+  assert.equal(schema.safeParse({ ...minimal, progress }).success, true);
+});
+
+test('in-progress projects cannot also be featured', () => {
+  assert.equal(schema.safeParse({ ...minimal, status: 'in-progress', progress, featured: true }).success, false);
+});
+
+test('the first unfinished milestone is current, even after a gap', () => {
+  assert.deepEqual(
+    milestoneStates([{ label: 'a', done: true }, { label: 'b', done: false }, { label: 'c', done: false }]),
+    ['done', 'current', 'todo'],
+  );
+  assert.deepEqual(
+    milestoneStates([{ label: 'a', done: false }, { label: 'b', done: true }, { label: 'c', done: false }]),
+    ['current', 'done', 'todo'],
+  );
+  assert.deepEqual(milestoneStates([{ label: 'a', done: true }]), ['done']);
+});
+
+test('update age labels and the paused threshold', () => {
+  const now = new Date('2026-11-03');
+  assert.equal(formatAgo(new Date('2026-11-03'), now), 'today');
+  assert.equal(formatAgo(new Date('2026-11-01'), now), '2d ago');
+  assert.equal(formatAgo(new Date('2026-10-06'), now), '4w ago');
+  assert.equal(isPaused(new Date('2026-10-04'), now), false);
+  assert.equal(isPaused(new Date('2026-10-03'), now), true);
+});
+
+test('in-progress list keeps only in-progress projects, most recently updated first', () => {
+  const list = [
+    { id: 'shipped', data: { status: 'shipped' } },
+    { id: 'older', data: { status: 'in-progress', progress: { updated: new Date('2026-10-01') } } },
+    { id: 'newer', data: { status: 'in-progress', progress: { updated: new Date('2026-11-01') } } },
+  ];
+  assert.deepEqual(ids(inProgressProjects(list)), ['newer', 'older']);
 });

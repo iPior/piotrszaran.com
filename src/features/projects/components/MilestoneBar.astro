@@ -1,0 +1,34 @@
+---
+import { milestoneStates, type MilestoneState, type ProjectMilestone } from '../../../lib/projects';
+
+interface Props {
+  milestones: ProjectMilestone[];
+  /** Paused projects drop the orange "current" segment. */
+  paused?: boolean;
+  /** Show the current milestone's name after the count. */
+  showCurrent?: boolean;
+}
+
+const { milestones, paused = false, showCurrent = false } = Astro.props;
+const states = milestoneStates(milestones);
+const done = states.filter((state) => state === 'done').length;
+const current = milestones[states.indexOf('current')];
+
+const segmentClass: Record<MilestoneState, string> = {
+  done: 'bg-site-green',
+  current: paused ? 'bg-site-overlay' : 'bg-site-peach',
+  todo: 'bg-site-border',
+};
+---
+
+<div class="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+  <div class="flex gap-1" role="img" aria-label={`${done} of ${milestones.length} milestones done`}>
+    {states.map((state, index) => (
+      <span class:list={['h-1.5 w-5 rounded-full sm:w-7', segmentClass[state]]} title={milestones[index].label}></span>
+    ))}
+  </div>
+  <span class="text-xs text-site-dim" aria-hidden="true">
+    {done} of {milestones.length} milestones done
+    {showCurrent && current && <>· <span class="text-site-subtext">{current.label}</span></>}
+  </span>
+</div>

@@ -1,0 +1,80 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ShieldBadges from '../../projects/components/ShieldBadges';
+import MilestoneBar from '../../projects/components/MilestoneBar.astro';
+import { formatAgo, isPaused } from '../../../lib/projects';
+
+interface Props {
+  /** In-progress projects, already ordered (see inProgressProjects). */
+  projects: CollectionEntry<'projects'>[];
+}
+
+const { projects } = Astro.props;
+
+const rows = projects.flatMap((project) => {
+  const { progress } = project.data;
+  if (!progress) return [];
+  return [{ project, progress, paused: isPaused(progress.updated) }];
+});
+const activeCount = rows.filter((row) => !row.paused).length;
+const pausedCount = rows.length - activeCount;
+const summary = [
+  activeCount > 0 && `${activeCount} active`,
+  pausedCount > 0 && `${pausedCount} paused`,
+].filter(Boolean).join(', ');
+const latest = rows[0]?.progress.updated;
+---
+
+{/*
+  `let` rather than the `const` used by featuredProjects and blogPosts: this is
+  the one list on the page that is still changing. Rows follow the featured
+  project card anatomy, plus a milestone bar.
+*/}
+{rows.length > 0 && (
+  <section aria-labelledby="currently-building-heading">
+    <div class="mt-10 flex flex-wrap items-baseline gap-x-3 gap-y-1 border-b border-site-border pb-2.5 sm:mt-12">
+      <h2 id="currently-building-heading" class="text-lg font-semibold text-site-text sm:text-2xl">
+        <span class="font-normal text-site-mauve">let</span>{' '}<span class="text-site-yellow">currentlyBuilding</span>
+      </h2>
+      <span class="text-xs text-site-dim">// {summary}{latest && `, last update ${formatAgo(latest)}`}</span>
+    </div>
+
+    <div>
+      {rows.map(({ project, progress, paused }) => (
+        <article class="border-b border-site-border py-4 transition-colors duration-100 sm:hover:-mx-3 sm:hover:rounded sm:hover:bg-site-surface-hover sm:hover:px-3">
+          <div class="flex items-start gap-3 sm:gap-4">
+            <span class="relative mt-[7px] flex h-2 w-2 shrink-0" aria-hidden="true">
+              {!paused && <span class="absolute inset-0 rounded-full bg-site-peach/60 motion-safe:animate-ping"></span>}
+              <span class:list={['relative h-2 w-2 rounded-full', paused ? 'bg-site-overlay' : 'bg-site-peach']}></span>
+            </span>
+
+            <div class="min-w-0 flex-1">
+              <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                <a href={`/projects/${project.slug}`}>
+                  <h3 class="text-sm font-semibold leading-snug text-site-blue sm:text-base">{project.data.title}</h3>
+                </a>
+                <span class="text-xs text-site-dim">
+                  {paused && <span class="text-site-subtext">paused · </span>}
+                  since {project.data.date.toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' })}
+                </span>
+              </div>
+
+              <p class="mt-1 text-[11px] italic leading-relaxed text-site-dim sm:text-xs">{project.data.description}</p>
+
+              <p class="mt-2 text-xs leading-relaxed text-site-subtext">
+                <span class={paused ? 'text-site-dim' : 'text-site-peach'}>{paused ? 'Last:' : 'Now:'}</span>{' '}{progress.focus}
+                <span class="text-site-dim"> · {formatAgo(progress.updated)}</span>
+              </p>
+
+              <div class="mt-2.5">
+                <MilestoneBar milestones={progress.milestones} paused={paused} />
+              </div>
+
+              <ShieldBadges tags={project.data.stack ?? []} class="mt-3 flex flex-wrap gap-1" />
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+)}

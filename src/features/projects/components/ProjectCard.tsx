@@ -18,7 +18,17 @@ interface Props {
   githubUrl?: string;
   layout?: 'home' | 'list';
   depth?: 'short' | 'full';
+  inProgress?: boolean;
   tagColorMode?: ShieldBadgeColorMode;
+}
+
+function InProgressLabel() {
+  return (
+    <span class="inline-flex items-center gap-1.5 text-xs text-site-peach">
+      <span class="h-1.5 w-1.5 rounded-full bg-site-peach" aria-hidden="true" />
+      In progress
+    </span>
+  );
 }
 
 export default function ProjectCard({
@@ -33,6 +43,7 @@ export default function ProjectCard({
   githubUrl,
   layout = 'list',
   depth = 'full',
+  inProgress = false,
   tagColorMode = 'mapped',
 }: Props) {
   const categoryLabel = PROJECT_CATEGORY_LABELS[category];
@@ -42,7 +53,10 @@ export default function ProjectCard({
     <article class="border-b border-site-border py-4 transition-colors duration-100 sm:hover:-mx-3 sm:hover:rounded sm:hover:bg-site-surface-hover sm:hover:px-3">
       {layout !== 'home' && (
         <div class={`mb-1 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-xs ${layout === 'list' ? 'relative z-[60] md:hidden sm:ml-[3.25rem]' : ''}`}>
-          <time class="text-site-dim">{dateLabel}</time>
+          <span class="flex items-center gap-2">
+            <time class="text-site-dim">{dateLabel}</time>
+            {inProgress && <InProgressLabel />}
+          </span>
           <span
             class={`inline-block rounded px-2 py-0.5 font-medium tracking-wider ${categoryToneClass}`}
           >
@@ -111,6 +125,7 @@ export default function ProjectCard({
             {categoryLabel}
           </span>
           <time class="text-xs text-site-dim">{dateLabel}</time>
+          {inProgress && <InProgressLabel />}
         </div>
       </div>
     </article>

@@ -54,3 +54,52 @@ export function splitFeatured<T extends FeaturedFields>(projects: T[]): { large:
     small: ordered.filter((project, index) => !isLarge(project, index)),
   };
 }
+
+export type ProjectStatus = 'shipped' | 'in-progress';
+export type MilestoneState = 'done' | 'current' | 'todo';
+
+export interface ProjectMilestone {
+  label: string;
+  done: boolean;
+}
+
+/** A project with no update in this many days is shown as paused. */
+export const PAUSED_AFTER_DAYS = 30;
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+export function daysSince(date: Date, now: Date = new Date()): number {
+  return Math.max(0, Math.floor((now.valueOf() - date.valueOf()) / DAY_MS));
+}
+
+export function isPaused(updated: Date, now: Date = new Date()): boolean {
+  return daysSince(updated, now) > PAUSED_AFTER_DAYS;
+}
+
+/** "today", "3d ago", "5w ago". Computed at build time, so it is as fresh as the last deploy. */
+export function formatAgo(date: Date, now: Date = new Date()): string {
+  const days = daysSince(date, now);
+  if (days === 0) return 'today';
+  if (days < 14) return `${days}d ago`;
+  return `${Math.floor(days / 7)}w ago`;
+}
+
+/** The first milestone not marked done is current; everything after it is still to do. */
+export function milestoneStates(milestones: ProjectMilestone[]): MilestoneState[] {
+  const current = milestones.findIndex((milestone) => !milestone.done);
+  return milestones.map((milestone, index) => {
+    if (milestone.done) return 'done';
+    return index === current ? 'current' : 'todo';
+  });
+}
+
+interface ProgressFields {
+  data: { status: ProjectStatus; progress?: { updated: Date } };
+}
+
+/** In-progress projects, most recently updated first. */
+export function inProgressProjects<T extends ProgressFields>(projects: T[]): T[] {
+  return projects
+    .filter((project) => project.data.status === 'in-progress' && project.data.progress)
+    .sort((a, b) => b.data.progress!.updated.valueOf() - a.data.progress!.updated.valueOf());
+}

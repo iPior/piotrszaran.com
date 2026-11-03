@@ -2,10 +2,11 @@
 import AppLayout from '../layouts/AppLayout.astro';
 import BlogSection from '../features/home/components/BlogSection.astro';
 import HeroPanel from '../features/home/components/HeroPanel.astro';
+import InProgressSection from '../features/home/components/InProgressSection.astro';
 import ProjectsSection from '../features/home/components/ProjectsSection.astro';
 import { getCollection } from 'astro:content';
 import profilePhoto from '../assets/images/pior.jpeg';
-import { numberProjects, orderFeatured } from '../lib/projects';
+import { inProgressProjects, numberProjects, orderFeatured } from '../lib/projects';
 
 const title = 'Piotr Szaran — Portfolio';
 const description = 'Software developer portfolio featuring profile details and selected projects.';
@@ -21,6 +22,7 @@ const allProjects = numberProjects(
 );
 // Same order as the Featured work section on /projects.
 const projects = orderFeatured(allProjects.filter((project) => project.data.featured));
+const buildingNow = inProgressProjects(allProjects);
 ---
 
 <AppLayout
@@ -36,6 +38,7 @@ const projects = orderFeatured(allProjects.filter((project) => project.data.feat
     profileImageAlt="Piotr Szaran profile picture"
   />
 
+  <InProgressSection projects={buildingNow} />
   <ProjectsSection projects={projects} totalProjects={allProjects.length} />
   <BlogSection posts={blogPosts} totalPosts={allBlogPosts.length} />
 </AppLayout>
