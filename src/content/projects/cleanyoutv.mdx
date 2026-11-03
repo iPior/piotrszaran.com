@@ -1,0 +1,40 @@
+---
+title: "Five Home Screens for a TCL Google TV"
+date: 2026-10-31
+category: "personal"
+description: "A personal fork of the cleanyourtv Android TV launcher with a Continue watching row and five home screen themes switched on the TV, built for a debloated TCL 43S450G."
+stack: ["Java", "Android TV", "ADB", "Claude"]
+githubUrl: "https://github.com/iPior/cleanyourtv"
+featured: false
+hidden: false
+
+Overview
+
+This project replaces the stock Google TV home screen on my TCL 43S450G, which was slow and full of ads, with my own build of the open source cleanyourtv launcher. I debloated the TV, then extended the launcher with a Continue watching row and five home screen themes I designed myself: Feature, Minutes, Horizon, Centre Line and Lamp. They're switched from a Themes button on the TV, with no computer needed. The point was to come up with my own designs and own the software my TV runs.
+
+The build was also a test of how far AI coding agents have come. I designed each theme as an HTML mock-up, then built it into the launcher with an agent one theme at a time over about a week, checking every step on the real TV with the real remote.
+
+What I Built
+
+- I debloated the TV with ADB, disabling 27 packages including the stock launcher, voice assistant and Chromecast. Every change can be reversed: nothing was uninstalled and the TV isn't rooted.
+- I added a Continue watching row that reads Android TV's Watch Next and filters out stale, finished, duplicate and watchlist entries. Posters decode off the main thread into a cache, because Jellyfin's image provider is slow.
+- I added five themes, each with its own layout, motion and type:
+  - Feature: a cinema banner with film-strip progress.
+  - Minutes: a timeline of time left, shortest first.
+  - Horizon: a sky that follows the clock through dawn, day, dusk and night.
+  - Centre Line: a centred layout where stars come out in the evening.
+  - Lamp: a dim, warm room lit by a glow that follows focus.
+- I added a Themes picker in the top bar and made the TCL remote's Netflix, YouTube, Prime, Input and Settings buttons work in the new launcher.
+- I added an opt-in Netflix poster fetch limited to https on Netflix's image server, with no redirects followed and every picture cached on the TV.
+
+How It Works
+
+- The launcher runs as the TV's Home screen. Picking a theme saves it to the launcher's preferences and rebuilds Home in that layout. Each theme is a set of config keys plus its own Java views for backgrounds, glows and progress.
+- Behind the scenes, the Continue watching row queries Watch Next through READ_TV_LISTINGS. Time-of-day themes drive their colours from the clock, and each theme's focus effects follow the launcher's existing spring-animated focus highlight rather than tracking focus again.
+- The launcher is plain Java on Android TV, installed over ADB, and I built it with Claude Code. The APK is 724 KB, over upstream's 576 KB limit, almost entirely because of the cut-down theme fonts. I made that trade on purpose for a TV with 2 GB of RAM.
+
+Technical Highlights
+
+- Five on-TV themes built with an AI agent: I went from HTML mock-ups to five working themes on real hardware in about a week, which shows how easy this kind of project has become with current models.
+- Designed for real TV constraints: The themes run on a 2 GB Google TV and work with the real remote, with costs measured at every step: off-thread posters, an image fetch restricted to one host, and an APK size measured at each milestone.
+- Listed in the upstream showcase: My fork was accepted into the original cleanyourtv repository's Showcase of projects built on it.
