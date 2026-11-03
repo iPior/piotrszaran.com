@@ -1,0 +1,34 @@
+---
+title: "Self-Hosted Development Environment"
+date: 2026-10-21
+category: "personal"
+description: "A persistent, self-hosted development environment with secure browser-based IDE and terminal access, on-demand VM management, and reproducible infrastructure."
+stack: ["Debian", "KVM/QEMU", "libvirt", "Tailscale", "Cloudflare Tunnel", "Cloudflare Access", "code-server", "ttyd", "Bash", "Terraform", "Ansible"]
+githubUrl: "https://github.com/iPior/devbox-infrastructure"
+featured: false
+hidden: false
+---
+
+## Overview
+
+I built a self-hosted development environment on my OptiPlex media server to maintain a consistent workspace across devices without duplicating development tools, repositories, SSH configurations, and shell customizations. The environment runs inside an isolated Debian virtual machine, with secure access through SSH or a browser, allowing me to develop from my laptop, desktop, or another device without maintaining separate setups.
+
+## What I Built
+
+- A persistent Debian 13 virtual machine using KVM/QEMU and libvirt, allocated 2 vCPUs, 8 GB RAM, and 100 GB of virtual storage on my existing OptiPlex server.
+- A centralized development workspace with Git, Node.js, pnpm, tmux, Codex CLI, SSH authentication, and consistent shell configuration across devices.
+- Browser-based development interfaces using code-server for a VS Code experience and ttyd for terminal access, exposed through Cloudflare Tunnel and secured with Cloudflare Access.
+- A custom Bash CLI for starting and stopping the virtual machine and individual development services on demand, with remote administration available through Tailscale.
+- Reproducible infrastructure using Terraform and Ansible, validated by provisioning, configuring, and removing a separate test VM without modifying the existing environment.
+
+## How It Works
+
+- I connect to the development VM using SSH, VS Code Remote SSH, or the browser-based interfaces at `dev.pior.ca` and `term.pior.ca`, with Cloudflare Access handling browser authentication.
+- The virtual machine maintains my repositories, development tools, and configurations independently of whichever device I'm using. A custom CLI controls the VM and its systemd services, allowing me to enable remote development access when needed and shut down the environment afterward.
+- KVM/libvirt isolates the Debian environment from the existing media-server workloads, while Terraform provisions the virtual infrastructure and Ansible configures the development software and services.
+
+## Technical Highlights
+
+- **Secure browser-based development**: Integrated code-server and ttyd with Cloudflare Tunnel and Access, providing authenticated IDE and terminal access from any browser without directly exposing their application ports.
+- **On-demand infrastructure management**: Built a Bash CLI using libvirt, SSH, and systemd to manage the VM and individual services, keeping the development environment available when needed without requiring it to run continuously.
+- **Reproducible virtualized infrastructure**: Used Terraform and Ansible, with Codex assisting in codifying the existing configuration, and validated the implementation through a disposable VM rebuild, repeat configuration checks, and cleanup.
