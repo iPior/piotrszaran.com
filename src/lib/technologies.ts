@@ -1,8 +1,10 @@
 /** Technology metadata shared by icon tiles, learning topics, and badges.
  * Add a technology here; components should not keep their own logo maps.
  */
-import openaiLogo from "../../public/images/tech/openai.svg?raw";
-import playwrightLogo from "../../public/images/tech/playwright.svg?raw";
+import openaiLogo from "../assets/images/tech/openai.svg?raw";
+import openaiLogoUrl from "../assets/images/tech/openai.svg?url";
+import playwrightLogo from "../assets/images/tech/playwright.svg?raw";
+import playwrightLogoUrl from "../assets/images/tech/playwright.svg?url";
 
 export interface Technology {
   name: string;
@@ -207,6 +209,15 @@ export const TECHNOLOGIES: readonly Technology[] = [
     badgeColor: "c5f74f",
   },
   { name: "Hono", simpleIcon: "hono", badgeColor: "e36002" },
+  {
+    name: "Java",
+    skillIcon: "java",
+    simpleIcon: "openjdk",
+    themeAware: true,
+    badgeColor: "ed8b00",
+  },
+  { name: "Android TV", simpleIcon: "googletv", badgeColor: "4285f4" },
+  { name: "ADB", simpleIcon: "android", badgeColor: "3ddc84" },
   { name: "Go", simpleIcon: "go", themeAware: true },
   { name: "Rust", simpleIcon: "rust", themeAware: true },
   {
@@ -225,14 +236,14 @@ export const TECHNOLOGIES: readonly Technology[] = [
   { name: "DigitalOcean", simpleIcon: "digitalocean", badgeColor: "0080ff" },
   {
     name: "OpenAI",
-    customIcon: "/images/tech/openai.svg",
+    customIcon: openaiLogoUrl,
     iconBackground: { base: "bg-black", sm: "sm:bg-black" },
     badgeColor: "000000",
     badgeLogo: `data:image/svg+xml;base64,${btoa(openaiLogo)}`,
   },
   {
     name: "Playwright",
-    customIcon: "/images/tech/playwright.svg",
+    customIcon: playwrightLogoUrl,
     badgeColor: "2ead33",
     badgeLogo: `data:image/svg+xml;base64,${btoa(playwrightLogo)}`,
   },
