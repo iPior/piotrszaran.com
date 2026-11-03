@@ -1,0 +1,53 @@
+---
+/*
+  A short, recognisable row of technology logos with a "+N" overflow, so a
+  reader sees the headline tools at a glance instead of a wall of badges.
+*/
+import { TECH_ICON_ONERROR, getIconBgClass, getIconSources, getMonogram } from '../../../lib/techIcons';
+
+interface Props {
+  stack: string[];
+  max?: number;
+  size?: 'sm' | 'md';
+}
+
+const { stack, max = 5, size = 'sm' } = Astro.props;
+const shown = stack.slice(0, max);
+const hidden = stack.slice(max);
+const box = size === 'md' ? 'h-7 w-7 rounded-md' : 'h-6 w-6 rounded';
+---
+
+{stack.length > 0 && (
+  <ul class="flex flex-wrap items-center gap-1.5" aria-label={`Built with ${stack.join(', ')}`}>
+    {shown.map((tech) => {
+      const { primary, fallback, fallbackTemplate } = getIconSources(tech);
+      return (
+        <li class={`relative flex shrink-0 items-center justify-center overflow-hidden ${box}`} title={tech}>
+          {(primary || fallback) && (
+            <img
+              src={primary ?? fallback!}
+              data-fallback-src={fallback ?? ''}
+              data-theme-simple-icon-template={!primary ? (fallbackTemplate ?? undefined) : undefined}
+              alt=""
+              loading="lazy"
+              class={`relative z-60 h-full w-full object-contain ${getIconBgClass(tech)}`}
+              onerror={TECH_ICON_ONERROR}
+            />
+          )}
+          <span
+            data-icon-fallback
+            aria-hidden="true"
+            class={`absolute inset-0 items-center justify-center bg-site-surface-hover text-[9px] font-semibold text-site-subtext ${primary || fallback ? 'hidden' : 'flex'}`}
+          >
+            {getMonogram(tech)}
+          </span>
+        </li>
+      );
+    })}
+    {hidden.length > 0 && (
+      <li class="ml-1 text-xs text-site-dim" title={hidden.join(', ')} aria-hidden="true">
+        +{hidden.length} more
+      </li>
+    )}
+  </ul>
+)}

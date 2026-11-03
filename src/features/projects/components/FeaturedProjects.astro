@@ -1,0 +1,106 @@
+---
+/*
+  Featured work: large cards on top, small cards underneath. Each project's
+  `featuredOrder` and `featuredSize` frontmatter decide where it sits (see
+  splitFeatured). Labels stay in plain language so the section reads well to
+  non-engineers; the archive below keeps the detail.
+*/
+import type { CollectionEntry } from 'astro:content';
+import TechLogos from './TechLogos.astro';
+import { PROJECT_CATEGORY_LABELS, splitFeatured, type ProjectCategory } from '../../../lib/projects';
+
+interface Props {
+  projects: (CollectionEntry<'projects'> & { itemNumber: number })[];
+}
+
+const { projects } = Astro.props;
+const { large, small } = splitFeatured(projects);
+
+// With an odd number of large cards, the first spans the full width so no card is left alone in a row.
+const isWide = (index: number) => large.length % 2 === 1 && index === 0;
+const largeGrid = large.length > 1 ? 'md:grid-cols-2' : '';
+// Pick column counts that avoid a lone card on the last row where possible.
+const smallGrid =
+  small.length === 1 ? '' :
+  small.length === 2 || small.length === 4 ? 'sm:grid-cols-2' :
+  'sm:grid-cols-2 lg:grid-cols-3';
+
+const CATEGORY_TEXT: Record<ProjectCategory, string> = {
+  personal: 'text-site-blue',
+  freelance: 'text-site-peach',
+  work: 'text-site-green',
+};
+const categoryLabel = (category: ProjectCategory) => PROJECT_CATEGORY_LABELS[category];
+const shortDate = (date: Date) =>
+  date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+---
+
+{projects.length > 0 && (
+  <section class="mt-12" aria-labelledby="featured-projects-heading">
+    <div class="mb-4">
+      <h2 id="featured-projects-heading" class="text-lg font-semibold text-site-text sm:text-xl">Featured work</h2>
+      <p class="mt-1 text-xs italic text-site-dim">// a good place to start</p>
+    </div>
+
+    <div class={`grid gap-4 ${largeGrid}`}>
+      {large.map((project, index) => {
+        const wide = isWide(index);
+        return (
+          <article class={`group relative flex flex-col rounded-xl border border-site-border bg-site-surface p-5 transition-colors hover:border-site-blue ${wide ? 'sm:p-8 md:col-span-2' : 'sm:p-6'}`}>
+            <p class="text-xs text-site-dim">
+              <span class={CATEGORY_TEXT[project.data.category]}>{categoryLabel(project.data.category)}</span>
+              <span class="mx-1.5 text-site-overlay">·</span>
+              <time datetime={project.data.date.toISOString()}>{shortDate(project.data.date)}</time>
+            </p>
+            <h3 class={`mt-2 font-bold leading-tight tracking-tight text-site-text ${wide ? 'text-2xl sm:text-4xl' : 'text-2xl sm:text-[1.75rem]'}`}>
+              <a href={`/projects/${project.slug}`} class="after:absolute after:inset-0 after:rounded-xl after:content-[''] focus-visible:outline-none">
+                {project.data.title}
+              </a>
+            </h3>
+            <p class={`mt-3 max-w-2xl leading-relaxed text-site-subtext ${wide ? 'text-sm sm:text-[0.95rem]' : 'text-sm'}`}>{project.data.description}</p>
+
+            <div class={`mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-5 pt-6`}>
+              <TechLogos stack={project.data.stack ?? []} max={wide ? 7 : 6} size="md" />
+              <div class="relative z-10 flex flex-wrap items-center gap-3 text-xs">
+                {project.data.blogSlug && (
+                  <a href={`/blogs/${project.data.blogSlug}`} class="text-site-blue hover:underline">Read the story</a>
+                )}
+                <a
+                  href={`/projects/${project.slug}`}
+                  class="rounded-md bg-site-blue px-3.5 py-2 font-semibold text-site-bg transition-opacity hover:opacity-85"
+                >
+                  View project →
+                </a>
+              </div>
+            </div>
+            <span aria-hidden="true" class="pointer-events-none absolute inset-0 rounded-xl outline-2 -outline-offset-1 outline-site-blue opacity-0 group-has-[h3_a:focus-visible]:opacity-100"></span>
+          </article>
+        );
+      })}
+    </div>
+
+    {small.length > 0 && (
+      <div class={`grid gap-4 ${large.length > 0 ? 'mt-4' : ''} ${smallGrid}`}>
+        {small.map((project) => (
+          <article class="group relative flex flex-col rounded-xl border border-site-border bg-site-surface p-5 transition-colors hover:border-site-blue">
+            <p class="text-xs text-site-dim">
+              <span class={CATEGORY_TEXT[project.data.category]}>{categoryLabel(project.data.category)}</span>
+              <span class="mx-1.5 text-site-overlay">·</span>
+              <time datetime={project.data.date.toISOString()}>{shortDate(project.data.date)}</time>
+            </p>
+            <h3 class="mt-1.5 text-base font-semibold leading-snug text-site-text transition-colors group-hover:text-site-blue">
+              <a href={`/projects/${project.slug}`} class="after:absolute after:inset-0 after:rounded-xl after:content-[''] focus-visible:outline-none">
+                {project.data.title}
+              </a>
+            </h3>
+            <p class="mt-2 line-clamp-3 text-xs leading-relaxed text-site-subtext">{project.data.description}</p>
+            <div class="mt-auto pt-4">
+              <TechLogos stack={project.data.stack ?? []} max={4} />
+            </div>
+            <span aria-hidden="true" class="pointer-events-none absolute inset-0 rounded-xl outline-2 -outline-offset-1 outline-site-blue opacity-0 group-has-[h3_a:focus-visible]:opacity-100"></span>
+          </article>
+        ))}
+      </div>
+    )}
+  </section>
+)}
