@@ -22,7 +22,7 @@ const visible = projects.filter((project) => !project.hidden)
   .sort((a, b) => new Date(b.date) - new Date(a.date));
 
 test('spotlight precedes the complete archive and adds no hydrated island', () => {
-  assert.ok(spotlight.includes('Featured Projects'));
+  assert.ok(spotlight.includes('Featured work'));
   assert.ok(archive.includes('projectList'));
   assert.ok(html.indexOf(spotlight) < html.indexOf(archive));
   assert.equal((spotlight.match(/<article\b/g) ?? []).length, visible.filter((p) => p.featured).length);
@@ -70,11 +70,11 @@ test('homepage keeps a compact list of all featured projects', async () => {
   assert.ok(!section.includes('bg-site-surface p-4'));
 });
 
-test('homepage and spotlight use each project’s complete archive number', async () => {
+test('homepage and archive use each project’s complete archive number', async () => {
   const home = await readFile('dist/index.html', 'utf8');
   for (const [index, project] of visible.entries()) {
     const expected = String(visible.length - index).padStart(2, '0');
-    const sections = project.featured ? [archive, spotlight, home] : [archive];
+    const sections = project.featured ? [archive, home] : [archive];
     for (const section of sections) {
       const article = [...section.matchAll(/<article\b[\s\S]*?<\/article>/g)]
         .find(([markup]) => markup.includes(`href="/projects/${project.slug}"`))?.[0];

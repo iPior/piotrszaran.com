@@ -16,9 +16,16 @@ const projects = defineCollection({
     githubUrl: z.string().url().optional(),
     blogSlug: z.string().optional(),
     featured: z.boolean().default(false),
+    // Position in the Featured work section (1 = first). Unordered entries follow, newest first.
+    featuredOrder: z.number().int().positive().optional(),
+    // Card size in the Featured work section. If no entry is large, the first one is.
+    featuredSize: z.enum(['large', 'small']).optional(),
     depth: z.enum(['short', 'full']).default('full'),
     hidden: z.boolean().default(false),
-  }),
+  }).refine(
+    (data) => data.featured || (data.featuredOrder === undefined && data.featuredSize === undefined),
+    { message: 'featuredOrder and featuredSize only apply when featured: true', path: ['featured'] },
+  ),
 });
 
 const blog = defineCollection({

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { registerHooks } from 'node:module';
 import { test } from 'node:test';
-import { numberProjects } from '../src/lib/projects.ts';
+import { numberProjects, orderFeatured, splitFeatured } from '../src/lib/projects.ts';
 
 test('archive numbers survive featured and category filtering without mutating entries', () => {
   const entries = [
@@ -16,6 +16,38 @@ test('archive numbers survive featured and category filtering without mutating e
   assert.ok(entries.every((p) => !('itemNumber' in p)));
   assert.deepEqual(numberProjects([]), []);
   assert.equal(numberProjects([{ id: 'new', category: 'work' }, ...entries])[1].itemNumber, 3);
+});
+
+const entry = (id, date, extra = {}) => ({ id, data: { date: new Date(date), ...extra } });
+const ids = (list) => list.map((p) => p.id);
+
+test('featured order puts numbered entries first, then the rest newest first', () => {
+  const list = [
+    entry('old', '2026-01-01'),
+    entry('second', '2026-02-01', { featuredOrder: 2 }),
+    entry('new', '2026-09-01'),
+    entry('first', '2025-01-01', { featuredOrder: 1 }),
+  ];
+  assert.deepEqual(ids(orderFeatured(list)), ['first', 'second', 'new', 'old']);
+  assert.deepEqual(ids(list), ['old', 'second', 'new', 'first']);
+});
+
+test('featured split defaults to one large lead and honours explicit sizes', () => {
+  const plain = [entry('a', '2026-03-01'), entry('b', '2026-02-01'), entry('c', '2026-01-01')];
+  const byDefault = splitFeatured(plain);
+  assert.deepEqual(ids(byDefault.large), ['a']);
+  assert.deepEqual(ids(byDefault.small), ['b', 'c']);
+
+  const sized = [
+    entry('a', '2026-05-01'),
+    entry('b', '2026-04-01', { featuredSize: 'large', featuredOrder: 2 }),
+    entry('c', '2026-03-01', { featuredSize: 'large', featuredOrder: 1 }),
+    entry('d', '2026-02-01', { featuredSize: 'small' }),
+  ];
+  const explicit = splitFeatured(sized);
+  assert.deepEqual(ids(explicit.large), ['c', 'b']);
+  assert.deepEqual(ids(explicit.small), ['a', 'd']);
+  assert.deepEqual(splitFeatured([]), { large: [], small: [] });
 });
 
 // Astro provides this virtual module at build time. Keep its real Zod export
@@ -65,6 +97,18 @@ test('depth and featured status are independent and never require a blog', () =>
 test('project schema rejects unsupported depths and non-boolean featured flags', () => {
   assert.equal(schema.safeParse({ ...minimal, depth: 'summary' }).success, false);
   assert.equal(schema.safeParse({ ...minimal, featured: 'true' }).success, false);
+});
+
+test('featured order and size are validated and require featured: true', () => {
+  const data = schema.parse({ ...minimal, featured: true, featuredOrder: 1, featuredSize: 'large' });
+  assert.equal(data.featuredOrder, 1);
+  assert.equal(data.featuredSize, 'large');
+  assert.equal(schema.parse(minimal).featuredOrder, undefined);
+  assert.equal(schema.safeParse({ ...minimal, featured: true, featuredOrder: 0 }).success, false);
+  assert.equal(schema.safeParse({ ...minimal, featured: true, featuredOrder: 1.5 }).success, false);
+  assert.equal(schema.safeParse({ ...minimal, featured: true, featuredSize: 'huge' }).success, false);
+  assert.equal(schema.safeParse({ ...minimal, featuredOrder: 1 }).success, false);
+  assert.equal(schema.safeParse({ ...minimal, featuredSize: 'large' }).success, false);
 });
 
 test('existing optional links and all project categories remain supported', () => {

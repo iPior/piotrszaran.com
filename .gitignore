@@ -18,3 +18,7 @@ node_modules/
 Thumbs.db
 
 notes.txt
+
+# Agent workspaces
+.claude/
+.agents/

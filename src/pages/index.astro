@@ -5,7 +5,7 @@ import HeroPanel from '../features/home/components/HeroPanel.astro';
 import ProjectsSection from '../features/home/components/ProjectsSection.astro';
 import { getCollection } from 'astro:content';
 import profilePhoto from '../assets/images/pior.jpeg';
-import { numberProjects } from '../lib/projects';
+import { numberProjects, orderFeatured } from '../lib/projects';
 
 const title = 'Piotr Szaran — Portfolio';
 const description = 'Software developer portfolio featuring profile details and selected projects.';
@@ -19,7 +19,8 @@ const allProjects = numberProjects(
   (await getCollection('projects', ({ data }) => !data.hidden))
     .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()),
 );
-const projects = allProjects.filter((project) => project.data.featured);
+// Same order as the Featured work section on /projects.
+const projects = orderFeatured(allProjects.filter((project) => project.data.featured));
 ---
 
 <AppLayout

@@ -16,7 +16,7 @@ interface Props {
   href?: string;
   liveUrl?: string;
   githubUrl?: string;
-  layout?: 'home' | 'list' | 'spotlight';
+  layout?: 'home' | 'list';
   depth?: 'short' | 'full';
   tagColorMode?: ShieldBadgeColorMode;
 }
@@ -39,9 +39,7 @@ export default function ProjectCard({
   const categoryToneClass = PROJECT_CATEGORY_TONE_CLASSES[category];
 
   return (
-    <article class={layout === 'spotlight'
-      ? 'rounded-lg border border-site-border bg-site-surface p-4 transition-colors duration-100 hover:border-site-blue'
-      : 'border-b border-site-border py-4 transition-colors duration-100 sm:hover:-mx-3 sm:hover:rounded sm:hover:bg-site-surface-hover sm:hover:px-3'}>
+    <article class="border-b border-site-border py-4 transition-colors duration-100 sm:hover:-mx-3 sm:hover:rounded sm:hover:bg-site-surface-hover sm:hover:px-3">
       {layout !== 'home' && (
         <div class={`mb-1 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-xs ${layout === 'list' ? 'relative z-[60] md:hidden sm:ml-[3.25rem]' : ''}`}>
           <time class="text-site-dim">{dateLabel}</time>
@@ -106,14 +104,14 @@ export default function ProjectCard({
           )}
         </div>
 
-        {layout !== 'spotlight' && <div class="relative z-[60] hidden w-36 flex-col items-end gap-2 text-right md:flex lg:w-40">
+        <div class="relative z-[60] hidden w-36 flex-col items-end gap-2 text-right md:flex lg:w-40">
           <span
             class={`inline-block rounded px-2 py-0.5 text-xs font-medium tracking-wider ${categoryToneClass}`}
           >
             {categoryLabel}
           </span>
           <time class="text-xs text-site-dim">{dateLabel}</time>
-        </div>}
+        </div>
       </div>
     </article>
   );
