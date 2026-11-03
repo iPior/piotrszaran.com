@@ -1,6 +1,8 @@
 /** Technology metadata shared by icon tiles, learning topics, and badges.
  * Add a technology here; components should not keep their own logo maps.
  */
+import cloudInitBadgeLogo from "../assets/images/tech/cloud-init-badge.svg?raw";
+import cloudInitLogoUrl from "../assets/images/tech/cloud-init.svg?url";
 import openaiLogo from "../assets/images/tech/openai.svg?raw";
 import openaiLogoUrl from "../assets/images/tech/openai.svg?url";
 import playwrightLogo from "../assets/images/tech/playwright.svg?raw";
@@ -175,6 +177,15 @@ export const TECHNOLOGIES: readonly Technology[] = [
     aliases: ["QEMU", "KVM"],
     simpleIcon: "qemu",
     badgeColor: "ff6600",
+  },
+  // Official mark from canonical/cloud-init (doc/rtd/static/logo.svg), wordmark removed.
+  // The hand is cut out of the circle, so the tile stays white like the original.
+  {
+    name: "cloud-init",
+    customIcon: cloudInitLogoUrl,
+    iconBackground: { base: "bg-white", sm: "sm:bg-white" },
+    badgeColor: "e95420",
+    badgeLogo: `data:image/svg+xml;base64,${btoa(cloudInitBadgeLogo)}`,
   },
   // No libvirt or ttyd logo exists on Simple Icons or skillicons: badge colour only, monogram tile.
   { name: "libvirt", badgeColor: "3e5f8a" },
