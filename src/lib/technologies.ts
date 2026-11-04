@@ -1,8 +1,12 @@
 /** Technology metadata shared by icon tiles, learning topics, and badges.
  * Add a technology here; components should not keep their own logo maps.
  */
-import openaiLogo from "../../public/images/tech/openai.svg?raw";
-import playwrightLogo from "../../public/images/tech/playwright.svg?raw";
+import cloudInitBadgeLogo from "../assets/images/tech/cloud-init-badge.svg?raw";
+import cloudInitLogoUrl from "../assets/images/tech/cloud-init.svg?url";
+import openaiLogo from "../assets/images/tech/openai.svg?raw";
+import openaiLogoUrl from "../assets/images/tech/openai.svg?url";
+import playwrightLogo from "../assets/images/tech/playwright.svg?raw";
+import playwrightLogoUrl from "../assets/images/tech/playwright.svg?url";
 
 export interface Technology {
   name: string;
@@ -168,9 +172,33 @@ export const TECHNOLOGIES: readonly Technology[] = [
     themeAware: true,
     badgeColor: "0054ff",
   },
+  {
+    name: "KVM/QEMU",
+    aliases: ["QEMU", "KVM"],
+    simpleIcon: "qemu",
+    badgeColor: "ff6600",
+  },
+  // Official mark from canonical/cloud-init (doc/rtd/static/logo.svg), wordmark removed.
+  // The hand is cut out of the circle, so the tile stays white like the original.
+  {
+    name: "cloud-init",
+    customIcon: cloudInitLogoUrl,
+    iconBackground: { base: "bg-white", sm: "sm:bg-white" },
+    badgeColor: "e95420",
+    badgeLogo: `data:image/svg+xml;base64,${btoa(cloudInitBadgeLogo)}`,
+  },
+  // No libvirt or ttyd logo exists on Simple Icons or skillicons: badge colour only, monogram tile.
+  { name: "libvirt", badgeColor: "3e5f8a" },
+  { name: "ttyd", badgeColor: "2e3436" },
+  // code-server is built by Coder, whose mark is the closest official logo.
+  { name: "code-server", simpleIcon: "coder", themeAware: true, badgeColor: "000000" },
+  { name: "Bash", skillIcon: "bash", badgeLogo: "gnubash", badgeColor: "4eaa25" },
+  { name: "Terraform", skillIcon: "terraform", badgeLogo: "terraform", badgeColor: "844fba" },
+  { name: "Ansible", skillIcon: "ansible", badgeLogo: "ansible", badgeColor: "ee0000" },
   { name: "Render", simpleIcon: "render", badgeColor: "46e3b7" },
   { name: "Netlify", simpleIcon: "netlify", badgeColor: "00c7b7" },
   { name: "Anthropic API", simpleIcon: "anthropic", badgeColor: "d97757" },
+  { name: "Ollama", simpleIcon: "ollama", themeAware: true, badgeColor: "000000" },
   {
     name: "Payload",
     simpleIcon: "payloadcms",
@@ -207,6 +235,15 @@ export const TECHNOLOGIES: readonly Technology[] = [
     badgeColor: "c5f74f",
   },
   { name: "Hono", simpleIcon: "hono", badgeColor: "e36002" },
+  {
+    name: "Java",
+    skillIcon: "java",
+    simpleIcon: "openjdk",
+    themeAware: true,
+    badgeColor: "ed8b00",
+  },
+  { name: "Android TV", simpleIcon: "googletv", badgeColor: "4285f4" },
+  { name: "ADB", simpleIcon: "android", badgeColor: "3ddc84" },
   { name: "Go", simpleIcon: "go", themeAware: true },
   { name: "Rust", simpleIcon: "rust", themeAware: true },
   {
@@ -225,14 +262,14 @@ export const TECHNOLOGIES: readonly Technology[] = [
   { name: "DigitalOcean", simpleIcon: "digitalocean", badgeColor: "0080ff" },
   {
     name: "OpenAI",
-    customIcon: "/images/tech/openai.svg",
+    customIcon: openaiLogoUrl,
     iconBackground: { base: "bg-black", sm: "sm:bg-black" },
     badgeColor: "000000",
     badgeLogo: `data:image/svg+xml;base64,${btoa(openaiLogo)}`,
   },
   {
     name: "Playwright",
-    customIcon: "/images/tech/playwright.svg",
+    customIcon: playwrightLogoUrl,
     badgeColor: "2ead33",
     badgeLogo: `data:image/svg+xml;base64,${btoa(playwrightLogo)}`,
   },

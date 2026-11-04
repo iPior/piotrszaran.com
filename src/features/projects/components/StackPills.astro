@@ -66,8 +66,10 @@ const isPills = mobileLayout === "pills";
               <span
                 data-icon-fallback
                 class:list={[
-                  "absolute inset-0 items-center justify-center font-semibold tracking-wide text-site-subtext sm:text-[11px]",
-                  isPills ? "text-[9px]" : "text-[11px]",
+                  "absolute inset-0 items-center justify-center font-semibold tracking-wide text-site-subtext sm:rounded-xl sm:border-2 sm:border-site-border sm:text-[11px]",
+                  // Same tile as a logo, so a missing logo doesn't look unfinished.
+                  isPills ? "text-[9px]" : "rounded-xl border-2 border-site-border text-[11px]",
+                  iconBgClass,
                   primary || fallback ? "hidden" : "flex",
                 ]}
                 aria-hidden="true"

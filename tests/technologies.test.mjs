@@ -86,6 +86,18 @@ test("custom icons exist and embedded badge logos match their source SVGs", asyn
   }
 });
 
+test("Ollama provides a theme-aware pill icon and branded badge", () => {
+  const technology = registry.getTechnology("Ollama");
+  assert.equal(technology.badgeColor, "000000");
+  assert.equal(
+    icons.getIconSources("Ollama").fallbackTemplate,
+    `https://cdn.simpleicons.org/ollama/${icons.THEME_SIMPLE_ICON_COLOR_PLACEHOLDER}`,
+  );
+  const badge = new URL(badges.getShieldSrc("Ollama", technology.badgeColor, "mapped"));
+  assert.equal(badge.searchParams.get("logo"), "ollama");
+  assert.equal(badge.searchParams.get("logoColor"), "ffffff");
+});
+
 test("unknown technologies retain readable fallbacks and safe badge labels", () => {
   assert.equal(registry.getTechnology("Unknown & Tech"), undefined);
   assert.deepEqual(icons.getIconSources("Unknown & Tech"), {

@@ -1,35 +1,33 @@
 ---
-title: "Custom WordPress Plugin"
-date: 2026-04-04
+title: "Network Access Request Management System"
+date: 2026-10-25
 category: "work"
-description: "WordPress plugin that manages Network Access Request Form submissions. It collects request details, stores them in a database, sends notifications, and provides an admin interface for reviewing and exporting records."
+description: "Custom WordPress plugin for network access requests, employee profiles, and access lifecycle tracking, with server-verified review, retry-safe submissions, and administrative reporting."
 stack: ["HTML", "CSS", "JavaScript", "PHP", "MariaDB", "WordPress"]
 featured: true
-hidden: true
+hidden: false
 ---
 
 ## Overview
 
-NARF Form Handler is a WordPress plugin used by Ontario court organizations to process Network Access Request Forms from submission through audit-ready admin review. It serves judiciary and ministry teams with a conditional request flow that adapts to ministry, division, branch, and section. I owned the end-to-end implementation across form behavior, persistence, admin operations, and export and reporting paths.
-
-## How It Works
-
-- The public `[narf_form]` shortcode renders a dynamic, multi-step form with cascading org selections and division-specific access checklists for apps, groups, DLs, folders, and mailboxes, then posts to a hardened `admin-post.php` handler with nonce validation.
-- The backend sanitizes and normalizes input, merges variant checkbox payloads into canonical arrays, writes submissions to a dedicated MySQL schema (`submissions` plus normalized `submission_items`), and triggers HTML email notifications.
-- Admin users manage records in a custom "NARF Records" panel with searchable list and detail views, plus CSV and PDF exports handled early in `admin_init` to avoid output-buffer and header conflicts.
-
-## Technical Highlights
-
-- **Dedicated data layer outside WordPress tables**: I isolated request data in a separate `narf_form` database via a custom `wpdb` instance, which simplified schema control and reduced coupling to site-level WordPress data.
-- **Normalization and compatibility strategy**: I stored multi-select access items in a junction table while preserving UI flexibility through variant field merging, such as division-specific checkbox names, which balanced clean storage with practical form evolution.
-- **Operational reliability in WordPress constraints**: I added nonce checks, deterministic redirect states, failure diagnostics, and export routing that works with WordPress' hook and output lifecycle instead of fighting it.
+NARF Form Handler is a custom WordPress plugin used by Ontario court organizations to process network access requests and track employee profiles and access changes. I built the conditional request form, server-verified review and submission workflow, dedicated database layer, and administrative tools for judicial managers.
 
 ## What I Built
 
-- I implemented the full submission pipeline: validation, sanitization, conditional field resolution, database writes, and notification email delivery.
-- I built the admin records experience, including search, detail rendering, and secure CSV and PDF export flows.
-- I integrated Microsoft 365 MSAL-based submitter auto-fill and conditional asset loading, including Elementor-aware behavior, to reduce user friction and avoid unnecessary frontend overhead.
+- I implemented request flows for new users, staff transfers, access changes, account enable/disable, and staff deletion, with cascading organization selections, role templates, address suggestions, and organization-specific access checklists.
+- I built the Request details -> Review -> Complete workflow, including Microsoft 365 MSAL-based submitter auto-fill, server-side identity verification, administrator-managed submission eligibility, and retry-safe persistence.
+- I modeled employee users, organization-bound profiles, and current access separately from historical requests, with lifecycle transitions and tracked edits to active profiles.
+- I built the Submissions, Users, and Settings admin modules, including searchable records, profile detail and editing, access catalogs, role and division templates, and submission whitelist management.
+- I implemented configurable email notifications and formatted templates, optional PDF attachments, protected requester PDF downloads, CSV export, and administrator print/save-as-PDF views.
 
-## Optional Context
+## How It Works
 
-This project had to fit strict WordPress plugin boundaries, including procedural PHP, a hook-driven lifecycle, and no Node or Composer dependency chain, while supporting a complex org hierarchy and access catalog. The architecture choice to normalize items and centralize request handling made ongoing schema and migration work significantly safer and easier to ship.
+- Managers choose the staff change they need and fill out a guided form. Role templates suggest the access an employee needs, so managers do not have to remember individual distribution lists, security groups, or mailboxes.
+- Managers review and submit their request, then download a PDF for their records. The plugin saves the request and emails the service desk, where staff assign the ticket to IT support technicians.
+- Administrators use the WordPress dashboard to look up requests and employee records, update templates, and change notification recipients and other settings without editing code.
+
+## Technical Highlights
+
+- **Role-based access templates**: I captured common access requirements in reusable templates, giving experienced and newly appointed managers a starting point without needing to know the technical setup.
+- **Settings the team can maintain**: I put everyday configuration in the admin dashboard so the product can adapt to staff and process changes without depending on me to update the code.
+- **Checks that protect the records**: I added server-side permission checks and duplicate-submission protection, and kept original requests separate from editable employee profiles so later changes do not overwrite request history.

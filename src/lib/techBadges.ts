@@ -12,7 +12,8 @@ export function getShieldSrc(
   logoColorMode: ShieldBadgeColorMode,
 ): string {
   const technology = getTechnology(tag);
-  const encodedTag = encodeURIComponent(tag);
+  // Shields uses "-" and "_" as separators in badge paths; doubling them escapes them.
+  const encodedTag = encodeURIComponent(tag.replace(/-/g, "--").replace(/_/g, "__"));
   const logo = technology?.badgeLogo ?? technology?.simpleIcon;
   const logoColor =
     technology?.preserveBadgeLogoColor && logoColorMode === "mapped"

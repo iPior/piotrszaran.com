@@ -22,10 +22,9 @@ const { projects, totalProjects } = Astro.props;
     projects.length === 0 ? (
       <p class="py-6 text-site-dim">No featured projects yet.</p>
     ) : (
-        <div>
+        <div class="pl-3 sm:pl-4">
           {projects.map((project) => (
             <ProjectCard
-              itemNumber={project.itemNumber}
               title={project.data.title}
               description={project.data.description}
               category={project.data.category}

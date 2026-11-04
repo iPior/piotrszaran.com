@@ -23,6 +23,7 @@ const filterProjects = projects.map((project) => ({
   liveUrl: project.data.liveUrl,
   githubUrl: project.data.githubUrl,
   depth: project.data.depth,
+  inProgress: project.data.status === 'in-progress',
 }));
 ---
 

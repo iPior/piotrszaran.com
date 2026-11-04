@@ -2,7 +2,7 @@
 import HeroGrid from './hero/HeroGrid.astro';
 import HeroHeader from './hero/HeroHeader.astro';
 import HeroSocials from './hero/HeroSocials.astro';
-import type { LearningTopic, ProfileField, SocialLink } from './hero/types';
+import type { ProfileField, SocialLink } from './hero/types';
 import type { ImageMetadata } from 'astro';
 
 export interface Props {
@@ -15,7 +15,6 @@ export interface Props {
   frontend?: string[];
   backend?: string[];
   platformInfrastructure?: string[];
-  learningTopics?: LearningTopic[];
   socialLinks?: SocialLink[];
   resumeHref?: string;
   resumeLabel?: string;
@@ -39,7 +38,7 @@ const defaultFrontend = [
   "Tailwind CSS",
 ];
 
-const defaultBackend = ["Node.js", "Hono", "Drizzle"];
+const defaultBackend = ["Node.js", "Go", "Hono", "Drizzle"];
 
 const defaultPlatformInfrastructure = [
   "Docker",
@@ -47,25 +46,6 @@ const defaultPlatformInfrastructure = [
   "Linux",
   "GitHub Actions",
   "Caddy",
-];
-
-const defaultLearningTopics: LearningTopic[] = [
-  {
-    name: "Go",
-    description:
-      "Building small services and platform tooling while learning idiomatic Go.",
-  },
-  {
-    name: "Rust",
-    description:
-      "Exploring systems programming and strongly typed backend development.",
-  },
-  {
-    name: "Data Structures & Algorithms",
-    description:
-      "Practicing common interview patterns such as two pointers, sliding windows, binary search, linked lists, BFS, and DFS.",
-    glyph: "algorithm",
-  },
 ];
 
 const defaultSocialLinks: SocialLink[] = [
@@ -84,7 +64,6 @@ const {
   frontend = defaultFrontend,
   backend = defaultBackend,
   platformInfrastructure = defaultPlatformInfrastructure,
-  learningTopics = defaultLearningTopics,
   socialLinks = defaultSocialLinks,
   resumeHref = '/resume.pdf',
   resumeLabel = 'Resume',
@@ -104,7 +83,6 @@ const {
     frontend={frontend}
     backend={backend}
     platformInfrastructure={platformInfrastructure}
-    learningTopics={learningTopics}
     profileFields={profileFields}
   />
 </section>

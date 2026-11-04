@@ -22,6 +22,7 @@ interface Project {
   githubUrl?: string;
   blogSlug?: string;
   depth?: 'short' | 'full';
+  inProgress?: boolean;
 }
 
 export default function ProjectFilter({ projects }: { projects: Project[] }) {
@@ -55,6 +56,7 @@ export default function ProjectFilter({ projects }: { projects: Project[] }) {
               liveUrl={project.liveUrl}
               githubUrl={project.githubUrl}
               depth={project.depth}
+              inProgress={project.inProgress}
               layout="list"
               tagColorMode="mapped"
             />
