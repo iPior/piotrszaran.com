@@ -11,7 +11,7 @@ interface Props {
   size?: 'sm' | 'md';
 }
 
-const { stack, max = 5, size = 'sm' } = Astro.props;
+const { stack, max = 6, size = 'sm' } = Astro.props;
 const shown = stack.slice(0, max);
 const hidden = stack.slice(max);
 const box = size === 'md' ? 'h-7 w-7 rounded-md' : 'h-6 w-6 rounded';
@@ -45,7 +45,7 @@ const box = size === 'md' ? 'h-7 w-7 rounded-md' : 'h-6 w-6 rounded';
       );
     })}
     {hidden.length > 0 && (
-      <li class="ml-1 text-xs text-site-dim" title={hidden.join(', ')} aria-hidden="true">
+      <li class="ml-1 whitespace-nowrap text-xs text-site-dim" title={hidden.join(', ')} aria-hidden="true">
         +{hidden.length} more
       </li>
     )}

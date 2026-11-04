@@ -198,6 +198,7 @@ export const TECHNOLOGIES: readonly Technology[] = [
   { name: "Render", simpleIcon: "render", badgeColor: "46e3b7" },
   { name: "Netlify", simpleIcon: "netlify", badgeColor: "00c7b7" },
   { name: "Anthropic API", simpleIcon: "anthropic", badgeColor: "d97757" },
+  { name: "Ollama", simpleIcon: "ollama", themeAware: true, badgeColor: "000000" },
   {
     name: "Payload",
     simpleIcon: "payloadcms",

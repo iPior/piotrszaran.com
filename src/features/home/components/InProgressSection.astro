@@ -39,15 +39,10 @@ const latest = rows[0]?.progress.updated;
       <span class="text-xs text-site-dim">// {summary}{latest && `, last update ${formatAgo(latest)}`}</span>
     </div>
 
-    <div>
+    <div class="pl-3 sm:pl-4">
       {rows.map(({ project, progress, paused }) => (
         <article class="border-b border-site-border py-4 transition-colors duration-100 sm:hover:-mx-3 sm:hover:rounded sm:hover:bg-site-surface-hover sm:hover:px-3">
           <div class="flex items-start gap-3 sm:gap-4">
-            <span class="relative mt-[7px] flex h-2 w-2 shrink-0" aria-hidden="true">
-              {!paused && <span class="absolute inset-0 rounded-full bg-site-peach/60 motion-safe:animate-ping"></span>}
-              <span class:list={['relative h-2 w-2 rounded-full', paused ? 'bg-site-overlay' : 'bg-site-peach']}></span>
-            </span>
-
             <div class="min-w-0 flex-1">
               <div class="mb-1 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 md:hidden">
                 <span class="text-xs text-site-dim">

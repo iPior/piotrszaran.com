@@ -25,8 +25,8 @@ const { posts, totalPosts } = Astro.props;
       <p class="py-6 text-site-dim">No posts yet.</p>
     ) : (
       <>
-        <div>
-          {posts.map((post, idx) => <BlogCard post={post} itemNumber={totalPosts - idx} />)}
+        <div class="pl-3 sm:pl-4">
+          {posts.map((post) => <BlogCard post={post} />)}
         </div>
 
         <div class="mt-4 flex items-center justify-between gap-3">

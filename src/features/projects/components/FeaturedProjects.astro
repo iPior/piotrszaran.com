@@ -60,7 +60,7 @@ const shortDate = (date: Date) =>
             <p class={`mt-3 max-w-2xl leading-relaxed text-site-subtext ${wide ? 'text-sm sm:text-[0.95rem]' : 'text-sm'}`}>{project.data.description}</p>
 
             <div class={`mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-5 pt-6`}>
-              <TechLogos stack={project.data.stack ?? []} max={wide ? 7 : 6} size="md" />
+              <TechLogos stack={project.data.stack ?? []} max={8} size="md" />
               <div class="relative z-10 flex flex-wrap items-center gap-3 text-xs">
                 {project.data.blogSlug && (
                   <a href={`/blogs/${project.data.blogSlug}`} class="text-site-blue hover:underline">Read the story</a>
@@ -95,7 +95,7 @@ const shortDate = (date: Date) =>
             </h3>
             <p class="mt-2 line-clamp-3 text-xs leading-relaxed text-site-subtext">{project.data.description}</p>
             <div class="mt-auto pt-4">
-              <TechLogos stack={project.data.stack ?? []} max={4} />
+              <TechLogos stack={project.data.stack ?? []} max={6} />
             </div>
             <span aria-hidden="true" class="pointer-events-none absolute inset-0 rounded-xl outline-2 -outline-offset-1 outline-site-blue opacity-0 group-has-[h3_a:focus-visible]:opacity-100"></span>
           </article>
