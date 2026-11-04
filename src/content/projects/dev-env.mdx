@@ -23,7 +23,7 @@ I built a self-hosted development environment on my OptiPlex media server to mai
 
 ## How It Works
 
-- I connect to the development VM using SSH, VS Code Remote SSH, or the browser-based interfaces at `dev.pior.ca` and `term.pior.ca`, with Cloudflare Access handling browser authentication.
+- I connect to the development VM using SSH, VS Code Remote SSH, or the browser-based interfaces on custom domains with Cloudflare Access handling browser authentication.
 - The virtual machine maintains my repositories, development tools, and configurations independently of whichever device I'm using. A custom CLI controls the VM and its systemd services, allowing me to enable remote development access when needed and shut down the environment afterward.
 - KVM/libvirt isolates the Debian environment from the existing media-server workloads, while Terraform provisions the virtual infrastructure and Ansible configures the development software and services.
 

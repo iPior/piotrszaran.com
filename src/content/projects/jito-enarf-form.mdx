@@ -10,7 +10,7 @@ hidden: false
 
 ## Overview
 
-NARF Form Handler is a custom WordPress plugin used by Ontario court organizations to process network access requests and track employee profiles and access changes. I built the conditional request form, server-verified review and submission workflow, dedicated database layer, and administrative tools for judiciary and ministry teams.
+NARF Form Handler is a custom WordPress plugin used by Ontario court organizations to process network access requests and track employee profiles and access changes. I built the conditional request form, server-verified review and submission workflow, dedicated database layer, and administrative tools for judicial managers.
 
 ## What I Built
 
@@ -22,12 +22,12 @@ NARF Form Handler is a custom WordPress plugin used by Ontario court organizatio
 
 ## How It Works
 
-- The `[narf_form]` shortcode renders a conditional form that adapts to the request type and ministry, division, branch, and section. A nonce-protected server check verifies the signed-in submitter against the submission whitelist before enabling request selection.
-- Review validates the request without saving records or sending email. Final AJAX submission repeats authorization and validation, checks that the input and relevant context still match the reviewed request, and commits through a durable operation record before processing lifecycle updates and notifications.
-- Procedural PHP and modular JavaScript integrate with WordPress hooks, while a custom `wpdb` connection stores requests, normalized organization and access data, profiles, and processing state in the separate `narf_form` database. Admin tools expose saved records and profile history; requester downloads and email attachments share the same saved-submission PDF renderer.
+- Managers choose the staff change they need and fill out a guided form. Role templates suggest the access an employee needs, so managers do not have to remember individual distribution lists, security groups, or mailboxes.
+- Managers review and submit their request, then download a PDF for their records. The plugin saves the request and emails the service desk, where staff assign the ticket to IT support technicians.
+- Administrators use the WordPress dashboard to look up requests and employee records, update templates, and change notification recipients and other settings without editing code.
 
 ## Technical Highlights
 
-- **Employee lifecycle modeling**: I separated historical submissions from current employee profiles and access, supporting transfers, access changes, and audited profile edits without rewriting the original requests.
-- **Retry-safe submission processing**: I implemented durable idempotency, reviewed-request integrity checks, and post-save recovery through client polling and scheduled reconciliation, preventing duplicate submissions and avoiding automatic resends when a notification attempt has an uncertain outcome.
-- **Organization-scoped authorization**: I enforced exact whitelist membership for server-verified submitter identities and validated selected access against the target organization's catalog, with missing or invalid whitelist configuration denying submissions.
+- **Role-based access templates**: I captured common access requirements in reusable templates, giving experienced and newly appointed managers a starting point without needing to know the technical setup.
+- **Settings the team can maintain**: I put everyday configuration in the admin dashboard so the product can adapt to staff and process changes without depending on me to update the code.
+- **Checks that protect the records**: I added server-side permission checks and duplicate-submission protection, and kept original requests separate from editable employee profiles so later changes do not overwrite request history.

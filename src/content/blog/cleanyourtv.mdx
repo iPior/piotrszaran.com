@@ -13,18 +13,13 @@ hidden: false
 
 ### Overview
 
-This project is my own build of cleanyourtv, an open source project for cleaning up Android TVs that replaces the
-stock home screen with a lightweight launcher. I ran it on my TCL 43S450G and then made it mine: a Continue watching
-row and five home screens I designed myself (Feature, Minutes, Horizon, Centre Line and Lamp), switched with a Themes
-button right on the TV. I built all of it with Claude Code in a few days.
+This project is my own build of [Gathin23/cleanyourtv](https://github.com/Gathin23/cleanyourtv), an open source project for cleaning up Android TVs that replaces the stock home screen with a lightweight launcher. I ran it on my TCL 43S450G and then made it mine: a Continue watching row and five home screens I designed myself (Feature, Minutes, Horizon, Centre Line and Lamp), switched with a Themes button right on the TV. I built all of it with Claude Code in a few days.
 
 ### Goals of the Project
 
 - Get rid of the ads and the slowness. The stock Google TV home screen was full of ads, and the TV felt slow.
-- Make it my own. Cleaning up the TV was the starting point, but I knew I could take the launcher further and make
-  something I liked better.
-- Come up with my own designs. A home screen is something you look at every day, and I wanted it to look the way I
-  wanted, not the way a TV maker decided.
+- Make it my own. Cleaning up the TV was the starting point, but I knew I could take the launcher further and make something I liked better.
+- Come up with my own designs. A home screen is something you look at every day, and I wanted it to look the way I wanted, not the way a TV maker decided.
 - Own my software. Every change is reversible, nothing is rooted or uninstalled, and the code is mine to change.
 - See how far AI coding agents have come, by building a real Android project on real hardware with one.
 
@@ -38,18 +33,11 @@ button right on the TV. I built all of it with Claude Code in a few days.
 
 ### Backstory
 
-cleanyourtv was popular online, and I thought, why not give it a shot? My TV had the usual Google TV problems: ads
-all over the home screen and a general feeling of slowness. The project's approach was simple: back everything up,
-disable the bloat (never uninstall it), and replace the home screen with a small, fast launcher. I ended up
-disabling 27 packages, including the stock launcher, the voice assistant and Chromecast, and the TV immediately felt
-better.
+[Gathin23/cleanyourtv](https://github.com/Gathin23/cleanyourtv) was popular online, and I thought, why not give it a shot? My TV had the usual Google TV problems: ads all over the home screen and a general feeling of slowness. The project's approach was simple: back everything up, disable the bloat (never uninstall it), and replace the home screen with a small, fast launcher. I ended up disabling 27 packages, including the stock launcher, the voice assistant and Chromecast, and the TV immediately felt better.
 
-But I also knew going in that I could make it my own, and better. The stock launcher is clean, but it's someone
-else's design. So I started with the thing I missed most: a Continue watching row, so the shows I'm halfway through
-in Jellyfin and Netflix are right there on Home.
+But I also knew going in that I could make it my own, and better. The stock launcher is clean, but it's someone else's design. So I started with the thing I missed most: a Continue watching row, so the shows I'm halfway through in Jellyfin and Netflix are right there on Home.
 
-Then I got into the fun part. I designed home screens as HTML mock-ups on my laptop, tried a bunch of ideas, and
-kept five:
+Then I got into the fun part. I designed home screens as HTML mock-ups on my laptop, tried a bunch of ideas, and kept five:
 
 - **Feature:** a big cinema banner of whatever's focused, with progress shown as a strip of film.
 - **Minutes:** a timeline of how much time is left in each show, shortest first, for "what can I finish before
@@ -58,34 +46,10 @@ kept five:
 - **Centre Line:** calm and centred, with stars coming out in the evening.
 - **Lamp:** a dim, warm room where only the focused item is lit, like a lamp following you around.
 
-From there I built them one at a time with Claude Code. The loop was simple: build a step, install it on the TV,
-look at it, press the real remote, decide what to change. Some of my favourite decisions came from that loop. Lamp's
-first dim was too dark, so it got lighter. Centre Line had a little focus dot that looked fine in the mock-up but
-not on the TV, so it went. I tried a sky setting for Horizon and decided the sky should simply follow the clock.
+From there I built them one at a time with Claude Code. The loop was simple: build a step, install it on the TV, look at it, press the real remote, decide what to change. Lamp's first dim was too dark, so it got lighter. Centre Line had a little focus dot that looked fine in the mock-up but not on the TV, so it went. I tried a sky setting for Horizon and decided the sky should simply follow the clock.
 
-Honestly, there were no big surprises. It was a simple few-day project. That's what struck me most: how easy it is
-now to build something like this with an AI agent, and how good the models have become. I made the designs and the
-decisions, and Claude turned them into working Java on a real TV.
-
-### What I Learned
-
-- **Seeing it on the TV is what matters.** A mock-up on a laptop and a screen across the room aren't the same thing.
-  Several of my decisions only came after seeing a theme on the TV and using it with the real remote.
-- **Android TV apps share less than you'd think.** On my TV only Jellyfin and Netflix publish anything to Watch Next,
-  the list behind Continue watching. Prime Video, YouTube and Disney+ publish nothing.
-- **Fonts are heavy.** The original project keeps its launcher under 576 KB because it targets TVs with 1 GB of RAM.
-  My build is 724 KB, and almost all of the difference is the fonts I gave three of the themes, even cut down. I
-  kept them on purpose: on a 2 GB TV the type is worth more than the kilobytes, and that's exactly the kind of call
-  owning your own fork lets you make.
-- **Keep network access tight.** Netflix's posters are web addresses, so showing them meant giving the launcher
-  internet access. I limited it to Netflix's image server only, with every picture cached on the TV.
-- **TVs are bad at recording themselves.** I wanted demo videos for the README, but this TV's screen recorder only
-  catches about one frame per key press, so the README has screenshots instead.
+Honestly, there were no big surprises. It was a simple few-day project. That's what struck me most: how easy it is now to build something like this with an AI agent, and how good the models have become. I made the designs and the decisions, and Claude turned them into working Java on a real TV.
 
 ### Ending Up in the Showcase
 
-Because my fork adds permissions and goes over the size limit, it was never meant to go back into the original
-project as a pull request. The project has a Showcase page for exactly that: projects built on top of it that live in
-their own repositories. I wrote a proper README for the fork with screenshots of all five themes, opened a pull
-request adding it to the Showcase, and it was merged. Seeing my fork listed in the original repo was a nice way to
-finish a project that started with "why not give it a shot?"
+Because my fork adds permissions and goes over the size limit, it was never meant to go back into the original project as a pull request. The project has a Showcase page for exactly that: projects built on top of it that live in their own repositories. I wrote a proper README for the fork with screenshots of all five themes, opened a pull request adding it to the Showcase, and it was merged.
