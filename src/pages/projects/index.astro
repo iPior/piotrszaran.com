@@ -24,6 +24,8 @@ const filterProjects = projects.map((project) => ({
   githubUrl: project.data.githubUrl,
   depth: project.data.depth,
   inProgress: project.data.status === 'in-progress',
+  group: project.data.group,
+  featured: project.data.featured,
 }));
 ---
 
@@ -33,9 +35,15 @@ const filterProjects = projects.map((project) => ({
 >
   <ProjectPageIntro />
 
+  <p class="mt-5 max-w-2xl text-sm leading-relaxed text-site-subtext">A few projects that show how I build today, smaller things made out of curiosity, and the earlier work that got me here.</p>
+  <nav aria-label="Project sections" class="mt-5 flex flex-wrap gap-x-5 gap-y-3 text-xs text-site-blue">
+    <a href="#featured-projects-heading" class="hover:underline">Selected work ↓</a>
+    <a href="#browse-projects" class="hover:underline">Explore the rest ↓</a>
+  </nav>
+
   <FeaturedProjects projects={projects.filter((project) => project.data.featured)} />
 
-  <section class="mt-10" aria-label="All projects">
+  <section id="browse-projects" class="mt-14 scroll-mt-6" aria-label="Browse projects">
     {
       projects.length === 0 ? (
         <p class="py-6 text-site-dim">No projects yet.</p>

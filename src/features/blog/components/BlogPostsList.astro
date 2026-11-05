@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import BlogCard from "./BlogCard.astro";
+import { BLOG_TOPICS, BLOG_TOPIC_IDS } from '../../../lib/blog';
 
 interface Props {
   posts: CollectionEntry<"blog">[];
@@ -9,22 +10,62 @@ interface Props {
 const { posts } = Astro.props;
 ---
 
-<section class="mt-10">
+<section class="mt-12" data-blog-browser>
   <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1 border-b border-site-border pb-2.5">
     <h2 class="text-base font-semibold text-site-text sm:text-lg">
-      <span class="font-normal text-site-mauve">const</span>
-      <span class="text-site-yellow">posts</span>
+      All writing
     </h2>
-    <span class="text-xs text-site-dim">// {posts.length} items</span>
+    <span class="text-xs text-site-subtext" aria-live="polite" aria-atomic="true" data-post-count>{posts.length} posts · newest first</span>
   </div>
+
+  <div class="mt-4 flex flex-wrap gap-2" role="group" aria-label="Filter writing by topic">
+    {(['all', ...BLOG_TOPIC_IDS] as const).map((topic) => {
+      const count = topic === 'all' ? posts.length : posts.filter((post) => post.data.topics.includes(topic)).length;
+      return (
+        <button type="button" data-blog-topic={topic} aria-pressed={topic === 'all'}
+          class="rounded-md border border-site-border px-3 py-2 text-xs text-site-subtext transition-colors hover:text-site-text aria-pressed:border-site-blue aria-pressed:bg-site-blue/10 aria-pressed:text-site-blue focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-site-blue">
+          {topic === 'all' ? 'All posts' : BLOG_TOPICS[topic]} <span class="ml-1">{count}</span>
+        </button>
+      );
+    })}
+  </div>
+  <p class="mt-3 text-xs leading-relaxed text-site-subtext">Browse by subject. Some stories cross topics; technology tags stay with each post.</p>
+  <p class="pt-6 text-sm text-site-subtext" data-blog-empty hidden>No posts in this topic yet. Choose another topic or All posts.</p>
 
   {
     posts.length === 0 ? (
       <p class="py-6 text-site-dim">No posts yet.</p>
     ) : (
       <div>
-        {posts.map((post, index) => <BlogCard post={post} itemNumber={posts.length - index} />)}
+        {posts.map((post, index) => (
+          <div data-blog-entry data-topics={JSON.stringify(post.data.topics)}>
+            <BlogCard post={post} itemNumber={posts.length - index} />
+          </div>
+        ))}
       </div>
     )
   }
 </section>
+
+<script>
+  import { matchesBlogTopic, type BlogTopic } from '../../../lib/blog';
+
+  document.querySelectorAll<HTMLElement>('[data-blog-browser]').forEach((browser) => {
+    const buttons = browser.querySelectorAll<HTMLButtonElement>('[data-blog-topic]');
+    const entries = browser.querySelectorAll<HTMLElement>('[data-blog-entry]');
+    buttons.forEach((button) => button.addEventListener('click', () => {
+      const active = button.dataset.blogTopic as BlogTopic | 'all';
+      buttons.forEach((other) => other.setAttribute('aria-pressed', String(other === button)));
+      let count = 0;
+      entries.forEach((entry) => {
+        const matches = matchesBlogTopic(JSON.parse(entry.dataset.topics ?? '[]'), active);
+        entry.hidden = !matches;
+        if (matches) count++;
+      });
+      const counter = browser.querySelector('[data-post-count]');
+      if (counter) counter.textContent = `${count} ${count === 1 ? 'post' : 'posts'} · newest first`;
+      const empty = browser.querySelector<HTMLElement>('[data-blog-empty]');
+      if (empty) empty.hidden = count !== 0;
+    }));
+  });
+</script>

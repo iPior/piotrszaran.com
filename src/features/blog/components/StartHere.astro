@@ -1,0 +1,27 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { orderStartHere } from '../../../lib/blog';
+import { calculateReadingTime } from '../../../lib/utils';
+
+interface Props { posts: CollectionEntry<'blog'>[] }
+const posts = orderStartHere(Astro.props.posts);
+---
+
+{posts.length > 0 && (
+  <section class="mt-10" aria-labelledby="start-here-heading">
+    <h2 id="start-here-heading" class="text-lg font-semibold text-site-text sm:text-xl">Start here</h2>
+    <p class="mt-1 text-sm text-site-subtext">Three sides of how I build: the systems, the curiosity, and the decisions.</p>
+    <div class="mt-4 grid gap-4 md:grid-cols-3">
+      {posts.map((post) => (
+        <article class="group relative flex flex-col rounded-xl border border-site-border bg-site-surface p-5 transition-colors hover:border-site-blue">
+          <p class="text-xs text-site-green">{post.data.readingTime ?? calculateReadingTime(post.body ?? '')} min read</p>
+          <h3 class="mt-3 text-base font-semibold leading-snug text-site-text group-hover:text-site-blue">
+            <a href={`/blogs/${post.slug}`} class="after:absolute after:inset-0 after:rounded-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-site-blue">{post.data.title}</a>
+          </h3>
+          <p class="mt-3 text-sm leading-relaxed text-site-subtext">{post.data.startHere?.reason}</p>
+          <span aria-hidden="true" class="mt-auto pt-5 text-xs text-site-blue">Read the story →</span>
+        </article>
+      ))}
+    </div>
+  </section>
+)}

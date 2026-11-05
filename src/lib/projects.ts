@@ -6,6 +6,23 @@ export const PROJECT_CATEGORY_LABELS = {
 
 export type ProjectCategory = keyof typeof PROJECT_CATEGORY_LABELS;
 
+export const PROJECT_GROUPS = [
+  { id: 'building', title: 'Currently building', description: 'Work in progress. The next things I’m figuring out.' },
+  { id: 'main', title: 'More projects', description: 'More applications, client work, and infrastructure to explore.' },
+  { id: 'small', title: 'Small builds', description: 'Useful tools, personal forks, and things made out of curiosity. Small doesn’t mean uninteresting.' },
+  { id: 'earlier', title: 'Earlier work', description: 'Projects that helped me get here. Kept as a record of what I was learning along the way.' },
+] as const;
+
+export function projectGroup(project: {
+  inProgress?: boolean;
+  featured?: boolean;
+  group?: 'main' | 'small' | 'earlier';
+}): string {
+  if (project.inProgress) return 'building';
+  if (project.featured) return 'selected';
+  return project.group ?? 'main';
+}
+
 // Number the newest-first archive before selecting featured projects or categories.
 export function numberProjects<T>(projects: T[]): (T & { itemNumber: number })[] {
   return projects.map((project, index) => ({

@@ -1,4 +1,5 @@
 import { defineCollection, z } from 'astro:content';
+import { BLOG_TOPIC_IDS } from '../lib/blog.ts';
 
 const projects = defineCollection({
   type: 'content',
@@ -16,6 +17,9 @@ const projects = defineCollection({
     githubUrl: z.string().url().optional(),
     blogSlug: z.string().optional(),
     featured: z.boolean().default(false),
+    // Editorial grouping, independent of age, category, status, and write-up length.
+    group: z.enum(['main', 'small', 'earlier']).default('main'),
+    selectedFor: z.string().optional(),
     // Position in the Featured work section (1 = first). Unordered entries follow, newest first.
     featuredOrder: z.number().int().positive().optional(),
     // Card size in the Featured work section. If no entry is large, the first one is.
@@ -61,6 +65,12 @@ const blog = defineCollection({
     readingTime: z.number().optional(),
     projectSlug: z.string().optional(),
     tags: z.array(z.string()).optional(),
+    topics: z.array(z.enum(BLOG_TOPIC_IDS)).default([]),
+    // Curated for the writing, independently of the linked project's prominence.
+    startHere: z.object({
+      order: z.number().int().positive(),
+      reason: z.string(),
+    }).optional(),
     coverImage: image().optional(),
     draft: z.boolean().default(false),
     hidden: z.boolean().default(false),

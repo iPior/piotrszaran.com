@@ -2,6 +2,7 @@
 import AppLayout from "../../layouts/AppLayout.astro";
 import BlogPageIntro from "../../features/blog/components/BlogPageIntro.astro";
 import BlogPostsList from "../../features/blog/components/BlogPostsList.astro";
+import StartHere from "../../features/blog/components/StartHere.astro";
 import { getCollection } from "astro:content";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft && !data.hidden)).sort(
@@ -14,5 +15,7 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft && !data.hi
   description="Technical writing on software development."
 >
   <BlogPageIntro />
+  <p class="mt-5 max-w-2xl text-sm leading-relaxed text-site-subtext">Stories behind the projects: what I wanted to solve, the choices I made, and what I learned along the way.</p>
+  <StartHere posts={posts} />
   <BlogPostsList posts={posts} />
 </AppLayout>

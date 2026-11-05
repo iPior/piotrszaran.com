@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { registerHooks } from 'node:module';
 import { test } from 'node:test';
+import { z } from 'astro/zod';
 import {
   formatAgo,
   inProgressProjects,
@@ -9,6 +10,7 @@ import {
   numberProjects,
   orderFeatured,
   splitFeatured,
+  projectGroup,
 } from '../src/lib/projects.ts';
 
 test('archive numbers survive featured and category filtering without mutating entries', () => {
@@ -28,6 +30,14 @@ test('archive numbers survive featured and category filtering without mutating e
 
 const entry = (id, date, extra = {}) => ({ id, data: { date: new Date(date), ...extra } });
 const ids = (list) => list.map((p) => p.id);
+
+test('editorial groups are explicit, with progress and selection taking precedence', () => {
+  assert.equal(projectGroup({}), 'main');
+  assert.equal(projectGroup({ group: 'earlier' }), 'earlier');
+  assert.equal(projectGroup({ group: 'small' }), 'small');
+  assert.equal(projectGroup({ group: 'small', featured: true }), 'selected');
+  assert.equal(projectGroup({ featured: true, inProgress: true }), 'building');
+});
 
 test('featured order puts numbered entries first, then the rest newest first', () => {
   const list = [
@@ -75,6 +85,18 @@ const hooks = registerHooks({
 const { collections } = await import('../src/content/config.ts');
 hooks.deregister();
 const schema = collections.projects.schema;
+const blogSchema = collections.blog.schema({ image: () => z.string() });
+
+test('blog topics and curated reading metadata are optional and validated', () => {
+  const post = { title: 'A story', date: '2026-11-05', description: 'Behind the build.' };
+  assert.deepEqual(blogSchema.parse(post).topics, []);
+  assert.equal(blogSchema.parse(post).startHere, undefined);
+  assert.deepEqual(blogSchema.parse({ ...post, topics: ['products', 'process'] }).topics, ['products', 'process']);
+  assert.equal(blogSchema.safeParse({ ...post, topics: ['typescript'] }).success, false);
+  assert.equal(blogSchema.safeParse({ ...post, startHere: { order: 0, reason: 'Read this first.' } }).success, false);
+  assert.equal(blogSchema.safeParse({ ...post, startHere: { order: 1 } }).success, false);
+  assert.equal(blogSchema.parse({ ...post, startHere: { order: 1, reason: 'Read this first.' } }).startHere.order, 1);
+});
 const minimal = {
   title: 'Small experiment',
   date: '2026-10-30',
@@ -82,9 +104,18 @@ const minimal = {
   description: 'A standalone project without a blog post.',
 };
 
+test('editorial grouping is validated independently of featured status and depth', () => {
+  for (const group of ['main', 'small', 'earlier']) {
+    assert.equal(schema.parse({ ...minimal, group, featured: true, depth: 'short' }).group, group);
+  }
+  assert.equal(schema.safeParse({ ...minimal, group: 'old' }).success, false);
+  assert.equal(schema.parse({ ...minimal, selectedFor: 'Real-world reach' }).selectedFor, 'Real-world reach');
+});
+
 test('existing project metadata defaults to full, unfeatured, and visible', () => {
   const data = schema.parse(minimal);
   assert.equal(data.depth, 'full');
+  assert.equal(data.group, 'main');
   assert.equal(data.featured, false);
   assert.equal(data.hidden, false);
   assert.equal(data.blogSlug, undefined);
