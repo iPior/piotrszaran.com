@@ -4,6 +4,9 @@ import ProjectFilter from "../../features/projects/components/ProjectFilter";
 import ProjectPageIntro from "../../features/projects/components/ProjectPageIntro.astro";
 import FeaturedProjects from "../../features/projects/components/FeaturedProjects.astro";
 import { getCollection } from "astro:content";
+import Collections from "../../features/collections/Collections.astro";
+import InProgressSection from "../../features/home/components/InProgressSection.astro";
+import { inProgressProjects } from "../../lib/projects";
 import { numberProjects } from "../../lib/projects";
 
 const projects = numberProjects(
@@ -24,6 +27,9 @@ const filterProjects = projects.map((project) => ({
   githubUrl: project.data.githubUrl,
   depth: project.data.depth,
   inProgress: project.data.status === 'in-progress',
+  featured: project.data.featured,
+  era: project.data.era,
+  collections: project.data.collections,
 }));
 ---
 
@@ -35,7 +41,10 @@ const filterProjects = projects.map((project) => ({
 
   <FeaturedProjects projects={projects.filter((project) => project.data.featured)} />
 
-  <section class="mt-10" aria-label="All projects">
+  <InProgressSection projects={inProgressProjects(projects)} />
+  <Collections />
+
+  <section class="mt-12" aria-label="All projects">
     {
       projects.length === 0 ? (
         <p class="py-6 text-site-dim">No projects yet.</p>

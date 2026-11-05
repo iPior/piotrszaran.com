@@ -1,4 +1,6 @@
 ---
+import CollectionLinks from "../../collections/CollectionLinks.astro";
+import { WRITING_TYPES } from "../../../lib/collections";
 import AppLayout from "../../../layouts/AppLayout.astro";
 import TableOfContents from "../components/TableOfContents.astro";
 import BackLink from "../../../components/BackLink.astro";
@@ -26,6 +28,8 @@ const { title, description, date, tags, coverImage } = post.data;
         <div
           class="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-site-dim sm:text-sm"
         >
+          <span class="text-site-mauve">{WRITING_TYPES[post.data.writingType]}</span>
+          <span aria-hidden="true">·</span>
           <time datetime={date.toISOString()}>{formatDate(date)}</time>
           <span aria-hidden="true">·</span>
           <span class="text-site-green">{readingTime} min read</span>
@@ -60,6 +64,7 @@ const { title, description, date, tags, coverImage } = post.data;
             </div>
           )
         }
+        <CollectionLinks ids={post.data.collections} />
         {
           coverImage && (
             <div class="blog-post-image mt-6">

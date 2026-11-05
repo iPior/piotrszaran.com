@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content';
+import AppLayout from '../../layouts/AppLayout.astro';
+import BackLink from '../../components/BackLink.astro';
+import BlogCard from '../../features/blog/components/BlogCard.astro';
+import CollectionLinks from '../../features/collections/CollectionLinks.astro';
+import { COLLECTIONS, COLLECTION_IDS } from '../../lib/collections';
+import { formatDate } from '../../lib/utils';
+export function getStaticPaths() {
+  return COLLECTION_IDS.map((id) => ({ params: { collection: id }, props: { id } }));
+}
+const { id } = Astro.props;
+const collection = COLLECTIONS[id];
+const projects = (await getCollection('projects', ({ data }) => !data.hidden && data.collections.includes(id)))
+  .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
+const posts = (await getCollection('blog', ({ data }) => !data.hidden && !data.draft && data.collections.includes(id)))
+  .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
+---
+<AppLayout title={`${collection.title} - Piotr Szaran`} description={collection.description}>
+  <BackLink href="/projects" label="Back to projects" />
+  <header class="mt-6">
+    <p class="text-xs text-site-mauve">Collection · {projects.length} projects · {posts.length} posts</p>
+    <h1 class="mt-3 text-3xl font-bold tracking-tight text-site-text sm:text-5xl">{collection.title}</h1>
+    <p class="mt-4 max-w-xl text-sm leading-relaxed text-site-subtext">{collection.description}</p>
+  </header>
+  <section class="mt-10" aria-labelledby="collection-projects">
+    <h2 id="collection-projects" class="border-b border-site-border pb-3 text-lg font-semibold">The projects <span class="text-xs font-normal text-site-subtext">/ in the order they began</span></h2>
+    <div class="mt-4 border-l border-site-border pl-5 sm:pl-7">
+      {projects.map((project) => <article class="relative py-4">
+        <span aria-hidden="true" class="absolute -left-[25px] top-6 h-2 w-2 rounded-full bg-site-mauve sm:-left-[33px]"></span>
+        <p class="text-xs text-site-subtext"><time datetime={project.data.date.toISOString()}>{formatDate(project.data.date)}</time>{project.data.status === 'in-progress' && ' · In progress'}</p>
+        <h3 class="mt-1 text-base font-semibold"><a class="text-site-blue hover:underline" href={`/projects/${project.slug}`}>{project.data.title} →</a></h3>
+        <p class="mt-2 max-w-2xl text-xs leading-relaxed text-site-subtext">{project.data.description}</p>
+      </article>)}
+    </div>
+  </section>
+  {posts.length > 0 && <section class="mt-10" aria-labelledby="collection-writing">
+    <h2 id="collection-writing" class="border-b border-site-border pb-3 text-lg font-semibold">The writing <span class="text-xs font-normal text-site-subtext">/ read from the beginning</span></h2>
+    {posts.map((post) => <BlogCard post={post} />)}
+  </section>}
+  <CollectionLinks label="Explore more collections" ids={COLLECTION_IDS.filter((other) => other !== id)} />
+</AppLayout>

@@ -1,4 +1,5 @@
 ---
+import CollectionLinks from "../../collections/CollectionLinks.astro";
 import AppLayout from "../../../layouts/AppLayout.astro";
 import CategoryBadge from "../components/CategoryBadge.astro";
 import StackPills from "../components/StackPills.astro";
@@ -10,10 +11,10 @@ import type { CollectionEntry } from "astro:content";
 
 interface Props {
   project: CollectionEntry<"projects">;
-  relatedBlog?: CollectionEntry<"blog"> | null;
+  relatedBlogs?: CollectionEntry<"blog">[];
 }
 
-const { project, relatedBlog } = Astro.props;
+const { project, relatedBlogs = [] } = Astro.props;
 const { title, description, date, category, stack, liveUrl, githubUrl, depth, status, progress } =
   project.data;
 const inProgress = status === "in-progress" && progress !== undefined;
@@ -77,21 +78,14 @@ const paused = progress ? isPaused(progress.updated) : false;
           )
         }
       </div>
-      {
-        relatedBlog && (
-          <div class="mt-6 p-4 border border-site-border rounded-lg bg-site-surface">
-            <p class="text-xs text-site-dim mb-1 uppercase tracking-wide font-medium">
-              Related
-            </p>
-            <a
-              href={`/blogs/${relatedBlog.slug}`}
-              class="text-site-blue hover:underline font-medium"
-            >
-              Read the full write-up →
-            </a>
-          </div>
-        )
-      }
+      <CollectionLinks ids={project.data.collections} />
+      {project.data.era === 'earlier' && <p class="mt-5 border-l-2 border-site-peach pl-4 text-xs leading-relaxed text-site-subtext">Earlier work, preserved as part of my learning journey. The write-up reflects what I was building and learning at the time.</p>}
+      {relatedBlogs.length > 0 && <aside class="mt-6 rounded-lg border border-site-border bg-site-surface p-4" aria-label="Related writing">
+        <p class="mb-2 text-xs font-medium text-site-subtext">The writing behind this project</p>
+        <ul class="space-y-2">
+          {relatedBlogs.map((post) => <li><a href={`/blogs/${post.slug}`} class="text-sm text-site-blue hover:underline">{post.data.title} →</a></li>)}
+        </ul>
+      </aside>}
     </header>
     {depth === 'full' && <hr class="mb-6 border-site-border sm:mb-8" />}
     <div class="prose max-w-none">

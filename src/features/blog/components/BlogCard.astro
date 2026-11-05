@@ -1,4 +1,5 @@
 ---
+import { WRITING_TYPES } from "../../../lib/collections";
 import type { CollectionEntry } from "astro:content";
 import { calculateReadingTime, formatDate } from "../../../lib/utils";
 
@@ -33,6 +34,7 @@ const readingTime =
     </div>}
 
     <div class="min-w-0 flex-1">
+      <p class="mb-1 text-[11px] text-site-mauve">{WRITING_TYPES[post.data.writingType]}</p>
       <a
         href={`/blogs/${post.slug}`}
         class="group inline-flex max-w-full items-start gap-2"

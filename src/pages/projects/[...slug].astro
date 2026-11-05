@@ -1,5 +1,5 @@
 ---
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import ProjectLayout from '../../features/projects/layouts/ProjectLayout.astro';
 import Callout from '../../components/mdx/Callout.astro';
 import Image from '../../components/mdx/Image.astro';
@@ -16,15 +16,11 @@ export async function getStaticPaths() {
 const { project } = Astro.props;
 const { Content } = await project.render();
 
-const relatedBlogEntry = project.data.blogSlug
-  ? await getEntry('blog', project.data.blogSlug)
-  : null;
-
-const relatedBlog = relatedBlogEntry && !relatedBlogEntry.data.draft && !relatedBlogEntry.data.hidden
-  ? relatedBlogEntry
-  : null;
+const relatedBlogs = (await getCollection('blog', ({ data }) => !data.draft && !data.hidden))
+  .filter((post) => post.data.projectSlug === project.slug || post.slug === project.data.blogSlug)
+  .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
 ---
 
-<ProjectLayout project={project} relatedBlog={relatedBlog}>
+<ProjectLayout project={project} relatedBlogs={relatedBlogs}>
   <Content components={{ Callout, Image, LinkCard }} />
 </ProjectLayout>

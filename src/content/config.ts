@@ -1,4 +1,5 @@
 import { defineCollection, z } from 'astro:content';
+import { COLLECTION_IDS } from '../lib/collections.ts';
 
 const projects = defineCollection({
   type: 'content',
@@ -21,6 +22,9 @@ const projects = defineCollection({
     // Card size in the Featured work section. If no entry is large, the first one is.
     featuredSize: z.enum(['large', 'small']).optional(),
     depth: z.enum(['short', 'full']).default('full'),
+    era: z.enum(['current', 'earlier']).default('current'),
+    selectionNote: z.string().optional(),
+    collections: z.array(z.enum(COLLECTION_IDS)).default([]),
     hidden: z.boolean().default(false),
 
     // === IN PROGRESS ===
@@ -59,6 +63,11 @@ const blog = defineCollection({
 
     // === OPTIONAL ===
     readingTime: z.number().optional(),
+    writingType: z.enum(['story', 'note', 'update']).default('story'),
+    topics: z.array(z.enum(['self-hosting', 'building-with-ai', 'client-work', 'learning'])).default([]),
+    collections: z.array(z.enum(COLLECTION_IDS)).default([]),
+    startHereOrder: z.number().int().positive().optional(),
+    startHereNote: z.string().optional(),
     projectSlug: z.string().optional(),
     tags: z.array(z.string()).optional(),
     coverImage: image().optional(),

@@ -267,3 +267,9 @@
     @apply my-5 rounded-lg sm:my-6;
   }
 }
+
+/* Keep keyboard navigation visible across content browsers and collection links. */
+:where(a, button, select):focus-visible {
+  outline: 2px solid var(--color-site-blue);
+  outline-offset: 4px;
+}

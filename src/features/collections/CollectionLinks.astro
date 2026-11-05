@@ -1,0 +1,9 @@
+---
+import { COLLECTIONS, type CollectionId } from '../../lib/collections';
+interface Props { ids: CollectionId[]; label?: string }
+const { ids, label = 'Part of' } = Astro.props;
+---
+{ids.length > 0 && <nav aria-label="Related collections" class="mt-5 flex flex-wrap items-center gap-2 text-xs">
+  <span class="text-site-subtext">{label}</span>
+  {ids.map((id) => <a href={`/collections/${id}`} class="rounded-full border border-site-border px-3 py-1 text-site-mauve hover:border-site-mauve">{COLLECTIONS[id].title} ↗</a>)}
+</nav>}

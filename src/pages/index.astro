@@ -38,7 +38,7 @@ const buildingNow = inProgressProjects(allProjects);
     profileImageAlt="Piotr Szaran profile picture"
   />
 
-  <InProgressSection projects={buildingNow} />
   <ProjectsSection projects={projects} totalProjects={allProjects.length} />
+  <InProgressSection projects={buildingNow} />
   <BlogSection posts={blogPosts} totalPosts={allBlogPosts.length} />
 </AppLayout>

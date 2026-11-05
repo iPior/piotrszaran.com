@@ -7,6 +7,8 @@ import { getCollection } from "astro:content";
 const posts = (await getCollection("blog", ({ data }) => !data.draft && !data.hidden)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
+const startingPosts = posts.filter((post) => post.data.startHereOrder !== undefined)
+  .sort((a, b) => a.data.startHereOrder! - b.data.startHereOrder!);
 ---
 
 <AppLayout
@@ -14,5 +16,17 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft && !data.hi
   description="Technical writing on software development."
 >
   <BlogPageIntro />
+  <p class="mt-4 max-w-xl text-sm leading-relaxed text-site-subtext">What I built, why I built it, and what changed along the way.</p>
+  <section class="mt-10" aria-labelledby="start-here">
+    <h2 id="start-here" class="text-lg font-semibold sm:text-xl">Start here</h2>
+    <p class="mt-1 text-xs text-site-subtext">A few stories that give you a feel for how I work.</p>
+    <div class="mt-4 grid gap-3 sm:grid-cols-3">
+      {startingPosts.map((post) => <a href={`/blogs/${post.slug}`} class="rounded-lg border border-site-border bg-site-surface p-5 transition-colors hover:border-site-mauve">
+        <p class="text-xs text-site-mauve">{post.data.startHereNote ?? 'Build story'}</p>
+        <h3 class="mt-3 text-base font-semibold leading-snug text-site-text">{post.data.title} →</h3>
+        <p class="mt-3 line-clamp-3 text-xs leading-relaxed text-site-subtext">{post.data.description}</p>
+      </a>)}
+    </div>
+  </section>
   <BlogPostsList posts={posts} />
 </AppLayout>

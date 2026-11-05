@@ -13,20 +13,20 @@ const { projects, totalProjects } = Astro.props;
 <section>
   <div class="mt-10 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-2 border-b border-site-border pb-2.5 sm:mt-12">
     <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-      <h2 class="text-lg font-semibold text-site-text sm:text-2xl"><span class="font-normal text-site-mauve">const</span> <span class="text-site-yellow">featuredProjects</span></h2>
-      <span class="text-xs text-site-dim">// {projects.length} featured, {totalProjects} total</span>
+      <h2 class="text-lg font-semibold text-site-text sm:text-2xl"><span class="font-normal text-site-mauve">const</span> <span class="text-site-yellow">selectedWork</span></h2>
+      <span class="text-xs text-site-dim">// {projects.length} selected, {totalProjects} total</span>
     </div>
   </div>
 
   {
     projects.length === 0 ? (
-      <p class="py-6 text-site-dim">No featured projects yet.</p>
+      <p class="py-6 text-site-dim">No selected projects yet.</p>
     ) : (
         <div class="pl-3 sm:pl-4">
           {projects.map((project) => (
             <ProjectCard
               title={project.data.title}
-              description={project.data.description}
+              description={project.data.selectionNote ?? project.data.description}
               category={project.data.category}
               href={`/projects/${project.slug}`}
               dateLabel={project.data.date.toLocaleDateString('en-US', {

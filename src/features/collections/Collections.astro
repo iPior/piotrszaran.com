@@ -1,0 +1,15 @@
+---
+import { COLLECTIONS } from '../../lib/collections';
+---
+<section class="mt-12" aria-labelledby="collections-heading">
+  <h2 id="collections-heading" class="text-lg font-semibold text-site-text sm:text-xl">Connected stories</h2>
+  <p class="mt-1 text-xs text-site-subtext">Follow a thread across projects and writing.</p>
+  <div class="mt-4 grid gap-3 sm:grid-cols-2">
+    {Object.entries(COLLECTIONS).map(([id, collection]) => (
+      <a href={`/collections/${id}`} class="group rounded-lg border border-site-border p-4 transition-colors hover:border-site-mauve">
+        <h3 class="text-sm font-semibold text-site-mauve">{collection.title} <span class="inline-block motion-safe:transition-transform motion-safe:group-hover:translate-x-1">→</span></h3>
+        <p class="mt-2 text-xs leading-relaxed text-site-subtext">{collection.description}</p>
+      </a>
+    ))}
+  </div>
+</section>

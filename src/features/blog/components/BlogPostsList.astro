@@ -1,30 +1,62 @@
 ---
-import type { CollectionEntry } from "astro:content";
-import BlogCard from "./BlogCard.astro";
-
-interface Props {
-  posts: CollectionEntry<"blog">[];
-}
-
+import type { CollectionEntry } from 'astro:content';
+import BlogCard from './BlogCard.astro';
+import { TOPICS, WRITING_TYPES } from '../../../lib/collections';
+interface Props { posts: CollectionEntry<'blog'>[] }
 const { posts } = Astro.props;
 ---
-
-<section class="mt-10">
-  <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1 border-b border-site-border pb-2.5">
-    <h2 class="text-base font-semibold text-site-text sm:text-lg">
-      <span class="font-normal text-site-mauve">const</span>
-      <span class="text-site-yellow">posts</span>
-    </h2>
-    <span class="text-xs text-site-dim">// {posts.length} items</span>
+<section class="mt-12" aria-labelledby="all-writing" data-writing-browser>
+  <div class="border-b border-site-border pb-4">
+    <h2 id="all-writing" class="text-lg font-semibold text-site-text sm:text-xl">All writing</h2>
+    <p class="mt-1 text-xs text-site-subtext">Build stories, focused technical notes, and updates. Newest first.</p>
+    <div class="mt-5 flex flex-wrap gap-2" aria-label="Filter writing by topic">
+      <button type="button" data-topic="all" aria-pressed="true" class="writing-topic rounded-full border px-3 py-1.5 text-xs">All topics</button>
+      {Object.entries(TOPICS).map(([id, label]) => <button type="button" data-topic={id} aria-pressed="false" class="writing-topic rounded-full border px-3 py-1.5 text-xs">{label}</button>)}
+    </div>
+    <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
+      <label class="flex items-center gap-2 text-xs text-site-subtext">Format
+        <select data-writing-format class="rounded-md border border-site-border bg-site-bg px-2 py-1.5 text-site-text">
+          <option value="all">All formats</option>
+          {Object.entries(WRITING_TYPES).map(([id, label]) => <option value={id}>{label}</option>)}
+        </select>
+      </label>
+      <p role="status" data-writing-count class="text-xs text-site-subtext">{posts.length} posts</p>
+    </div>
   </div>
-
-  {
-    posts.length === 0 ? (
-      <p class="py-6 text-site-dim">No posts yet.</p>
-    ) : (
-      <div>
-        {posts.map((post, index) => <BlogCard post={post} itemNumber={posts.length - index} />)}
-      </div>
-    )
-  }
+  {posts.map((post) => <div data-writing-entry data-topics={post.data.topics.join(' ')} data-format={post.data.writingType}>
+    <BlogCard post={post} />
+  </div>)}
+  <p data-writing-empty hidden class="py-8 text-sm text-site-subtext">No posts match these filters. Try another topic or format.</p>
 </section>
+<style>
+  .writing-topic { border-color: var(--color-site-border); color: var(--color-site-subtext); }
+  .writing-topic:hover { border-color: var(--color-site-blue); }
+  .writing-topic[aria-pressed='true'] { background: var(--color-site-blue); border-color: var(--color-site-blue); color: var(--color-site-bg); }
+</style>
+<script>
+  function initializeWriting() {
+    document.querySelectorAll<HTMLElement>('[data-writing-browser]').forEach((browser) => {
+      if (browser.dataset.initialized) return;
+      browser.dataset.initialized = 'true';
+      let topic = 'all';
+      const format = browser.querySelector<HTMLSelectElement>('[data-writing-format]')!;
+      const buttons = browser.querySelectorAll<HTMLButtonElement>('[data-topic]');
+      const entries = browser.querySelectorAll<HTMLElement>('[data-writing-entry]');
+      const apply = () => {
+        let count = 0;
+        entries.forEach((entry) => {
+          entry.hidden = !((topic === 'all' || entry.dataset.topics?.split(' ').includes(topic)) &&
+            (format.value === 'all' || entry.dataset.format === format.value));
+          if (!entry.hidden) count++;
+        });
+        browser.querySelector('[data-writing-count]')!.textContent = `${count} ${count === 1 ? 'post' : 'posts'}`;
+        browser.querySelector<HTMLElement>('[data-writing-empty]')!.hidden = count > 0;
+        buttons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.topic === topic)));
+      };
+      buttons.forEach((button) => button.addEventListener('click', () => { topic = button.dataset.topic!; apply(); }));
+      format.addEventListener('change', apply);
+    });
+  }
+  initializeWriting();
+  document.addEventListener('astro:page-load', initializeWriting);
+</script>

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { z } from 'astro/zod';
 import { registerHooks } from 'node:module';
 import { test } from 'node:test';
 import {
@@ -183,4 +184,28 @@ test('in-progress list keeps only in-progress projects, most recently updated fi
     { id: 'newer', data: { status: 'in-progress', progress: { updated: new Date('2026-11-01') } } },
   ];
   assert.deepEqual(ids(inProgressProjects(list)), ['newer', 'older']);
+});
+
+test('editorial era and collections are independent of prominence and lifecycle', () => {
+  const data = schema.parse({ ...minimal, era: 'earlier', featured: true, collections: ['this-website', 'self-hosting'] });
+  assert.equal(data.era, 'earlier');
+  assert.equal(data.featured, true);
+  assert.deepEqual(data.collections, ['this-website', 'self-hosting']);
+  assert.deepEqual(schema.parse(minimal).collections, []);
+  assert.equal(schema.parse(minimal).era, 'current');
+  assert.equal(schema.safeParse({ ...minimal, collections: ['unknown'] }).success, false);
+  assert.equal(schema.safeParse({ ...minimal, era: 'abandoned' }).success, false);
+});
+
+const blogSchema = collections.blog.schema({ image: () => z.any() });
+test('writing formats and topics support short updates without requiring a project', () => {
+  const post = { title: 'A small update', description: 'One thing I changed.', date: '2026-11-04' };
+  assert.equal(blogSchema.parse(post).writingType, 'story');
+  for (const writingType of ['story', 'note', 'update']) {
+    const data = blogSchema.parse({ ...post, writingType, topics: ['self-hosting'], startHereOrder: 1 });
+    assert.equal(data.writingType, writingType);
+    assert.equal(data.projectSlug, undefined);
+  }
+  assert.equal(blogSchema.safeParse({ ...post, topics: ['unknown'] }).success, false);
+  assert.equal(blogSchema.safeParse({ ...post, startHereOrder: 0 }).success, false);
 });

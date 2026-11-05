@@ -15,6 +15,8 @@ interface Props {
 
 const { projects } = Astro.props;
 const { large, small } = splitFeatured(projects);
+import { getCollection } from 'astro:content';
+const publicPosts = new Set((await getCollection('blog', ({ data }) => !data.hidden && !data.draft)).map((post) => post.slug));
 
 // With an odd number of large cards, the first spans the full width so no card is left alone in a row.
 const isWide = (index: number) => large.length % 2 === 1 && index === 0;
@@ -38,7 +40,7 @@ const shortDate = (date: Date) =>
 {projects.length > 0 && (
   <section class="mt-12" aria-labelledby="featured-projects-heading">
     <div class="mb-4">
-      <h2 id="featured-projects-heading" class="text-lg font-semibold text-site-text sm:text-xl">Featured work</h2>
+      <h2 id="featured-projects-heading" class="text-lg font-semibold text-site-text sm:text-xl">Selected work</h2>
       <p class="mt-1 text-xs italic text-site-dim">// a good place to start</p>
     </div>
 
@@ -57,12 +59,12 @@ const shortDate = (date: Date) =>
                 {project.data.title}
               </a>
             </h3>
-            <p class={`mt-3 max-w-2xl leading-relaxed text-site-subtext ${wide ? 'text-sm sm:text-[0.95rem]' : 'text-sm'}`}>{project.data.description}</p>
+            <p class={`mt-3 max-w-2xl leading-relaxed text-site-subtext ${wide ? 'text-sm sm:text-[0.95rem]' : 'text-sm'}`}>{project.data.selectionNote ?? project.data.description}</p>
 
             <div class={`mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-5 pt-6`}>
               <TechLogos stack={project.data.stack ?? []} max={8} size="md" />
               <div class="relative z-10 flex flex-wrap items-center gap-3 text-xs">
-                {project.data.blogSlug && (
+                {project.data.blogSlug && publicPosts.has(project.data.blogSlug) && (
                   <a href={`/blogs/${project.data.blogSlug}`} class="text-site-blue hover:underline">Read the story</a>
                 )}
                 <a
@@ -93,7 +95,7 @@ const shortDate = (date: Date) =>
                 {project.data.title}
               </a>
             </h3>
-            <p class="mt-2 line-clamp-3 text-xs leading-relaxed text-site-subtext">{project.data.description}</p>
+            <p class="mt-2 line-clamp-3 text-xs leading-relaxed text-site-subtext">{project.data.selectionNote ?? project.data.description}</p>
             <div class="mt-auto pt-4">
               <TechLogos stack={project.data.stack ?? []} max={6} />
             </div>

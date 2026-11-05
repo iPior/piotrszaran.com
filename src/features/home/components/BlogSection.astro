@@ -14,7 +14,7 @@ const { posts, totalPosts } = Astro.props;
   <div class="mt-14 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-2 border-b border-site-border pb-2.5 sm:mt-20">
     <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
       <h2 class="text-xl font-semibold text-site-text sm:text-2xl">
-        <span class="font-normal text-site-mauve">const</span> <span class="text-site-yellow">blogPosts</span>
+        <span class="font-normal text-site-mauve">const</span> <span class="text-site-yellow">recentWriting</span>
       </h2>
       <span class="text-xs text-site-dim">// {totalPosts} items</span>
     </div>
@@ -30,7 +30,7 @@ const { posts, totalPosts } = Astro.props;
         </div>
 
         <div class="mt-4 flex items-center justify-between gap-3">
-          <span class="text-xs text-site-dim">showing last {posts.length} blogs ...</span>
+          <span class="text-xs text-site-dim">latest {posts.length} posts</span>
           <a
             href="/blogs"
             class="shrink-0 text-xs text-site-blue hover:underline"
