@@ -1,20 +1,23 @@
 ---
 title: "NJ TEC Systems"
-date: 2026-08-31
+date: 2026-11-25
 category: "freelance"
 description: "A marketing website helping a security camera installer connect with homeowners and businesses across Mississauga and the GTA."
-stack: ["Astro", "Tailwind CSS", "TypeScript", "Bun", "Resend"]
+stack: ["Astro", "Tailwind CSS", "TypeScript", "Bun", "Resend", "Vercel"]
+liveUrl: "https://njtec.ca"
 featured: false
 hidden: false
-status: "in-progress"
-progress:
-  focus: "Finalizing details with the client ahead of domain purchase and launch."
-  updated: 2026-11-02
-  milestones:
-    - {label: "Idea", done: true}
-    - {label: "Design", done: true}
-    - {label: "Client information", done: true}
-    - {label: "Development", done: true}
-    - {label: "Revisions", done: true}
-    - {label: "Launch", done: false}
+depth: "full"
+status: "shipped"
 ---
+
+## Overview
+
+NJ TEC Systems is a lead-focused marketing site for a security camera installer serving homes and businesses across Mississauga, the GTA, and out to Hamilton, Barrie, and cottage country. The client had no web presence before this, so the site covers the full first-contact path: services, pricing, service areas, an installation gallery, an FAQ, and a quote form. It started as a Next.js build and I rebuilt it in Astro, because Astro is simply faster for a content-driven site like this.
+
+## What I Built
+
+- Nine prerendered pages covering services, pricing packages and add-ons, service areas, an installation gallery, reviews, an FAQ, and an about page, plus a mobile call bar that reveals on scroll so phone visitors can reach the client in one tap.
+- A quote form backed by a single serverless endpoint that validates submissions with Zod, discards bot traffic caught by a honeypot field, and emails the lead through Resend.
+- A data layer in which business details, pricing, service areas, services, gallery photos, and FAQs live in typed data files, so content changes never mean editing page markup.
+- The SEO groundwork for a local business: LocalBusiness and FAQPage structured data generated from the same data files, canonical and OpenGraph tags owned by one layout, a sitemap, and a single configured domain that every absolute URL derives from.
