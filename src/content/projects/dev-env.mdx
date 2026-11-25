@@ -3,8 +3,7 @@ title: "Self-Hosted Development Environment"
 date: 2026-10-21
 category: "personal"
 description: "A persistent, self-hosted development environment with secure browser-based IDE and terminal access, on-demand VM management, and reproducible infrastructure."
-stack: ["Debian", "KVM/QEMU", "libvirt", "Tailscale", "Cloudflare", "code-server", "ttyd", "Bash", "Terraform", "Ansible"]
-githubUrl: "https://github.com/iPior/devbox-infrastructure"
+stack: ["Debian", "KVM/QEMU", "libvirt", "Tailscale", "Cloudflare", "code-server", "ttyd", "Bash", "Docker", "Terraform", "Ansible"]
 featured: false
 hidden: false
 ---
@@ -16,7 +15,7 @@ I built a self-hosted development environment on my OptiPlex media server to mai
 ## What I Built
 
 - A persistent Debian 13 virtual machine using KVM/QEMU and libvirt, allocated 2 vCPUs, 8 GB RAM, and 100 GB of virtual storage on my existing OptiPlex server.
-- A centralized development workspace with Git, Node.js, pnpm, tmux, Codex CLI, SSH authentication, and consistent shell configuration across devices.
+- A centralized development workspace with Git, Node.js, pnpm, tmux, Codex CLI, Docker for local container builds, SSH authentication, and consistent shell configuration across devices.
 - Browser-based development interfaces using code-server for a VS Code experience and ttyd for terminal access, exposed through Cloudflare Tunnel and secured with Cloudflare Access.
 - A custom Bash CLI for starting and stopping the virtual machine and individual development services on demand, with remote administration available through Tailscale.
 - Reproducible infrastructure using Terraform and Ansible, validated by provisioning, configuring, and removing a separate test VM without modifying the existing environment.

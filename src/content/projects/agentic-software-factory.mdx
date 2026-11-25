@@ -1,0 +1,40 @@
+---
+title: "Agentic Software Factory"
+date: 2026-11-09
+category: "personal"
+description: "An opt-in, session-driven workflow of agent skills that takes a coding task from an approved plan through an isolated build, independent review, bounded repairs, and a pull request with CI checks."
+stack: ["Claude Code", "Agent Skills", "Node.js", "Git", "GitHub CLI", "GitHub Actions"]
+githubUrl: "https://github.com/iPior/my-agent-context"
+blogSlug: "session-driven-software-factory"
+featured: false
+hidden: true
+status: "shipped"
+---
+
+## Overview
+
+The factory is a set of opt-in agent skills that moves a coding task from an approved plan to a reviewed pull request with passing checks. The main conversation coordinates the run and dispatches separate workers to build, review, and ship, while I approve the task, make the consequential decisions, and keep merge authority. It lives in my shared agent context repository alongside the skills and global instructions I use across projects.
+
+The build was also a bet on where my attention should go: if agents can write the code, the next layer to engineer is verification, so the workflow makes agents prove their work before it reaches me.
+
+## What I Built
+
+- Five skills with narrow responsibilities: a coordinator that owns stage transitions and status, plus plan, build, review, and ship stages that each receive an explicit dispatch with their inputs, permitted actions, and output path.
+- A run contract and record set kept outside the target project: the approved task, numbered dispatches, a pre-change baseline, build, review, and ship handoffs, an evidence directory, and a friction log, with disposable Git worktrees stored separately so records survive worktree cleanup.
+- A dependency-free Node.js status helper that creates runs, records approvals with a SHA-256 digest of the approved task, and applies status patches with revision checks, a lock, and atomic replacement, refusing stale writes and shipping with a stale review or mismatched HEAD.
+- Verification rules that the workers enforce on each other: a baseline before any change, evidence logs tied to a committed SHA, a required real-browser end-to-end check for user-facing work, and a plan that lists every existing test whose expectation the task changes.
+- A feedback loop from real runs back into the source: every handoff records workflow friction, the coordinator summarizes it at the end of a run, and fixes land in the repository and get reinstalled rather than being patched mid-run.
+
+{/* DIAGRAM: Stage flow. Plan (with me) -> approval recorded -> build in worktree -> fresh review -> [changes requested -> repair -> fresh review, max 3 repairs across review and CI] -> ship (PR + CI) -> ready for me -> my merge. */}
+
+## How It Works
+
+- I start a run explicitly and plan with the coordinator in the main conversation; nothing is built until I approve the task, and the approval words and task digest are saved so a later change to the task invalidates that approval.
+- The coordinator creates a branch and worktree from a pinned base commit, dispatches a builder, then starts a reviewer in a fresh context that never sees the builder's conversation; findings are triaged by ID, repaired, and re-reviewed, with three automatic repair rounds allowed across review and CI combined.
+- A shipper publishes the reviewed candidate as a pull request and reads the actual check results for that head; the run stops at ready for human, and resuming any stage means reconciling the saved records with live Git, PR, and CI state rather than trusting chat memory.
+
+## Technical Highlights
+
+- **Independent review by construction**: The reviewer gets the raw requirements, code, and evidence, treats the build summary as a claim rather than a verdict, and re-runs checks itself, so passing review means a second context actually verified the candidate.
+- **Records on disk instead of a daemon**: The workflow is deliberately session-driven; all state lives in plain files and a revision-checked status file, which let me recover a run after a worker was stopped mid-repair by reconciling a clean worktree and a missing handoff.
+- **A design shaped by its own friction logs**: The first two live runs produced specific fixes, including triage by finding ID, evidence pinned to commits, required browser checks, and plans that surface changed test expectations for approval before the build.

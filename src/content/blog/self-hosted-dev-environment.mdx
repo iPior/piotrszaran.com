@@ -1,0 +1,72 @@
+---
+title: "A Workspace That Stays Put"
+date: 2026-11-16
+description: "How I use a self-hosted development VM on my home server, with browser and SSH access, persistent agent sessions, and shared context that carries across projects and sessions."
+projectSlug: "dev-env"
+tags: ["self-hosting", "debian", "cloudflare", "tmux", "ai", "agents", "homelab"]
+draft: true
+hidden: false
+---
+
+I code from my laptop most of the time, sometimes from my desktop, and every now and then I check on something from my phone. For a long time that meant separate setups: different repositories cloned in different places, SSH keys copied around, shell configs drifting out of sync. Adding AI agents made it worse, because now each machine also needed its own CLI tools, logins, and instructions.
+
+So I moved my development environment onto one machine that stays put, and I bring whatever device I have to it.
+
+## Where it lives
+
+The devbox is a Debian 13 virtual machine on the [OptiPlex](/projects/optiplex-home-server/) that also runs my media server. It's a modest VM, 2 vCPUs, 8 GB of RAM, and a 100 GB disk, isolated from the media workloads by KVM and libvirt. It is not the server that runs [Pior Labs](/blogs/pior-labs/) in production. That's a separate machine, so experiments on the devbox stay away from the apps my household uses.
+
+The VM has everything I need to work: Git, Node.js, pnpm, tmux, the agent CLIs, the GitHub CLI, and Docker so agents can build and test containers locally. The [project spec](/projects/dev-env/) covers how it's provisioned and how I validated rebuilding it with Terraform and Ansible, so I'll skip that here and talk about how I actually use it.
+
+{/* DIAGRAM: Laptop / desktop / phone -> (Cloudflare Tunnel + Access) browser IDE and terminal, or (Tailscale + SSH via the media server) -> OptiPlex host running the devbox CLI -> devbox VM with code-server, ttyd, tmux, agent CLIs, repos. Separate box off to the side: Pior Labs production server. */}
+
+## Getting in
+
+The VM doesn't need to be on all the time, so I wrote a small Bash CLI on the host called `devbox`. `devbox vm on` starts the VM, `devbox code on` starts the browser IDE, `devbox term on` starts the browser terminal, and `devbox status` tells me what's running. When I'm done, I turn things off again.
+
+From there I have a few ways in:
+
+- **Browser IDE and terminal.** code-server gives me VS Code in a browser and ttyd gives me a terminal, both only listening on the VM itself. Cloudflare Tunnel publishes them on two subdomains of my own domain, and Cloudflare Access makes me sign in before anything loads. ttyd is a writable shell on my dev machine, so the Access policy is not optional.
+- **SSH.** For normal work from my laptop I use SSH or VS Code Remote SSH, going through the media server as a jump host over Tailscale.
+
+When I SSH in, a login banner I wrote shows load, memory, disk, running containers, pending updates, and failed SSH logins in the last day. It's a small thing, but it means I notice a full disk or a reboot-required flag before it becomes a problem.
+
+## Keeping sessions alive
+
+The reason this setup works for agents is tmux. I start an agent session inside tmux, give it something to do, and close my laptop. The session keeps running on the VM, and when I come back from any device I reattach and it's right where I left it.
+
+When I'm away from my laptop, Claude Code's `/rc` remote control lets me check in from the Claude app on my phone. The app has a good interface for seeing that things are running smoothly. Most of the time I'm on my laptop anyway, but realistically I could kick off a new feature from my phone if I wanted to.
+
+## Four kinds of "it remembers"
+
+This is the part I had to think through most carefully, because "the agent remembers what I was doing" can mean very different things. There are four layers, and they don't overlap as much as I first assumed.
+
+| Layer | What provides it | What it actually gives me |
+| --- | --- | --- |
+| Running processes | tmux on the VM | A live session I can reattach to. Gone if the VM restarts, and a pane being open doesn't prove the agent in it is still working. |
+| Project context | Instruction files and shared skills | The rules and docs every fresh session starts with. |
+| Harness memory | The agent tool's own memory feature | Available, but I barely use it. |
+| Saved task state | Factory run records | The exact state of a long task, on disk, ready to be checked against Git and the PR. |
+
+**Project context** is the one that matters most day to day. I keep one global instructions file with my personal rules (no em dashes, no agent co-author lines, that kind of thing), and an installer links it into both Claude Code and Codex so they read the same thing. My skills live in one shared folder that both tools link to. Inside the Pior Labs workspace, a root instructions file tells agents which repo owns what and where the architecture, conventions, and decision records are, and every repository has its own instructions on top of that. A brand-new session in any project starts with the same context I'd give a new teammate.
+
+**Harness memory** is the one I use least. Claude Code has a memory feature, and I have memory folders for several projects, but every one of them is empty. Everything I rely on is in files I control and keep in Git. Those files are reviewable, versioned, and shared between tools, which a tool's private memory isn't.
+
+**Saved task state** is what my software factory writes for bigger features: the approved plan, status, each worker's handoff, and the evidence. It's how a feature can survive a session ending, and I wrote about it separately in [Moving Up to Verification](/blogs/session-driven-software-factory/).
+
+The way I think about it now: tmux keeps the process, the instruction files keep the context, and the run records keep the work. None of them replaces the others.
+
+## How I use it
+
+Most days are ordinary sessions. I open a repo, start an agent in tmux, and work through something with it. For a well-defined feature I'd rather hand off, I use the factory, which plans with me, builds and reviews in isolation, and comes back with a PR for me to read and merge.
+
+Having all of this on one box is also what makes the factory practical. The worktrees, run records, browser for end-to-end checks, Docker, and GitHub CLI are all in the same place, no matter which device I started the session from.
+
+## What's still rough
+
+- The rebuild with Terraform and Ansible was tested on a disposable VM, but the Cloudflare Tunnel and Access part of that rebuild hasn't been tested yet.
+- I have a backup and recovery runbook but haven't actually tested restoring from it.
+- The provisioning still grants passwordless sudo during setup. I have a proposal to make that temporary, but it isn't implemented.
+- A rebuild gives me the tools and services, not my personal files, credentials, or editor extensions. Those still need their own backups.
+
+None of this gets in the way day to day, but I'd rather list it than pretend the box is more finished than it is.

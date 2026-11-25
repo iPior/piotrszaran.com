@@ -1,0 +1,92 @@
+---
+title: "Moving Up to Verification"
+date: 2026-11-16
+description: "How I built a session-driven software factory out of agent skills, what its first real runs exposed, and why I now spend my time on verification instead of code."
+projectSlug: "agentic-software-factory"
+tags: ["ai", "agents", "claude-code", "workflow", "verification"]
+draft: true
+hidden: false
+---
+
+> **Source Code:** [github.com/iPior/my-agent-context](https://github.com/iPior/my-agent-context)
+
+I write most of my code through agents now. That part works. When I built [Pior Labs](/blogs/pior-labs/), the agents could implement almost anything I described, and the hard part was everything around the implementation: catching the locally reasonable choice that didn't fit the platform, checking that a feature actually worked, and going back to ask for the test that should have been there in the first place.
+
+The way I see it, the code-writing part is pretty much solved. The next abstraction up is verification. If an agent can write the feature, another agent should be able to prove it works before I ever look at it, and I should be spending my limited time on the decisions and the final read, not on clicking through a form for the tenth time.
+
+That limited time is the other half of this. I have a full-time job and a busy life, and personal projects happen in the evenings when I have energy left. I wanted a way to hand off a well-defined feature, come back later, and find either a reviewed PR with passing checks or a clear question waiting for me.
+
+So I built a factory.
+
+## The first version
+
+I wrote it as five skills in my [shared agent context repository](https://github.com/iPior/my-agent-context): a coordinator and four stages for planning, building, reviewing, and shipping. The skills are plain instructions with a small Node.js helper for status, so there's no service to run and nothing to deploy. You can read the components in the [project spec](/projects/agentic-software-factory/); here I want to talk about why it looks the way it does.
+
+The main conversation is the coordinator. That's where I talk through the plan, and it's the only place I need to be. The coordinator doesn't write product code itself. It dispatches a builder into a separate Git worktree, so my own checkout is never touched, then starts a reviewer in a completely fresh context. The reviewer never sees the builder's conversation. It gets the approved requirements, the code, and the evidence, and the contract literally says the build summary is "a fallible claim, not a verdict." If the reviewer could read the builder's reasoning, it would mostly agree with it. I wanted something that would disagree.
+
+{/* DIAGRAM: The run. Me + coordinator plan -> I approve -> builder (worktree) -> fresh reviewer -> repair loop (max 3 across review and CI) -> shipper opens PR, checks CI -> back to me to read and merge. Mark the two points where I'm involved. */}
+
+A few other decisions came from not trusting myself to remember things across sessions:
+
+- My approval gets written down, including my actual words and a SHA-256 digest of the approved task. If the task changes after that, the old approval no longer counts.
+- Repairs are capped at three rounds across review and CI combined. After that, or earlier if the same finding keeps coming back, the run stops and asks me. I didn't want agents looping on a problem that really needed a decision.
+- Nothing runs in the background. The factory is session-driven. Everything it knows lives in files: the task, the status, every dispatch and handoff, the evidence logs. When a session ends and a new one picks the run back up, it reads those files and then checks them against the real Git branch, the PR, and CI. A tmux pane that's still open doesn't prove a worker is alive, and an old "success" handoff doesn't prove the branch hasn't moved.
+
+That last one was a deliberate choice. A daemon that watched CI and woke the coordinator up would have been more impressive. It would also have been one more thing to babysit, and I'd rather have a workflow that stops and says it's waiting than one that claims to be monitoring something while nothing is running.
+
+## The first real run
+
+The first live run was on the Tasks app in Pior Labs: let a signed-in user create a task, see their tasks, and mark one complete. Small enough to finish, real enough to have auth, a database, and a UI.
+
+I wasn't worried about whether it would work. I already write a lot of code through agents, so I knew a builder could implement a task list. What I was testing was whether the agents would hold themselves to the verification I usually do by hand.
+
+They mostly did. The reviewer found that a task title containing a NUL character made the server return a 500 instead of a clear 400. That's the kind of edge case that's easy to never try by hand. It went back to the builder, got fixed, went through a fresh review, and passed. CI went green and the PR was ready for me.
+
+The run also produced a friction log with 19 entries, and that turned out to be the most useful thing it made. Some highlights:
+
+- That one small validation fix cost a full repair round and a second full review, about 10 extra minutes and roughly 230k worker tokens. The review verdicts had no way to say "pass, but here's a small recommended fix."
+- The coordinator's repair instructions paraphrased one finding more narrowly than the reviewer wrote it, and the builder had to guess which part to fix.
+- Builder evidence logs were written before the commit, so they couldn't say which commit they proved anything about. Reviewers just re-ran everything rather than trust them.
+- Every single worker got a reminder from the harness to add co-author and "Generated with" lines to commits and PRs. I don't want those. My rule only held because each dispatch repeated it. A worker that trusted the harness default would have published the attribution.
+
+That last one is still the most repeated friction across runs. It's a small thing, but it showed me that a worker only knows the rules you hand it. Now the contract says to copy the task's standing rules into every dispatch and that my rules win.
+
+I fixed all of this in the source repository the next day, never mid-run. Findings get triaged by ID and a listed ID means the whole finding. Re-reviews have an explicit scope. Evidence logs start with the commit they ran against. There are templates for the baseline and friction files that workers had been inventing by hand.
+
+## Making "it works" mean it works
+
+The bigger change after that first run was about browsers. The unit and API tests passed, but nothing in the run had actually opened the app and used it. Passing tests tell you the code does what the tests say. They don't tell you the page works.
+
+So user-facing tasks now require a real-browser end-to-end check. The builder writes and runs it. The reviewer re-runs it and then explores the app separately with its own browser session. Only I can waive it, and the waiver has to be written into the approved task.
+
+This is where my own habits changed the most. Before, I was the one who went back and tested. Now I put my effort into making the agents validate themselves and making them go back when they haven't. I'm still the human in the loop, but my part is the plan, the decisions, and reading the changes in the PR.
+
+## The second run
+
+The second run added editing and deleting tasks. It showed two new things.
+
+During planning, the browser check looked fine on paper. Only actually launching Chromium showed it couldn't start on my devbox because of missing system libraries. I installed them before approving. If planning had only read the setup instead of trying it, I'd have approved a check that could never run.
+
+Then the build hit a gap in my planning. The plan said "existing error codes unchanged" and "do not weaken tests," but the feature changed what three existing tests asserted. The builder had to decide on its own to change them. That's a decision I should have approved, so planning now searches for tests whose expectations the task changes and lists each one with its old and new expectation.
+
+The review passed with three small non-blocking findings, and the coordinator chose to spend a repair round on them since they were cheap and in scope. That repair builder got stopped twice by account usage limits before it made a single change. Nothing in the workflow records "worker interrupted," but because everything lived on disk, the coordinator could see a clean worktree and a missing handoff, conclude nothing had happened, and start a replacement on a different model. That's the session-driven design doing its job, even if I'd like the interruption to be recorded properly next time.
+
+PR #7 passed review and CI, and I merged it.
+
+{/* DIAGRAM: What survives a session ending. On disk: task + approval, status.json, dispatches, handoffs, evidence, friction log, the worktree. Live state to re-check: Git branch/HEAD, PR, CI. Gone: chat context, any worker that was running. */}
+
+## Where it is now
+
+The third feature, due dates, went through the factory too. Its planning logged a new kind of friction: I merged an unrelated README change after the run had pinned its base, and the contract had no clean way to refresh the base while still planning.
+
+I want to be clear about what this is. It is not an autonomous engineer. It doesn't run while I'm asleep, it doesn't decide what to build, and it doesn't merge. It's a structured way for me to hand off a feature I've approved and get back something that has been checked by more than the agent that wrote it. I still read the PR.
+
+What it has done is change where my time goes. I spend it on the plan and on the final read, and the friction logs tell me where the workflow needs to improve, rather than me noticing it one annoying evening at a time.
+
+Things I'd still like to fix or try:
+
+- Record interrupted workers as a real state instead of inferring it from what's missing.
+- Find a better answer to the attribution conflict than repeating the rule in every dispatch.
+- Maybe someday, some lightweight orchestration so a run can pick up after CI finishes without me starting a session. I'm in no rush. The no-daemon version has been honest with me so far, and I'd rather keep that.
+
+If you're curious about the machine all of this runs on, I wrote about that in [A Workspace That Stays Put](/blogs/self-hosted-dev-environment/).
