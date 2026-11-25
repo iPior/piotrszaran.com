@@ -3,7 +3,7 @@ title: "NJ TEC Systems"
 date: 2026-11-25
 category: "freelance"
 description: "A marketing website helping a security camera installer connect with homeowners and businesses across Mississauga and the GTA."
-stack: ["Astro", "Tailwind CSS", "TypeScript", "Bun", "Resend", "Zod", "Vercel"]
+stack: ["Astro", "Tailwind CSS", "TypeScript", "Bun", "Resend", "Vercel"]
 liveUrl: "https://njtec.ca"
 featured: false
 hidden: false
@@ -21,13 +21,3 @@ NJ TEC Systems is a lead-focused marketing site for a security camera installer 
 - A quote form backed by a single serverless endpoint that validates submissions with Zod, discards bot traffic caught by a honeypot field, and emails the lead through Resend.
 - A data layer in which business details, pricing, service areas, services, gallery photos, and FAQs live in typed data files, so content changes never mean editing page markup.
 - The SEO groundwork for a local business: LocalBusiness and FAQPage structured data generated from the same data files, canonical and OpenGraph tags owned by one layout, a sitemap, and a single configured domain that every absolute URL derives from.
-
-## How It Works
-
-Every page is prerendered to static HTML at build time and served from Vercel's CDN, and the only code that runs on a server is the `/api/contact` function. The form uses native HTML validation attributes generated from the same field rules the server's Zod schema is built from, so client and server checks cannot drift, and the server stays authoritative. Fonts are self-hosted and subsetted at build time, and client JavaScript is limited to three small inline scripts: the mobile menu, a click-to-load map, and the form.
-
-## Technical Highlights
-
-- **A quote form that does not lose leads**: If Resend is not configured or the request fails, the form falls back to a prefilled `mailto:` link, so a visitor's message always has a way to reach the client.
-- **Static site plus one function**: The whole architecture is prerendered HTML and a single serverless endpoint, which keeps hosting cheap and the pages fast on mobile.
-- **Tone-aware component system**: Pages are stacks of navy and white bands that redefine a shared set of color variables, so each component is written once and renders correctly on either background.
