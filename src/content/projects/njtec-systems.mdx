@@ -3,12 +3,31 @@ title: "NJ TEC Systems"
 date: 2026-11-25
 category: "freelance"
 description: "A marketing website helping a security camera installer connect with homeowners and businesses across Mississauga and the GTA."
-stack: ["Astro", "Tailwind CSS", "TypeScript", "Bun", "Resend"]
+stack: ["Astro", "Tailwind CSS", "TypeScript", "Bun", "Resend", "Zod", "Vercel"]
 liveUrl: "https://njtec.ca"
 featured: false
 hidden: false
-depth: "short"
+depth: "full"
 status: "shipped"
 ---
 
-A lead-focused marketing site for a client who installs security cameras for homes and businesses across Mississauga and the GTA. It covers services, pricing, service areas, an installation gallery, an FAQ, and a quote form, with a mobile call bar so visitors on a phone can reach the client in one tap. Every page is prerendered to static HTML, and the only server code is a single function that validates quote requests, drops bot submissions caught by a honeypot field, and emails the rest through Resend. Business details, pricing, and service areas live in data files rather than in the markup, so updating them never means editing a page. They also feed the structured data for search.
+## Overview
+
+NJ TEC Systems is a lead-focused marketing site for a security camera installer serving homes and businesses across Mississauga, the GTA, and out to Hamilton, Barrie, and cottage country. The client had no web presence before this, so the site covers the full first-contact path: services, pricing, service areas, an installation gallery, an FAQ, and a quote form. It started as a Next.js build and I rebuilt it in Astro, because Astro is simply faster for a content-driven site like this.
+
+## What I Built
+
+- Nine prerendered pages covering services, pricing packages and add-ons, service areas, an installation gallery, reviews, an FAQ, and an about page, plus a mobile call bar that reveals on scroll so phone visitors can reach the client in one tap.
+- A quote form backed by a single serverless endpoint that validates submissions with Zod, discards bot traffic caught by a honeypot field, and emails the lead through Resend.
+- A data layer in which business details, pricing, service areas, services, gallery photos, and FAQs live in typed data files, so content changes never mean editing page markup.
+- The SEO groundwork for a local business: LocalBusiness and FAQPage structured data generated from the same data files, canonical and OpenGraph tags owned by one layout, a sitemap, and a single configured domain that every absolute URL derives from.
+
+## How It Works
+
+Every page is prerendered to static HTML at build time and served from Vercel's CDN, and the only code that runs on a server is the `/api/contact` function. The form uses native HTML validation attributes generated from the same field rules the server's Zod schema is built from, so client and server checks cannot drift, and the server stays authoritative. Fonts are self-hosted and subsetted at build time, and client JavaScript is limited to three small inline scripts: the mobile menu, a click-to-load map, and the form.
+
+## Technical Highlights
+
+- **A quote form that does not lose leads**: If Resend is not configured or the request fails, the form falls back to a prefilled `mailto:` link, so a visitor's message always has a way to reach the client.
+- **Static site plus one function**: The whole architecture is prerendered HTML and a single serverless endpoint, which keeps hosting cheap and the pages fast on mobile.
+- **Tone-aware component system**: Pages are stacks of navy and white bands that redefine a shared set of color variables, so each component is written once and renders correctly on either background.
